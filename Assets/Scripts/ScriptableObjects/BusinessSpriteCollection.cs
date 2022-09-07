@@ -1,18 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BusinessSpriteCollection : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "BusinessSpriteCollection", menuName = "BusinessSpritesScriptableObject")]
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public class BusinessSpriteCollection : ScriptableObject
+{
+    public List<Sprite> BusinessSprites = new List<Sprite>();
 }
