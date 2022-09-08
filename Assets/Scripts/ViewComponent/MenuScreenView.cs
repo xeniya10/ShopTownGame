@@ -20,10 +20,13 @@ public class MenuScreenView : MonoBehaviour
     public Button TwitterButton;
 
     [Header("Button Text")]
+
     [SerializeField]
     private TextMeshProUGUI MusicButtonText;
+
     [SerializeField]
     private TextMeshProUGUI SoundButtonText;
+
     [SerializeField]
     private TextMeshProUGUI NotificationButtonText;
 

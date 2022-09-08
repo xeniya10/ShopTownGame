@@ -4,12 +4,24 @@ using TMPro;
 
 public class GameScreenView : MonoBehaviour
 {
+    [Header("Screens")]
+    public GameObject MenuScreen;
+    public GameObject PurchaseScreen;
+    public GameObject NewLevelScreen;
+    public GameObject WelcomeScreen;
+
+    [Header("Boards")]
+    public GameObject GameBoard;
+    public GameObject ManagerBoard;
+    public GameObject UpgradeBoard;
+
     [Header("Buttons")]
     public Button MoneyAddButton;
     public Button GoldAddButton;
     public Button MenuButton;
 
     [Header("Text Fields")]
+
     [SerializeField]
     private TextMeshProUGUI MoneyText;
 

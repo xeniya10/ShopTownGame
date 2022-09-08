@@ -16,4 +16,34 @@ public class ManagerRowView : MonoBehaviour
 
     [Header("Collections")]
     public ManagerSpriteCollection ManagerSpriteCollection;
+
+    public void SetSprite(int level)
+    {
+        ManagerImage.sprite = ManagerSpriteCollection.ManagerSprites[level - 1];
+    }
+
+    public void SetPrice(float price)
+    {
+        PriceText.text = price.ToString();
+    }
+
+    public void SetName(string name)
+    {
+        PriceText.text = name;
+    }
+
+    public void SetDescription(string description)
+    {
+        PriceText.text = description;
+    }
+
+    public void Lock()
+    {
+        LockState.SetActive(true);
+    }
+
+    public void Unlock()
+    {
+        LockState.SetActive(false);
+    }
 }
