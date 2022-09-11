@@ -60,7 +60,7 @@ public class StartScreenView : MonoBehaviour
                 cell.SetPosition(cell.StartPosition);
 
                 float targetX = Screen.width / 2 - (cellOffset * j);
-                float targetY = Screen.height / 2 - cellSize / 2.3f - (cellOffset * i);
+                float targetY = Screen.height / 2 + cellSize / 4 - (cellOffset * i);
                 cell.TargetPosition = new Vector2(targetX, targetY);
 
                 var cellMoveAnimation = cell.transform.DOLocalMove(cell.TargetPosition, MoveTime / 2);
@@ -70,7 +70,7 @@ public class StartScreenView : MonoBehaviour
     }
     private void AppearGameName()
     {
-        var startX = GameNameText.transform.localPosition.x - Screen.width;
+        var startX = GameNameText.transform.localPosition.x - Screen.width * 1.5f;
         var startY = GameNameText.transform.localPosition.y;
 
         var startPosition = new Vector2(startX, startY);
@@ -82,7 +82,7 @@ public class StartScreenView : MonoBehaviour
     }
     private void AppearStartButton()
     {
-        var startX = StartButton.transform.localPosition.x - Screen.width;
+        var startX = StartButton.transform.localPosition.x - Screen.width * 1.5f;
         var startY = StartButton.transform.localPosition.y;
 
         var startPosition = new Vector2(startX, startY);
@@ -90,16 +90,16 @@ public class StartScreenView : MonoBehaviour
 
         StartButton.transform.localPosition = startPosition;
         var moveAnimation = StartButton.transform.DOLocalMove(targetPosition, MoveTime);
-        _appearSequence.Append(moveAnimation);
+        _appearSequence.Append(moveAnimation).OnComplete(DisappearAnimation);
     }
 
     public void DisappearAnimation()
     {
         _disappearSequence = DOTween.Sequence();
 
-        DisappearCells();
         DisappearStartButton();
         DisappearGameName();
+        DisappearCells();
         DisappearStartScreen();
     }
 
