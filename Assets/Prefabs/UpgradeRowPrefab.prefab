@@ -1282,6 +1282,7 @@ GameObject:
   - component: {fileID: 8257790934877836869}
   - component: {fileID: 8714757247822605505}
   - component: {fileID: 3355535033051476685}
+  - component: {fileID: 2073721103709550428}
   m_Layer: 0
   m_Name: UpgradeRowPrefab
   m_TagString: Untagged
@@ -1363,3 +1364,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.11764706}
   m_EffectDistance: {x: 4, y: -6}
   m_UseGraphicAlpha: 1
+--- !u!114 &2073721103709550428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8991374681890536469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dfabe332e7a91f4996e89e1cc07d440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuyButton: {fileID: 5916342858564497767}
+  UpgradeImage: {fileID: 8568159226380776440}
+  LockState: {fileID: 523666622341064514}
+  NameText: {fileID: 3641624121910351034}
+  DescriptionText: {fileID: 3902685440533807263}
+  PriceText: {fileID: 4012227402390481624}
+  UpgradeSprites: {fileID: 11400000, guid: eb7d3a28f5faf274195b9f7aed7af367, type: 2}

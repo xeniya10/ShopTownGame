@@ -23,12 +23,12 @@ public class GameCellView : MonoBehaviour
     public TextMeshProUGUI PriceText;
 
     [Header("Collections")]
-    public CellBackgroundSpriteCollection BackgroundSpriteCollection;
+    public BackgroundSpriteCollection BackgroundSpriteCollection;
     public BusinessSpriteCollection BusinessSpriteCollection;
 
     public void SetBackgroundSprite(int i)
     {
-        BackgroundImage.sprite = BackgroundSpriteCollection.CellBackgroundSprites[i];
+        BackgroundImage.sprite = BackgroundSpriteCollection.BackgroundSprites[i];
     }
 
     public void SetBusinessSprite(int level)

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
+using System;
 
 public class MenuScreenView : MonoBehaviour
 {
@@ -29,6 +31,13 @@ public class MenuScreenView : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI NotificationButtonText;
+
+    [Header("Animation Durations")]
+
+    [SerializeField]
+    private float _moveTime;
+    private Vector2 _showPosition;
+    private Vector2 _hidePosition;
 
     private string _music = "Music: ";
     private string _sound = "Sound: ";
@@ -73,5 +82,40 @@ public class MenuScreenView : MonoBehaviour
         {
             NotificationButtonText.text = _notification + _off;
         }
+    }
+
+    private void SetPosition(Vector2 position)
+    {
+        transform.localPosition = position;
+    }
+
+    private void AppearAnimation()
+    {
+        _showPosition = transform.localPosition;
+
+        var startX = _showPosition.x;
+        var startY = _showPosition.y + Screen.height * 1.5f;
+        _hidePosition = new Vector2(startX, startY);
+
+        SetPosition(_hidePosition);
+        var moveAnimation = transform.DOLocalMove(_showPosition, _moveTime);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+        AppearAnimation();
+    }
+
+    private void DisappearAnimation(Action callBack)
+    {
+        var moveAnimation = transform.DOLocalMove(_hidePosition, _moveTime)
+        .OnComplete(() => callBack?.Invoke());
+    }
+
+    public void Hide()
+    {
+        DisappearAnimation(() => gameObject.SetActive(false));
+        SetPosition(_showPosition);
     }
 }

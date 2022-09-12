@@ -1282,6 +1282,7 @@ GameObject:
   - component: {fileID: 8257790934877836869}
   - component: {fileID: 8714757247822605505}
   - component: {fileID: 2840004637660482833}
+  - component: {fileID: 8624217191307333732}
   m_Layer: 0
   m_Name: ManagerRowPrefab
   m_TagString: Untagged
@@ -1363,3 +1364,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.11764706}
   m_EffectDistance: {x: 4, y: -6}
   m_UseGraphicAlpha: 1
+--- !u!114 &8624217191307333732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8991374681890536469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac7a50dc98d1314aa7cae2debb5c181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HireButton: {fileID: 5916342858564497767}
+  ManagerImage: {fileID: 8568159226380776440}
+  LockState: {fileID: 3872264323398827116}
+  NameText: {fileID: 3641624121910351034}
+  DescriptionText: {fileID: 3902685440533807263}
+  PriceText: {fileID: 4012227402390481624}
+  ManagerSpriteCollection: {fileID: 11400000, guid: f72b93b7b381b094983bdc2ced0c7c48, type: 2}

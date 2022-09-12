@@ -14,24 +14,22 @@ public class UpgradeRowView : MonoBehaviour
     public TextMeshProUGUI DescriptionText;
     public TextMeshProUGUI PriceText;
 
-    [Header("Collections")]
-    public FirstUpgradeSpriteCollection FirstLevelSpriteCollection;
-    public SecondUpgradeSpriteCollection SecondLevelSpriteCollection;
-    public ThirdUpgradeSpriteCollection ThirdLevelSpriteCollection;
+    [Space]
+    public UpgradeSpriteCollection UpgradeSprites;
 
     public void SetFirstUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = FirstLevelSpriteCollection.UpgradeSprites[level - 1];
+        UpgradeImage.sprite = UpgradeSprites.FirstLevelSprites[level - 1];
     }
 
     public void SetSecondUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = SecondLevelSpriteCollection.UpgradeSprites[level - 1];
+        UpgradeImage.sprite = UpgradeSprites.SecondLevelSprites[level - 1];
     }
 
     public void SetThirdUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = ThirdLevelSpriteCollection.UpgradeSprites[level - 1];
+        UpgradeImage.sprite = UpgradeSprites.ThirdLevelSprites[level - 1];
     }
 
     public void SetPrice(float price)

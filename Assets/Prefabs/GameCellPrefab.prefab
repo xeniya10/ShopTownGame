@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5781910238654324106}
   - component: {fileID: 6495142510868485376}
   - component: {fileID: 5296657927002233757}
+  - component: {fileID: 4485389564363225501}
   m_Layer: 0
   m_Name: GameCellPrefab
   m_TagString: Untagged
@@ -119,6 +120,30 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.11764706}
   m_EffectDistance: {x: 1.5, y: -1.5}
   m_UseGraphicAlpha: 1
+--- !u!114 &4485389564363225501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145814222278505013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95c0e01dd6888744881e1dcfe708727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CellButton: {fileID: 3980533619817171365}
+  BuyButton: {fileID: 4824023392377640321}
+  BackgroundImage: {fileID: 8158304643091286275}
+  BusinessImage: {fileID: 6326286883687291448}
+  ProgressImage: {fileID: 9106471491961129842}
+  ProgressBar: {fileID: 3414868392192021135}
+  BlockState: {fileID: 7691994964365097992}
+  LockState: {fileID: 3886116667683797181}
+  ProgressTimeText: {fileID: 4765561674394547569}
+  PriceText: {fileID: 523893662949467066}
+  BackgroundSpriteCollection: {fileID: 11400000, guid: d6e0626aba29450408c2b3a246467645, type: 2}
+  BusinessSpriteCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
 --- !u!1 &2714199092710712907
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.8915094, b: 0.9638365, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -345,7 +370,7 @@ GameObject:
   - component: {fileID: 6047103670924477731}
   - component: {fileID: 4824023392377640321}
   m_Layer: 0
-  m_Name: UnlockState
+  m_Name: LockState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -776,7 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.990566, g: 0.9111338, b: 0.9632612, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1027,7 +1052,7 @@ GameObject:
   - component: {fileID: 6842789929013706976}
   - component: {fileID: 8771666012425852737}
   m_Layer: 0
-  m_Name: LockState
+  m_Name: BlockState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

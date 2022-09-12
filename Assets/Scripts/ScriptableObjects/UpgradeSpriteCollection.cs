@@ -1,23 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FirstUpgradeSpriteCollection", menuName = "FirstUpgradeSpritesScriptableObject")]
+[CreateAssetMenu(fileName = "UpgradeSpriteCollection", menuName = "UpgradeSpritesScriptableObject")]
 
-public class FirstUpgradeSpriteCollection : ScriptableObject
+public class UpgradeSpriteCollection : ScriptableObject
 {
-    public List<Sprite> UpgradeSprites = new List<Sprite>();
-}
-
-[CreateAssetMenu(fileName = "SecondUpgradeSpriteCollection", menuName = "SecondUpgradeSpritesScriptableObject")]
-
-public class SecondUpgradeSpriteCollection : ScriptableObject
-{
-    public List<Sprite> UpgradeSprites = new List<Sprite>();
-}
-
-[CreateAssetMenu(fileName = "ThirdUpgradeSpriteCollection", menuName = "ThirdUpgradeSpritesScriptableObject")]
-
-public class ThirdUpgradeSpriteCollection : ScriptableObject
-{
-    public List<Sprite> UpgradeSprites = new List<Sprite>();
+    public List<Sprite> FirstLevelSprites = new List<Sprite>();
+    public List<Sprite> SecondLevelSprites = new List<Sprite>();
+    public List<Sprite> ThirdLevelSprites = new List<Sprite>();
 }

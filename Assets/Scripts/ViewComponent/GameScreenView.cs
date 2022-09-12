@@ -4,6 +4,11 @@ using TMPro;
 
 public class GameScreenView : MonoBehaviour
 {
+    [Header("Prefabs")]
+    public GameCellView GameCellPrefab;
+    public ManagerRowView ManagerRowPrefab;
+    public UpgradeRowView UpgradeRowPrefab;
+
     [Header("Screens")]
     public GameObject MenuScreen;
     public GameObject PurchaseScreen;
