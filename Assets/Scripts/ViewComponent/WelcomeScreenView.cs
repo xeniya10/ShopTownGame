@@ -7,25 +7,22 @@ using System;
 public class WelcomeScreenView : MonoBehaviour
 {
     [Header("Components")]
-    public Button OkButton;
-    public TextMeshProUGUI AmountMoneyText;
-    public TextMeshProUGUI AmountGoldText;
+    [SerializeField] private Button _okButton;
+    [SerializeField] private TextMeshProUGUI _moneyText;
+    [SerializeField] private TextMeshProUGUI _goldText;
 
     [Header("Animation Durations")]
-
-    [SerializeField]
-    private float _moveTime;
-    private Vector2 _showPosition;
-    private Vector2 _hidePosition;
+    [SerializeField] private float _moveTime;
+    private Vector2 _startPosition;
 
     private void SetMoneyNumber(float moneyAmount)
     {
-        AmountMoneyText.text = moneyAmount.ToString();
+        _moneyText.text = moneyAmount.ToString();
     }
 
     private void SetGoldNumber(float goldAmount)
     {
-        AmountGoldText.text = goldAmount.ToString();
+        _goldText.text = goldAmount.ToString();
     }
 
     private void SetPosition(Vector2 position)
@@ -33,35 +30,28 @@ public class WelcomeScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    private void AppearAnimation()
+    public void ClickOkButton(Action callBack)
     {
-        _showPosition = transform.localPosition;
-
-        var startX = _showPosition.x;
-        var startY = _showPosition.y - Screen.height * 1.5f;
-        _hidePosition = new Vector2(startX, startY);
-
-        SetPosition(_hidePosition);
-        var moveAnimation = transform.DOLocalMove(_showPosition, _moveTime);
+        _okButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
     public void Show(float moneyAmount, float goldAmount)
     {
         SetMoneyNumber(moneyAmount);
         SetGoldNumber(goldAmount);
+        _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AppearAnimation();
-    }
-
-    private void DisappearAnimation(Action callBack)
-    {
-        var moveAnimation = transform.DOLocalMove(_hidePosition, _moveTime)
-        .OnComplete(() => callBack?.Invoke());
+        AnimationUtility.MoveFromScreenBorder(transform, 0f, -1.5f, _moveTime, null);
     }
 
     public void Hide()
     {
-        DisappearAnimation(() => gameObject.SetActive(false));
-        SetPosition(_showPosition);
+        var sequence = DOTween.Sequence();
+        AnimationUtility.MoveToScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        sequence.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            SetPosition(_startPosition);
+        });
     }
 }

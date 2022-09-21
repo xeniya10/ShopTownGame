@@ -1,38 +1,45 @@
 using System;
+using System.Collections.Generic;
 
+[Serializable]
 public class GameDataModel
 {
-    public float CurrentBalance { get; set; }
-    public float TotalBalance { get; set; }
-    public int MaxOpenedLevel { get; set; }
-    public DateTime TimeStamp { get; set; }
-    public GameSettingModel Settings { get; set; }
+    public double CurrentMoneyBalance;
+    public double TotalMoneyBalance;
+    public int CurrentGoldBalance;
+    public int TotalGoldBalance;
+    public int MaxOpenedLevel;
+    public int NumberOfLevels;
 
-    // row, column
+    public DateTime TimeStamp;
+    public GameSettingModel Settings;
+    public GameBoardModel GameBoardModel; // to save row and column numbers
 
-    // List Businesses
-    // List Managers
-    // List Upgrades
+    public List<GameCellModel> Businesses;
+    public List<ManagerRowModel> Managers;
+    public List<UpgradeRowModel> FirstUpgrades;
+    public List<UpgradeRowModel> SecondUpgrades;
+    public List<UpgradeRowModel> ThirdUpgrades;
 
-    public void SetBalance(float amount)
+    public void SetBalance(double amount)
     {
-        CurrentBalance = amount;
+        CurrentMoneyBalance = amount;
         // Update text field
     }
 
-    public void AddToBalance(float amount)
+    public void AddToBalance(double amount)
     {
-        CurrentBalance = +amount;
+        CurrentMoneyBalance += amount;
         // Update text field
     }
-    public void SubtractFromBalance(float amount)
+    public void SubtractFromBalance(double amount)
     {
-        CurrentBalance = -amount;
+        CurrentMoneyBalance -= amount;
         // Update text field
     }
-    public bool CanBuy(float amount)
+    public bool CanBuy(double amount)
     {
-        if (amount > CurrentBalance)
+        if (amount > CurrentMoneyBalance)
         {
             return false;
         }

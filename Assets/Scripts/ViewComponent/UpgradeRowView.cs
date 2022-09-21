@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,55 +6,80 @@ using UnityEngine.UI;
 public class UpgradeRowView : MonoBehaviour
 {
     [Header("Components")]
-    public Button BuyButton;
-    public Image UpgradeImage;
-    public GameObject LockState;
+    [SerializeField] private Button _buyButton;
+    [SerializeField] private Image _upgradeImage;
+    [SerializeField] private Image _lockImage;
 
     [Space]
-    public TextMeshProUGUI NameText;
-    public TextMeshProUGUI DescriptionText;
-    public TextMeshProUGUI PriceText;
+    [SerializeField] private TextMeshProUGUI _nameText;
+    [SerializeField] private TextMeshProUGUI _descriptionText;
+    [SerializeField] private TextMeshProUGUI _priceText;
 
     [Space]
-    public UpgradeSpriteCollection UpgradeSprites;
+    [SerializeField] private UpgradeSpriteCollection _upgradeSprites;
+
+    [Header("Animation Duration")]
+    [SerializeField] private float _fadeTime;
 
     public void SetFirstUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = UpgradeSprites.FirstLevelSprites[level - 1];
+        _upgradeImage.sprite = _upgradeSprites.FirstLevelSprites[level - 1];
     }
 
     public void SetSecondUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = UpgradeSprites.SecondLevelSprites[level - 1];
+        _upgradeImage.sprite = _upgradeSprites.SecondLevelSprites[level - 1];
     }
 
     public void SetThirdUpgradeSprite(int level)
     {
-        UpgradeImage.sprite = UpgradeSprites.ThirdLevelSprites[level - 1];
+        _upgradeImage.sprite = _upgradeSprites.ThirdLevelSprites[level - 1];
     }
 
-    public void SetPrice(float price)
+    public void SetMoneyPrice(double price)
     {
-        PriceText.text = price.ToString();
+        _priceText.text = MoneyFormatUtility.MoneyDefault(price);
+    }
+
+    public void SetGoldPrice(double price)
+    {
+        _priceText.text = MoneyFormatUtility.GoldDefault(price);
     }
 
     public void SetName(string name)
     {
-        PriceText.text = name;
+        _nameText.text = name;
     }
 
     public void SetDescription(string description)
     {
-        PriceText.text = description;
+        _descriptionText.text = description;
+    }
+
+    public void ClickBuyButton(Action callBack)
+    {
+        _buyButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public UpgradeRowView Create(Transform parent)
+    {
+        var cell = Instantiate(this, parent);
+        return cell;
     }
 
     public void Lock()
     {
-        LockState.SetActive(true);
+        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        () =>
+        {
+            _lockImage.gameObject.SetActive(true);
+            AnimationUtility.FadeImage(_lockImage, 1, _fadeTime, null, null);
+        });
     }
 
     public void Unlock()
     {
-        LockState.SetActive(false);
+        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        () => _lockImage.gameObject.SetActive(false));
     }
 }

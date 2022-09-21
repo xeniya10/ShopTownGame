@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 256.66666, y: 256.66666}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!61 &1739006149682342106
 BoxCollider2D:
@@ -132,18 +132,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c0e01dd6888744881e1dcfe708727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CellButton: {fileID: 3980533619817171365}
-  BuyButton: {fileID: 4824023392377640321}
-  BackgroundImage: {fileID: 8158304643091286275}
-  BusinessImage: {fileID: 6326286883687291448}
-  ProgressImage: {fileID: 9106471491961129842}
-  ProgressBar: {fileID: 3414868392192021135}
-  BlockState: {fileID: 7691994964365097992}
-  LockState: {fileID: 3886116667683797181}
-  ProgressTimeText: {fileID: 4765561674394547569}
-  PriceText: {fileID: 523893662949467066}
-  BackgroundSpriteCollection: {fileID: 11400000, guid: d6e0626aba29450408c2b3a246467645, type: 2}
-  BusinessSpriteCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _progressBar: {fileID: 3414868392192021135}
+  _cellRect: {fileID: 9173163049554432057}
+  _earnButton: {fileID: 3980533619817171365}
+  _buyButton: {fileID: 4824023392377640321}
+  _backgroundImage: {fileID: 8158304643091286275}
+  _businessImage: {fileID: 6326286883687291448}
+  _progressImage: {fileID: 9106471491961129842}
+  _blockImage: {fileID: 8771666012425852737}
+  _lockImage: {fileID: 6047103670924477731}
+  _progressTimeText: {fileID: 4765561674394547569}
+  _priceText: {fileID: 523893662949467066}
+  _backgroundSpriteCollection: {fileID: 11400000, guid: d6e0626aba29450408c2b3a246467645, type: 2}
+  _businessSpriteCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _fadeTime: 0.2
 --- !u!1 &2714199092710712907
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9058824, g: 0.8980393, b: 0.9176471, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1057,7 +1059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3063711633887471175
 RectTransform:
   m_ObjectHideFlags: 0

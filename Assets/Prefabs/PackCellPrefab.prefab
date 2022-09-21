@@ -993,6 +993,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1b5d7386175de419ceb2201bdb8576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PurchaseButton: {fileID: 3314334085788624291}
-  MoneyText: {fileID: 991954869}
-  PriceText: {fileID: 215362538}
+  _purchaseButton: {fileID: 3314334085788624291}
+  _moneyText: {fileID: 991954869}
+  _priceText: {fileID: 215362538}

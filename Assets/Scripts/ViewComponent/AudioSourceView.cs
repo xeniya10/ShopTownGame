@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class AudioSourceView : MonoBehaviour
 {
-    public AudioSource BackgroundMusic;
-    public AudioSource ClickSound;
-    public AudioSource NewBusinessSound;
-    public AudioSource NewCoinSound;
-    public AudioSource SwapSound;
+    [SerializeField] private AudioSource _backgroundMusic;
+    [SerializeField] private AudioSource _clickSound;
+    [SerializeField] private AudioSource _newBusinessSound;
+    [SerializeField] private AudioSource _newCoinSound;
+    [SerializeField] private AudioSource _swapSound;
 
     public void PlayBackgroundMusic()
     {
-        BackgroundMusic.Play();
+        _backgroundMusic.Play();
     }
     public void PlayClickSound()
     {
-        ClickSound.Play();
+        _clickSound.Play();
     }
     public void PlayNewBusinessSound()
     {
-        NewBusinessSound.Play();
+        _newBusinessSound.Play();
     }
     public void PlayNewCoinSound()
     {
-        NewCoinSound.Play();
+        _newCoinSound.Play();
     }
     public void PlaySwapSound()
     {
-        SwapSound.Play();
+        _swapSound.Play();
     }
 }

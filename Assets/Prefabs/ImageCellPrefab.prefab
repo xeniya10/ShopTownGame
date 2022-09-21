@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 351, y: 351}
+  m_SizeDelta: {x: 260, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3142184407271059926
 CanvasRenderer:
@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f56dc38d3998b4aadd7a7550668db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CellRectTransform: {fileID: 7763017702156308329}
-  CellImage: {fileID: 7871535858252253721}
-  CellSpriteCollection: {fileID: 11400000, guid: 4361bf23c9c330541a14f970d71467db, type: 2}
+  _cellRectTransform: {fileID: 7763017702156308329}
+  _cellImage: {fileID: 7871535858252253721}
+  _cellSpriteCollection: {fileID: 11400000, guid: 4361bf23c9c330541a14f970d71467db, type: 2}
 --- !u!114 &8467469878352501433
 MonoBehaviour:
   m_ObjectHideFlags: 0

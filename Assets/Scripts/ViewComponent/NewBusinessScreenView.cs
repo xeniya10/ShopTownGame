@@ -7,26 +7,24 @@ using System;
 public class NewBusinessScreenView : MonoBehaviour
 {
     [Header("Components")]
-    public Image BusinessImage;
-    public Button OkButton;
-    public TextMeshProUGUI BusinessNameText;
-    public BusinessSpriteCollection BusinessSpriteCollection;
+    [SerializeField] private Image _businessImage;
+    [SerializeField] private Button _okButton;
+    [SerializeField] private TextMeshProUGUI _businessNameText;
+    [SerializeField] private ParticleSystem _confettiParticleSystem;
+    [SerializeField] private BusinessSpriteCollection _businessSpriteCollection;
 
     [Header("Animation Durations")]
-
-    [SerializeField]
-    private float _moveTime;
-    private Vector2 _showPosition;
-    private Vector2 _hidePosition;
+    [SerializeField] private float _moveTime;
+    private Vector2 _startPosition;
 
     private void SetSprite(int level)
     {
-        BusinessImage.sprite = BusinessSpriteCollection.BusinessSprites[level - 1];
+        _businessImage.sprite = _businessSpriteCollection.BusinessSprites[level - 1];
     }
 
     private void SetNameText(string businessName)
     {
-        BusinessNameText.text = businessName;
+        _businessNameText.text = businessName;
     }
 
     private void SetPosition(Vector2 position)
@@ -34,35 +32,30 @@ public class NewBusinessScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    private void AppearAnimation()
+    public void ClickOkButton(Action callBack)
     {
-        _showPosition = transform.localPosition;
-
-        var startX = _showPosition.x;
-        var startY = _showPosition.y - Screen.height * 1.5f;
-        _hidePosition = new Vector2(startX, startY);
-
-        SetPosition(_hidePosition);
-        var moveAnimation = transform.DOLocalMove(_showPosition, _moveTime);
+        _okButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
     public void Show(int level, string businessName)
     {
+        var sequence = DOTween.Sequence();
         SetSprite(level);
         SetNameText(businessName);
+        _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AppearAnimation();
-    }
-
-    private void DisappearAnimation(Action callBack)
-    {
-        var moveAnimation = transform.DOLocalMove(_hidePosition, _moveTime)
-        .OnComplete(() => callBack?.Invoke());
+        AnimationUtility.MoveFromScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        sequence.OnComplete(() => _confettiParticleSystem.Play());
     }
 
     public void Hide()
     {
-        DisappearAnimation(() => gameObject.SetActive(false));
-        SetPosition(_showPosition);
+        var sequence = DOTween.Sequence();
+        AnimationUtility.MoveToScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        sequence.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            SetPosition(_startPosition);
+        });
     }
 }

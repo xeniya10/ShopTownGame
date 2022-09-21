@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -6,47 +5,35 @@ using System;
 
 public class PurchaseScreenView : MonoBehaviour
 {
-    public Button OkButton;
-
-    [Header("Animation Durations")]
-
-    [SerializeField]
-    private float _moveTime;
-    private Vector2 _showPosition;
-    private Vector2 _hidePosition;
+    [SerializeField] private Button _hideButton;
+    [SerializeField] private float _moveTime;
+    private Vector2 _startPosition;
 
     private void SetPosition(Vector2 position)
     {
         transform.localPosition = position;
     }
 
-    private void AppearAnimation()
+    public void ClickOkButton(Action callBack)
     {
-        _showPosition = transform.localPosition;
-
-        var startX = _showPosition.x;
-        var startY = _showPosition.y - Screen.height * 1.5f;
-        _hidePosition = new Vector2(startX, startY);
-
-        SetPosition(_hidePosition);
-        var moveAnimation = transform.DOLocalMove(_showPosition, _moveTime);
+        _hideButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void Show(float moneyAmount, float goldAmount)
+    public void Show()
     {
+        _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AppearAnimation();
-    }
-
-    private void DisappearAnimation(Action callBack)
-    {
-        var moveAnimation = transform.DOLocalMove(_hidePosition, _moveTime)
-        .OnComplete(() => callBack?.Invoke());
+        AnimationUtility.MoveFromScreenBorder(transform, 0f, 1.5f, _moveTime, null);
     }
 
     public void Hide()
     {
-        DisappearAnimation(() => gameObject.SetActive(false));
-        SetPosition(_showPosition);
+        var sequence = DOTween.Sequence();
+        AnimationUtility.MoveToScreenBorder(transform, 0f, 1.5f, _moveTime, sequence);
+        sequence.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            SetPosition(_startPosition);
+        });
     }
 }

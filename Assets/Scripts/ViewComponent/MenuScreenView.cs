@@ -6,38 +6,29 @@ using System;
 
 public class MenuScreenView : MonoBehaviour
 {
-    public Button HideButton;
+    [SerializeField] private Button _hideButton;
 
     [Header("Setting Components")]
-    public Button MusicSwitchButton;
-    public Button SoundSwitchButton;
-    public Button NotificationSwitchButton;
-    public Button RemoveAdsButton;
+    [SerializeField] private Button _musicSwitchButton;
+    [SerializeField] private Button _soundSwitchButton;
+    [SerializeField] private Button _notificationSwitchButton;
+    [SerializeField] private Button _removeAdsButton;
 
     [Header("SocialNet Components")]
-    public Button LikeButton;
-    public Button InstagramButton;
-    public Button FacebookButton;
-    public Button TelegramButton;
-    public Button TwitterButton;
+    [SerializeField] private Button _likeButton;
+    [SerializeField] private Button _instagramButton;
+    [SerializeField] private Button _facebookButton;
+    [SerializeField] private Button _telegramButton;
+    [SerializeField] private Button _twitterButton;
 
     [Header("Button Text")]
-
-    [SerializeField]
-    private TextMeshProUGUI MusicButtonText;
-
-    [SerializeField]
-    private TextMeshProUGUI SoundButtonText;
-
-    [SerializeField]
-    private TextMeshProUGUI NotificationButtonText;
+    [SerializeField] private TextMeshProUGUI _musicButtonText;
+    [SerializeField] private TextMeshProUGUI _soundButtonText;
+    [SerializeField] private TextMeshProUGUI _notificationButtonText;
 
     [Header("Animation Durations")]
-
-    [SerializeField]
-    private float _moveTime;
-    private Vector2 _showPosition;
-    private Vector2 _hidePosition;
+    [SerializeField] private float _moveTime;
+    private Vector2 _startPosition;
 
     private string _music = "Music: ";
     private string _sound = "Sound: ";
@@ -49,12 +40,12 @@ public class MenuScreenView : MonoBehaviour
     {
         if (isMusicOn)
         {
-            MusicButtonText.text = _music + _on;
+            _musicButtonText.text = _music + _on;
         }
 
         else
         {
-            MusicButtonText.text = _music + _off;
+            _musicButtonText.text = _music + _off;
         }
     }
 
@@ -62,12 +53,12 @@ public class MenuScreenView : MonoBehaviour
     {
         if (isSoundOn)
         {
-            SoundButtonText.text = _sound + _on;
+            _soundButtonText.text = _sound + _on;
         }
 
         else
         {
-            SoundButtonText.text = _sound + _off;
+            _soundButtonText.text = _sound + _off;
         }
     }
 
@@ -75,12 +66,12 @@ public class MenuScreenView : MonoBehaviour
     {
         if (isNotificationOn)
         {
-            NotificationButtonText.text = _notification + _on;
+            _notificationButtonText.text = _notification + _on;
         }
 
         else
         {
-            NotificationButtonText.text = _notification + _off;
+            _notificationButtonText.text = _notification + _off;
         }
     }
 
@@ -89,33 +80,71 @@ public class MenuScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    private void AppearAnimation()
+    public void ClickHideButton(Action callBack)
     {
-        _showPosition = transform.localPosition;
+        _hideButton.onClick.AddListener(() => callBack?.Invoke());
+    }
 
-        var startX = _showPosition.x;
-        var startY = _showPosition.y + Screen.height * 1.5f;
-        _hidePosition = new Vector2(startX, startY);
+    public void ClickMusicButton(Action callBack)
+    {
+        _musicSwitchButton.onClick.AddListener(() => callBack?.Invoke());
+    }
 
-        SetPosition(_hidePosition);
-        var moveAnimation = transform.DOLocalMove(_showPosition, _moveTime);
+    public void ClickSoundButton(Action callBack)
+    {
+        _soundSwitchButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickNotificationButton(Action callBack)
+    {
+        _notificationSwitchButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickRemoveAdsButton(Action callBack)
+    {
+        _removeAdsButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickLikeButton(Action callBack)
+    {
+        _likeButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickInstagramButton(Action callBack)
+    {
+        _instagramButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickFacebookButton(Action callBack)
+    {
+        _facebookButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickTelegramButton(Action callBack)
+    {
+        _telegramButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickTwitterButton(Action callBack)
+    {
+        _twitterButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
     public void Show()
     {
+        _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AppearAnimation();
-    }
-
-    private void DisappearAnimation(Action callBack)
-    {
-        var moveAnimation = transform.DOLocalMove(_hidePosition, _moveTime)
-        .OnComplete(() => callBack?.Invoke());
+        AnimationUtility.MoveFromScreenBorder(transform, 0f, 1.5f, _moveTime, null);
     }
 
     public void Hide()
     {
-        DisappearAnimation(() => gameObject.SetActive(false));
-        SetPosition(_showPosition);
+        var sequence = DOTween.Sequence();
+        AnimationUtility.MoveToScreenBorder(transform, 0f, 1.5f, _moveTime, sequence);
+        sequence.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            SetPosition(_startPosition);
+        });
     }
 }

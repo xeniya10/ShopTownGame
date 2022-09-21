@@ -1,10 +1,13 @@
+using System;
+
 public class UpgradeRowModel
 {
-    public int UpgradeId { get; set; }
-    public int UpgradeLevel { get; set; }
-    public int GameCellId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public int Cost { get; set; }
-    public bool Unlocked { get; set; }
+    public int Level;
+    public int UpgradeLevel;
+    public string BusinessName;
+    public string Name;
+    public string Description { get { return String.Format("{0} profit x{1}", BusinessName, UpgradeLevel + 1); } }
+    public double MoneyCost;
+    public double GoldCost;
+    public bool Unlocked = false;
 }

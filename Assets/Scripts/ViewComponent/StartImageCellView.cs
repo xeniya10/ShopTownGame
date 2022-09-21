@@ -3,15 +3,15 @@ using UnityEngine.UI;
 
 public class StartImageCellView : MonoBehaviour
 {
-    public RectTransform CellRectTransform;
-    public Image CellImage;
-    public CellSpriteCollection CellSpriteCollection;
-    public Vector2 StartPosition { get; set; }
-    public Vector2 TargetPosition { get; set; }
+    [SerializeField] private RectTransform _cellRectTransform;
+    [SerializeField] private Image _cellImage;
+    [SerializeField] private CellSpriteCollection _cellSpriteCollection;
+    [HideInInspector] public Vector2 StartPosition { get; set; }
+    [HideInInspector] public Vector2 TargetPosition { get; set; }
 
     public void SetSprite(int i)
     {
-        CellImage.sprite = CellSpriteCollection.CellSprites[i];
+        _cellImage.sprite = _cellSpriteCollection.CellSprites[i];
     }
 
     public void SetPosition(Vector2 position)
@@ -21,6 +21,14 @@ public class StartImageCellView : MonoBehaviour
 
     public void SetSize(float size)
     {
-        CellRectTransform.sizeDelta = new Vector2(size, size);
+        _cellRectTransform.sizeDelta = new Vector2(size, size);
+    }
+
+    public StartImageCellView Create(Transform parent)
+    {
+        var cell = Instantiate(this, parent);
+        cell.SetPosition(cell.StartPosition);
+
+        return cell;
     }
 }

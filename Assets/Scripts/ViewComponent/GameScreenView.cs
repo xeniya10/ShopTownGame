@@ -1,44 +1,41 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameScreenView : MonoBehaviour
 {
-    [Header("Prefabs")]
-    public GameCellView GameCellPrefab;
-    public ManagerRowView ManagerRowPrefab;
-    public UpgradeRowView UpgradeRowPrefab;
-
-    [Header("Screens")]
-    public GameObject MenuScreen;
-    public GameObject PurchaseScreen;
-    public GameObject NewLevelScreen;
-    public GameObject WelcomeScreen;
-
     [Header("Boards")]
-    public GameObject GameBoard;
-    public GameObject ManagerBoard;
-    public GameObject UpgradeBoard;
+    public Transform GameBoardContent;
+    public Transform ManagerBoardContent;
+    public Transform UpgradeBoardContent;
 
     [Header("Buttons")]
-    public Button MoneyAddButton;
-    public Button GoldAddButton;
-    public Button MenuButton;
+    [SerializeField] private Button _moneyAddButton;
+    [SerializeField] private Button _goldAddButton;
+    [SerializeField] private Button _menuButton;
 
     [Header("Text Fields")]
-
-    [SerializeField]
-    private TextMeshProUGUI MoneyText;
-
-    [SerializeField]
-    private TextMeshProUGUI GoldText;
+    [SerializeField] private TextMeshProUGUI _moneyText;
+    [SerializeField] private TextMeshProUGUI _goldText;
 
     public void SetMoneyNumber(int number)
     {
-        MoneyText.text = number.ToString();
+        _moneyText.text = number.ToString();
     }
     public void SetGoldNumber(int number)
     {
-        GoldText.text = number.ToString();
+        _goldText.text = number.ToString();
+    }
+
+    public void ClickAddButton(Action callBack)
+    {
+        _moneyAddButton.onClick.AddListener(() => callBack?.Invoke());
+        _goldAddButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void ClickMenuButton(Action callBack)
+    {
+        _menuButton.onClick.AddListener(() => callBack?.Invoke());
     }
 }

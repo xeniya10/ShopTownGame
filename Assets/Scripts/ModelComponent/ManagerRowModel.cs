@@ -1,9 +1,12 @@
+using System;
+
 public class ManagerRowModel
 {
-    public int ManagerId { get; set; }
-    public int GameCellId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public int Cost { get; set; }
-    public bool Unlocked { get; set; }
+    public int Level;
+    public string BusinessName;
+    public string Name;
+    public string Description { get { return String.Format("Hire manager to run your {0}", BusinessName); } }
+    public double MoneyCost;
+    public double GoldCost;
+    public bool Unlocked = false;
 }

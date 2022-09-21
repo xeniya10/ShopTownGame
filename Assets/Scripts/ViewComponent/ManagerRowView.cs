@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,45 +6,70 @@ using UnityEngine.UI;
 public class ManagerRowView : MonoBehaviour
 {
     [Header("Components")]
-    public Button HireButton;
-    public Image ManagerImage;
-    public GameObject LockState;
+    [SerializeField] private Button _hireButton;
+    [SerializeField] private Image _managerImage;
+    [SerializeField] private Image _lockImage;
 
     [Space]
-    public TextMeshProUGUI NameText;
-    public TextMeshProUGUI DescriptionText;
-    public TextMeshProUGUI PriceText;
+    [SerializeField] private TextMeshProUGUI _nameText;
+    [SerializeField] private TextMeshProUGUI _descriptionText;
+    [SerializeField] private TextMeshProUGUI _priceText;
 
     [Header("Collections")]
-    public ManagerSpriteCollection ManagerSpriteCollection;
+    [SerializeField] private ManagerSpriteCollection _managerSpriteCollection;
+
+    [Header("Animation Duration")]
+    [SerializeField] private float _fadeTime;
 
     public void SetSprite(int level)
     {
-        ManagerImage.sprite = ManagerSpriteCollection.ManagerSprites[level - 1];
+        _managerImage.sprite = _managerSpriteCollection.ManagerSprites[level - 1];
     }
 
-    public void SetPrice(float price)
+    public void SetMoneyPrice(double price)
     {
-        PriceText.text = price.ToString();
+        _priceText.text = MoneyFormatUtility.MoneyDefault(price);
+    }
+
+    public void SetGoldPrice(double price)
+    {
+        _priceText.text = MoneyFormatUtility.GoldDefault(price);
     }
 
     public void SetName(string name)
     {
-        PriceText.text = name;
+        _nameText.text = name;
     }
 
     public void SetDescription(string description)
     {
-        PriceText.text = description;
+        _descriptionText.text = description;
+    }
+
+    public void ClickHireButton(Action callBack)
+    {
+        _hireButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public ManagerRowView Create(Transform parent)
+    {
+        var cell = Instantiate(this, parent);
+        return cell;
     }
 
     public void Lock()
     {
-        LockState.SetActive(true);
+        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        () =>
+        {
+            _lockImage.gameObject.SetActive(true);
+            AnimationUtility.FadeImage(_lockImage, 1, _fadeTime, null, null);
+        });
     }
 
     public void Unlock()
     {
-        LockState.SetActive(false);
+        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        () => _lockImage.gameObject.SetActive(false));
     }
 }
