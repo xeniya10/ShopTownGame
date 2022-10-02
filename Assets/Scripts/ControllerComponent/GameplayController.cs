@@ -1,37 +1,43 @@
 using System.Collections.Generic;
-using UnityEngine;
 using VContainer.Unity;
 
 public class GameplayController : IStartable
 {
-    private readonly GameCellView _gameCellPrefab;
-    private readonly ManagerRowView _managerRowPrefab;
-    private readonly UpgradeRowView _upgradeRowPrefab;
+    private readonly GameCellPresenter _gameCellPresenter;
+    private readonly ManagerRowPresenter _managerRowPresenter;
+    private readonly UpgradeRowPresenter _upgradeRowPresenter;
+
+    private readonly GameScreenPresenter _gameScreenPresenter;
+
+    private readonly DataController _dataController;
     private readonly GameScreenView _gameScreenView;
 
-    private readonly GameBoardModel _gameBoardModel;
-    private readonly DataController _dataController;
+    private readonly List<GameCellPresenter> _gameCells = new List<GameCellPresenter>();
+    private readonly List<ManagerRowPresenter> _managerRows = new List<ManagerRowPresenter>();
+    private readonly List<UpgradeRowPresenter> _upgradeRows = new List<UpgradeRowPresenter>();
 
-    private readonly List<GameCellView> _gameCells = new List<GameCellView>();
-    private readonly List<ManagerRowView> _managerRows = new List<ManagerRowView>();
-    private readonly List<UpgradeRowView> _upgradeRows = new List<UpgradeRowView>();
+    private int _activationCounter = 0;
 
-    public GameplayController(GameCellView gameCellPrefab,
-    ManagerRowView managerRowPrefab, UpgradeRowView upgradeRowPrefab,
-    GameScreenView gameScreenView, GameBoardModel gameBoardModel,
-    DataController dataController)
+    public GameplayController(GameCellPresenter gameCellPresenter,
+    ManagerRowPresenter managerRowPresenter, UpgradeRowPresenter upgradeRowPresenter,
+    DataController dataController, GameScreenView gameScreenView,
+    GameScreenPresenter gameScreenPresenter)
     {
-        _gameCellPrefab = gameCellPrefab;
-        _managerRowPrefab = managerRowPrefab;
-        _upgradeRowPrefab = upgradeRowPrefab;
-        _gameScreenView = gameScreenView;
-        _gameBoardModel = gameBoardModel;
+        _gameCellPresenter = gameCellPresenter;
+        _managerRowPresenter = managerRowPresenter;
+        _upgradeRowPresenter = upgradeRowPresenter;
+
         _dataController = dataController;
+        _gameScreenView = gameScreenView;
+
+
+        _gameScreenPresenter = gameScreenPresenter;
     }
 
     public void Start()
     {
         _dataController.CreateDefaultGameData();
+        _gameScreenPresenter.Initialize();
 
         CreateBoard();
         CreateManagerList();
@@ -40,19 +46,44 @@ public class GameplayController : IStartable
 
     private void CreateBoard()
     {
-        var cellSize = _gameBoardModel.CalculateCellSize();
-        _gameCellPrefab.SetSize(cellSize);
+        var data = _dataController.GameData;
 
-        for (int i = 0; i < _gameBoardModel.Rows; i++)
+        for (int i = 0; i < data.Businesses.Count; i++)
         {
-            for (int j = 0; j < _gameBoardModel.Columns; j++)
-            {
-                var cell = _gameCellPrefab.Create(_gameScreenView.GameBoardContent);
-                _gameCells.Add(cell);
+            var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, data.Businesses[i]);
+            cell.Buy(() => CheckPurchase(cell));
+            _gameCells.Add(cell);
+        }
+    }
 
-                cell.SetRandomBackgroundSprite();
-                cell.StartPosition = _gameBoardModel.CalculateCellPosition(j, i, cellSize);
-                cell.SetPosition(cell.StartPosition);
+    private void CheckPurchase(GameCellPresenter cell)
+    {
+        var cost = cell.GetCost();
+        if (_dataController.GameData.CanBuy(cost))
+        {
+            cell.Activate();
+            CheckNeighbors(cell);
+        }
+    }
+
+    private void CheckNeighbors(GameCellPresenter activatedCell)
+    {
+        var neighbors = new List<GameCellPresenter>();
+        foreach (var cell in _gameCells)
+        {
+            if (cell.IsNeighbor(activatedCell.GetPosition()))
+            {
+                neighbors.Add(cell);
+            }
+        }
+
+        if (neighbors.Count > 0)
+        {
+            _activationCounter++;
+            foreach (var cell in neighbors)
+            {
+                cell.SetCost(_activationCounter);
+                cell.Unlock();
             }
         }
     }
@@ -61,20 +92,10 @@ public class GameplayController : IStartable
     {
         var data = _dataController.GameData;
 
-        for (int i = 0; i < _dataController.GameData.NumberOfLevels - 1; i++)
+        for (int i = 0; i < data.Managers.Count; i++)
         {
-            var level = i + 1;
-            var row = _managerRowPrefab.Create(_gameScreenView.ManagerBoardContent);
+            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, data.Managers[i]);
             _managerRows.Add(row);
-
-            row.SetSprite(level);
-            row.SetMoneyPrice(data.Managers[i].MoneyCost);
-            if (data.Managers[i].MoneyCost == 0)
-            {
-                row.SetGoldPrice(data.Managers[i].GoldCost);
-            }
-            row.SetName(data.Managers[i].Name);
-            row.SetDescription(data.Managers[i].Description);
         }
     }
 
@@ -82,20 +103,10 @@ public class GameplayController : IStartable
     {
         var data = _dataController.GameData;
 
-        for (int i = 0; i < _dataController.GameData.NumberOfLevels - 1; i++)
+        for (int i = 0; i < data.Upgrades.Count; i++)
         {
-            var level = i + 1;
-            var row = _upgradeRowPrefab.Create(_gameScreenView.UpgradeBoardContent);
+            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, data.Upgrades[i]);
             _upgradeRows.Add(row);
-
-            row.SetFirstUpgradeSprite(level);
-            row.SetMoneyPrice(data.FirstUpgrades[i].MoneyCost);
-            if (data.FirstUpgrades[i].MoneyCost == 0)
-            {
-                row.SetGoldPrice(data.FirstUpgrades[i].GoldCost);
-            }
-            row.SetName(data.FirstUpgrades[i].Name);
-            row.SetDescription(data.FirstUpgrades[i].Description);
         }
     }
 }

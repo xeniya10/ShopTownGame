@@ -17,9 +17,9 @@ public class GameDataModel
 
     public List<GameCellModel> Businesses;
     public List<ManagerRowModel> Managers;
-    public List<UpgradeRowModel> FirstUpgrades;
-    public List<UpgradeRowModel> SecondUpgrades;
-    public List<UpgradeRowModel> ThirdUpgrades;
+    public List<UpgradeRowModel> Upgrades;
+
+    public Action BalanceChangeEvent;
 
     public void SetBalance(double amount)
     {
@@ -44,6 +44,7 @@ public class GameDataModel
             return false;
         }
 
+        SubtractFromBalance(amount);
         return true;
     }
 }

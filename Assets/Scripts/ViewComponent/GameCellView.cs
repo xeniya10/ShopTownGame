@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using System.Collections.Generic;
 using Random = UnityEngine.Random;
+using DG.Tweening;
+using System.Collections.Generic;
 
 public class GameCellView : MonoBehaviour
 {
@@ -12,14 +13,14 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private RectTransform _cellRect;
 
     [Space]
-    [SerializeField] private Button _earnButton;
-    [SerializeField] private Button _buyButton;
+    public Button CellButton;
+    public Button BuyButton;
 
     [Space]
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private Image _businessImage;
     [SerializeField] private Image _progressImage;
-    [SerializeField] private Image _blockImage;
+    [SerializeField] private Image _unlockImage;
     [SerializeField] private Image _lockImage;
 
     [Space]
@@ -34,13 +35,13 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private float _fadeTime;
 
     private Vector2[] _hitDirections = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
-    [HideInInspector] public Vector2 StartPosition { get; set; }
 
-    public void SetRandomBackgroundSprite()
+    public int RandomBackgroundSpriteNumber()
     {
         var randomNumber = Random.Range(0, _backgroundSpriteCollection.BackgroundSprites.Count);
-        _backgroundImage.sprite = _backgroundSpriteCollection.BackgroundSprites[randomNumber];
+        return randomNumber;
     }
+
     public void SetBackgroundSprite(int i)
     {
         _backgroundImage.sprite = _backgroundSpriteCollection.BackgroundSprites[i];
@@ -51,14 +52,9 @@ public class GameCellView : MonoBehaviour
         _businessImage.sprite = _businessSpriteCollection.BusinessSprites[level - 1];
     }
 
-    public void SetMoneyPrice(double price)
+    public void SetCost(double cost)
     {
-        _priceText.text = MoneyFormatUtility.MoneyDefault(price);
-    }
-
-    public void SetGoldPrice(double price)
-    {
-        _priceText.text = MoneyFormatUtility.GoldDefault(price);
+        _priceText.text = MoneyFormatUtility.Default(cost);
     }
 
     public void SetPosition(Vector2 position)
@@ -71,72 +67,96 @@ public class GameCellView : MonoBehaviour
         _cellRect.sizeDelta = new Vector2(size, size);
     }
 
-    public void ClickBuyButton(Action callBack)
-    {
-        _buyButton.onClick.AddListener(() => callBack?.Invoke());
-    }
-
-    public void ClickEarnButton(Action callBack)
-    {
-        _earnButton.onClick.AddListener(() => callBack?.Invoke());
-    }
-
-    public GameCellView Create(Transform parent)
+    public GameCellView Create(Transform parent, float size, Vector2 position, int spriteNumber)
     {
         var cell = Instantiate(this, parent);
+        cell.SetSize(size);
+        cell.SetPosition(position);
+        cell.SetLockState();
         return cell;
     }
 
-    public void Block()
+    public void SetLockState()
     {
         _progressBar.SetActive(false);
-        _blockImage.gameObject.SetActive(true);
-        _lockImage.gameObject.SetActive(false);
-    }
-
-    public void Lock()
-    {
         _lockImage.gameObject.SetActive(true);
-        AnimationUtility.FadeImage(_blockImage, 0, _fadeTime, null,
-        () => _blockImage.gameObject.SetActive(false));
+        _unlockImage.gameObject.SetActive(false);
     }
 
-    public void Unlock()
+    public void SetUnlockState()
     {
-        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        var sequence = DOTween.Sequence();
+
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, sequence,
         () => _lockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_unlockImage, 1, _fadeTime, sequence, null);
+
+        _unlockImage.gameObject.SetActive(true);
+        sequence.Play();
     }
 
-    public void ChangeProgressBar(float currentTime, float totalTime)
+    public void SetActiveState()
+    {
+        AnimationUtility.Fade(_unlockImage, 0, _fadeTime, null,
+        () => _unlockImage.gameObject.SetActive(false));
+    }
+
+    public void ChangeState(CellState state)
+    {
+        switch (state)
+        {
+            case CellState.Lock:
+                this.SetLockState();
+                break;
+
+            case CellState.Unlock:
+                this.SetUnlockState();
+                break;
+
+            case CellState.Active:
+                this.SetActiveState();
+                break;
+        }
+    }
+
+    public void Click(Action callBack)
+    {
+        CellButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void SetProcessState(double totalTime)
     {
         _progressBar.SetActive(true);
-
-        _progressImage.fillAmount = currentTime / totalTime;
-        _progressTimeText.text = currentTime.ToString();
-
-        if (currentTime < 0.01f)
+        AnimationUtility.Fill(_progressImage, _progressTimeText, (float)totalTime, null, () =>
         {
+            _progressImage.fillAmount = 1;
             _progressBar.SetActive(false);
-        }
+        });
+
+        // _progressImage.fillAmount = currentTime / totalTime;
+        // _progressTimeText.text = currentTime.ToString();
+
+        // if (currentTime < 0.01f)
+        // {
+        //     _progressBar.SetActive(false);
+        // }
     }
 
-    public void Drag() { }
+    // public List<GameCellView> CheckNeighbors()
+    // {
+    //     var hitedCells = new List<GameCellView>();
 
-    public List<GameCellView> CheckNeighbors()
-    {
-        List<GameCellView> hitedCells = new List<GameCellView>();
+    //     for (int i = 0; i < _hitDirections.Length; i++)
+    //     {
+    //         RaycastHit2D hit = Physics2D.Raycast(transform.position, _hitDirections[i]);
+    //         GameCellView hitedCell = hit.collider?.GetComponent<GameCellView>();
 
-        for (int i = 0; i < _hitDirections.Length; i++)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(this.transform.position, _hitDirections[i]);
-            GameCellView hitedCell = hit.collider?.GetComponent<GameCellView>();
+    //         if (hitedCell != null)
+    //         {
+    //             hitedCells.Add(hitedCell);
+    //         }
+    //     }
 
-            if (hitedCell != null)
-            {
-                hitedCells.Add(hitedCell);
-            }
-        }
-
-        return hitedCells;
-    }
+    //     return hitedCells;
+    // }
 }

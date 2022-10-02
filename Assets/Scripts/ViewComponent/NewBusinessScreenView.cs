@@ -17,12 +17,12 @@ public class NewBusinessScreenView : MonoBehaviour
     [SerializeField] private float _moveTime;
     private Vector2 _startPosition;
 
-    private void SetSprite(int level)
+    public void SetSprite(int level)
     {
         _businessImage.sprite = _businessSpriteCollection.BusinessSprites[level - 1];
     }
 
-    private void SetNameText(string businessName)
+    public void SetNameText(string businessName)
     {
         _businessNameText.text = businessName;
     }

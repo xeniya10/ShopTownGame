@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class AnimationUtility
 {
-    public static void FadeImage(Image image, int alpha, float time, Sequence sequence, Action CallBack)
+    public static void Fade(Image image, int alpha, float time, Sequence sequence, Action CallBack)
     {
         if (sequence != null)
         {
@@ -21,7 +21,7 @@ public static class AnimationUtility
         }
     }
 
-    public static void FadeText(TextMeshProUGUI text, int alpha, float time, Sequence sequence, Action CallBack)
+    public static void Fade(TextMeshProUGUI text, int alpha, float time, Sequence sequence, Action CallBack)
     {
         if (sequence != null)
         {
@@ -34,6 +34,52 @@ public static class AnimationUtility
             var animation = text.DOFade(alpha, time)
             .OnComplete(() => CallBack?.Invoke());
         }
+    }
+
+    public static void Fill(Image image, TextMeshProUGUI text, float duration, Sequence sequence, Action CallBack)
+    {
+        float currentTime = 0;
+
+        if (sequence != null)
+        {
+            sequence.Append(image.DOFillAmount(0, duration)
+            .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
+            .OnComplete(() => CallBack?.Invoke()));
+        }
+
+        else
+        {
+            var animation = image.DOFillAmount(0, duration)
+            .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
+            .OnComplete(() => CallBack?.Invoke());
+        }
+    }
+
+    public static string TimeToString(TimeSpan timeSpan)
+    {
+        if (timeSpan.Hours == 0 && timeSpan.Minutes == 0)
+        {
+            if (timeSpan.Seconds < 10)
+            {
+                return timeSpan.ToString(@"s\.f");
+            }
+            return timeSpan.ToString(@"ss\.f");
+        }
+
+        if (timeSpan.Hours == 0)
+        {
+            if (timeSpan.Minutes < 10)
+            {
+                return timeSpan.ToString(@"m\:ss");
+            }
+            return timeSpan.ToString(@"mm\:ss");
+        }
+
+        if (timeSpan.Hours < 10)
+        {
+            return timeSpan.ToString(@"h\:mm\:ss");
+        }
+        return timeSpan.ToString(@"hh\:mm\:ss");
     }
 
     public static void Scale(Transform objectTransform, Vector2 scale, float time, Sequence sequence, Action CallBack)

@@ -6,9 +6,9 @@ using System;
 public class GameScreenView : MonoBehaviour
 {
     [Header("Boards")]
-    public Transform GameBoardContent;
-    public Transform ManagerBoardContent;
-    public Transform UpgradeBoardContent;
+    public Transform GameBoard;
+    public Transform ManagerBoard;
+    public Transform UpgradeBoard;
 
     [Header("Buttons")]
     [SerializeField] private Button _moneyAddButton;
@@ -19,13 +19,13 @@ public class GameScreenView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _moneyText;
     [SerializeField] private TextMeshProUGUI _goldText;
 
-    public void SetMoneyNumber(int number)
+    public void SetMoneyNumber(double number)
     {
-        _moneyText.text = number.ToString();
+        _moneyText.text = MoneyFormatUtility.Default(number);
     }
-    public void SetGoldNumber(int number)
+    public void SetGoldNumber(double number)
     {
-        _goldText.text = number.ToString();
+        _goldText.text = MoneyFormatUtility.Default(number);
     }
 
     public void ClickAddButton(Action callBack)
@@ -37,5 +37,15 @@ public class GameScreenView : MonoBehaviour
     public void ClickMenuButton(Action callBack)
     {
         _menuButton.onClick.AddListener(() => callBack?.Invoke());
+    }
+
+    public void HideGameBoard()
+    {
+        GameBoard.gameObject.SetActive(false);
+    }
+
+    public void ShowGameBoard()
+    {
+        GameBoard.gameObject.SetActive(true);
     }
 }

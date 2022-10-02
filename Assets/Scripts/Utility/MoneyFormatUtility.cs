@@ -181,6 +181,12 @@ public static class MoneyFormatUtility
         return textNumber.Length;
     }
 
+    public static string Default(double unformatted)
+    {
+        var money = GetNumberDetails(unformatted);
+        return money.FormattedNumber + money.Scale;
+    }
+
     public static string MoneyDefault(double unformatted)
     {
         var money = GetNumberDetails(unformatted);

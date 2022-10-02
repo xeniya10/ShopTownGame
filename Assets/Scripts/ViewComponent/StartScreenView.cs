@@ -48,10 +48,10 @@ public class StartScreenView : MonoBehaviour
     {
         _disappearSequence = DOTween.Sequence();
 
-        AnimationUtility.FadeText(_startButtonText, 0, _fadeTime, _disappearSequence, null);
-        AnimationUtility.FadeText(_gameNameText, 0, _fadeTime, _disappearSequence, null);
+        AnimationUtility.Fade(_startButtonText, 0, _fadeTime, _disappearSequence, null);
+        AnimationUtility.Fade(_gameNameText, 0, _fadeTime, _disappearSequence, null);
         DisappearCells(list);
-        AnimationUtility.FadeImage(_startScreenImage, 0, _fadeTime, _disappearSequence,
+        AnimationUtility.Fade(_startScreenImage, 0, _fadeTime, _disappearSequence,
         () => gameObject.SetActive(false));
 
         _disappearSequence.Play();

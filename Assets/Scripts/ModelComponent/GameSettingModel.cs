@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class GameSettingModel
 {
     public bool Music { get; set; }

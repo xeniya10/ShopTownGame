@@ -61,25 +61,44 @@ public class UpgradeRowView : MonoBehaviour
         _buyButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public UpgradeRowView Create(Transform parent)
+    public UpgradeRowView Create(Transform parent, int upgradeLevel, int level, string name, string description)
     {
-        var cell = Instantiate(this, parent);
-        return cell;
+        var row = Instantiate(this, parent);
+
+        switch (upgradeLevel)
+        {
+            case 1:
+                row.SetFirstUpgradeSprite(level);
+                break;
+
+            case 2:
+                row.SetSecondUpgradeSprite(level);
+                break;
+
+            case 3:
+                row.SetThirdUpgradeSprite(level);
+                break;
+        }
+
+        row.SetName(name);
+        row.SetDescription(description);
+
+        return row;
     }
 
     public void Lock()
     {
-        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
         () =>
         {
             _lockImage.gameObject.SetActive(true);
-            AnimationUtility.FadeImage(_lockImage, 1, _fadeTime, null, null);
+            AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
         });
     }
 
     public void Unlock()
     {
-        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
         () => _lockImage.gameObject.SetActive(false));
     }
 }

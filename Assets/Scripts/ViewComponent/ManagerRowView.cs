@@ -51,25 +51,28 @@ public class ManagerRowView : MonoBehaviour
         _hireButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public ManagerRowView Create(Transform parent)
+    public ManagerRowView Create(Transform parent, int level, string name, string description)
     {
-        var cell = Instantiate(this, parent);
-        return cell;
+        var row = Instantiate(this, parent);
+        row.SetSprite(level);
+        row.SetName(name);
+        row.SetDescription(description);
+        return row;
     }
 
     public void Lock()
     {
-        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
         () =>
         {
             _lockImage.gameObject.SetActive(true);
-            AnimationUtility.FadeImage(_lockImage, 1, _fadeTime, null, null);
+            AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
         });
     }
 
     public void Unlock()
     {
-        AnimationUtility.FadeImage(_lockImage, 0, _fadeTime, null,
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
         () => _lockImage.gameObject.SetActive(false));
     }
 }

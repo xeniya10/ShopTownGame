@@ -15,12 +15,12 @@ public class WelcomeScreenView : MonoBehaviour
     [SerializeField] private float _moveTime;
     private Vector2 _startPosition;
 
-    private void SetMoneyNumber(float moneyAmount)
+    public void SetMoneyNumber(float moneyAmount)
     {
         _moneyText.text = moneyAmount.ToString();
     }
 
-    private void SetGoldNumber(float goldAmount)
+    public void SetGoldNumber(float goldAmount)
     {
         _goldText.text = goldAmount.ToString();
     }

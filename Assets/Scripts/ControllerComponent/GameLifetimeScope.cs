@@ -19,8 +19,12 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField] private UpgradeRowView _upgradeRowPrefab;
     [SerializeField] private PackCellView _packCellPrefab;
 
-    // [Header("ScriptableObjects")]
+    [Header("ScriptableObjects")]
     // [SerializeField] private GameSettings _gameSettings;
+    [SerializeField] private BusinessData _businessData;
+    [SerializeField] private GameCellData _gameCellData;
+    [SerializeField] private ManagerRowData _managerRowData;
+    [SerializeField] private UpgradeRowData _upgradeRowData;
 
     [Header("Audio")]
     [SerializeField] private AudioSourceView _audioSource;
@@ -57,7 +61,11 @@ public class GameLifetimeScope : LifetimeScope
     private void RegisterPresenter(IContainerBuilder builder)
     {
         builder.Register<StartScreenPresenter>(Lifetime.Scoped);
-        // builder.RegisterEntryPoint<StartScreenPresenter>(Lifetime.Scoped);
+        builder.Register<GameScreenPresenter>(Lifetime.Scoped);
+
+        builder.Register<GameCellPresenter>(Lifetime.Scoped);
+        builder.Register<ManagerRowPresenter>(Lifetime.Scoped);
+        builder.Register<UpgradeRowPresenter>(Lifetime.Scoped);
     }
 
     private void RegisterView(IContainerBuilder builder)
@@ -74,6 +82,11 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_managerRowPrefab);
         builder.RegisterInstance(_upgradeRowPrefab);
 
-        // builder.RegisterInstance(_gameSettings);
+        builder.RegisterInstance(_businessData);
+        builder.RegisterInstance(_gameCellData);
+        builder.RegisterInstance(_managerRowData);
+        builder.RegisterInstance(_upgradeRowData);
+
+        builder.RegisterInstance(_audioSource);
     }
 }

@@ -1,21 +1,23 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class StartScreenModel
 {
     public int Rows = 7;
     public int Columns = 4;
-    public int ScreenWidth = 800;
+    private const int _widthReference = 800;
     public float SizeFactor = 1.3f;
 
     public float CalculateCellSize()
     {
-        var cellSize = SizeFactor * ScreenWidth / Columns;
+        var cellSize = SizeFactor * _widthReference / Columns;
         return cellSize;
     }
 
     public Vector2 CalculateStartPosition(float xFactor, float yFactor, float cellSize)
     {
-        var x = -ScreenWidth - cellSize * (xFactor + 1);
+        var x = -_widthReference - cellSize * (xFactor + 1);
         var y = Screen.height - cellSize * (yFactor + 1);
 
         var cellPosition = new Vector2(x, y);
