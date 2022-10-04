@@ -6,17 +6,17 @@ public class MoneyModel
     public string FormattedNumber { get; private set; }
     public string Scale { get; private set; }
 
-    public MoneyModel(double number, string formattednumber, string scale)
+    public MoneyModel(double number, string formattedNumber, string scale)
     {
-        this.Number = number;
-        this.FormattedNumber = formattednumber;
-        this.Scale = scale;
+        Number = number;
+        FormattedNumber = formattedNumber;
+        Scale = scale;
     }
 }
 
 public static class MoneyFormatUtility
 {
-    public static Dictionary<int, string> Scales = new Dictionary<int, string>
+    private static Dictionary<int, string> _scales = new()
     {
         {3, "K"},
         {6, "M"},
@@ -122,57 +122,56 @@ public static class MoneyFormatUtility
         {306, "UC"}
     };
 
-    private static int lowestScale = 3;
+    private static int _lowestScale = 3;
 
     public static MoneyModel GetNumberParameters(string number)
     {
         return GetNumberDetails(double.Parse(number));
     }
 
-    public static MoneyModel GetNumberDetails(double number)
+    private static MoneyModel GetNumberDetails(double number)
     {
         var textNumber = number.ToString();
         var scale = DigitCount(textNumber) - 1;
-        string formatedTextNumber;
-        string textScale;
+        string formattedTextNumber;
 
-        if (scale < lowestScale)
+        if (scale < _lowestScale)
         {
-            formatedTextNumber = number.ToString("#,##0.0");
+            formattedTextNumber = number.ToString("#,##0.0");
 
-            if (formatedTextNumber.Substring(formatedTextNumber.IndexOf('.'), 2).Equals(".0"))
+            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))
             {
                 return new MoneyModel(number, number.ToString("#,##0"), string.Empty);
             }
 
-            return new MoneyModel(number, formatedTextNumber, string.Empty);
+            return new MoneyModel(number, formattedTextNumber, string.Empty);
         }
 
-        var scaleModulo = scale % lowestScale;
+        var scaleModulo = scale % _lowestScale;
         var key = scale - scaleModulo;
-        Scales.TryGetValue(key, out textScale);
+        _scales.TryGetValue(key, out var textScale);
 
-        formatedTextNumber = textNumber.Substring(0, scaleModulo + 1);
+        formattedTextNumber = textNumber.Substring(0, scaleModulo + 1);
         var fractionText = "." + textNumber.Substring(scaleModulo + 1, 1);
 
         if (!fractionText.Equals(".0"))
         {
-            formatedTextNumber += fractionText;
+            formattedTextNumber += fractionText;
         }
 
-        return new MoneyModel(number, formatedTextNumber, textScale);
+        return new MoneyModel(number, formattedTextNumber, textScale);
     }
 
     private static int DigitCount(string textNumber)
     {
-        int plusIndex = textNumber.IndexOf("+");
+        var plusIndex = textNumber.IndexOf("+");
         if (plusIndex > 0)
         {
-            string s = textNumber.Substring(plusIndex, textNumber.Length - plusIndex);
+            var s = textNumber.Substring(plusIndex, textNumber.Length - plusIndex);
             return int.Parse(s) + 1;
         }
 
-        int dotIndex = textNumber.IndexOf(".");
+        var dotIndex = textNumber.IndexOf(".");
         if (dotIndex > 0)
         {
             textNumber = textNumber.Substring(0, dotIndex);

@@ -3,14 +3,15 @@
 
 using UnityEngine;
 
-namespace DanielLochner.Assets.SimpleScrollSnap
+namespace Simple_Scroll_Snap.Examples.Example_6__3D_Shape_Selection_.Scripts
 {
-    public class Rotator : MonoBehaviour
+public class Rotator : MonoBehaviour
+{
+    [SerializeField] private float rotationSpeed;
+
+    private void Update()
     {
-        [SerializeField] private float rotationSpeed;
-        private void Update()
-        {
-            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
-        }
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
     }
+}
 }

@@ -1,9 +1,12 @@
+using System;
+using DG.Tweening;
+using ShopTown.SpriteContainer;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using System;
 
+namespace ShopTown.ViewComponent
+{
 public class NewBusinessScreenView : MonoBehaviour
 {
     [Header("Components")]
@@ -11,18 +14,19 @@ public class NewBusinessScreenView : MonoBehaviour
     [SerializeField] private Button _okButton;
     [SerializeField] private TextMeshProUGUI _businessNameText;
     [SerializeField] private ParticleSystem _confettiParticleSystem;
-    [SerializeField] private BusinessSpriteCollection _businessSpriteCollection;
+    [SerializeField] private BusinessCollection _businessCollection;
 
     [Header("Animation Durations")]
     [SerializeField] private float _moveTime;
+
     private Vector2 _startPosition;
 
-    public void SetSprite(int level)
+    private void SetSprite(int level)
     {
-        _businessImage.sprite = _businessSpriteCollection.BusinessSprites[level - 1];
+        _businessImage.sprite = _businessCollection.Sprites[level - 1];
     }
 
-    public void SetNameText(string businessName)
+    private void SetNameText(string businessName)
     {
         _businessNameText.text = businessName;
     }
@@ -58,4 +62,5 @@ public class NewBusinessScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+}
 }

@@ -2,84 +2,93 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using DanielLochner.Assets.SimpleScrollSnap;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-namespace DanielLochner.Assets.SimpleScrollSnap
+namespace Simple_Scroll_Snap.Examples.Example_5__Dynamic_Content_.Scripts
 {
-    public class DynamicContent : MonoBehaviour
+public class DynamicContent : MonoBehaviour
+{
+    #region Fields
+
+    [SerializeField] private GameObject panelPrefab;
+    [SerializeField] private Toggle togglePrefab;
+    [SerializeField] private ToggleGroup toggleGroup;
+    [SerializeField] private InputField addInputField, removeInputField;
+    [SerializeField] private SimpleScrollSnap scrollSnap;
+
+    private float toggleWidth;
+
+    #endregion
+
+    #region Methods
+
+    private void Awake()
     {
-        #region Fields
-        [SerializeField] private GameObject panelPrefab;
-        [SerializeField] private Toggle togglePrefab;
-        [SerializeField] private ToggleGroup toggleGroup;
-        [SerializeField] private InputField addInputField, removeInputField;
-        [SerializeField] private SimpleScrollSnap scrollSnap;
+        toggleWidth = (togglePrefab.transform as RectTransform).sizeDelta.x * (Screen.width / 2048f);
+        ;
+    }
 
-        private float toggleWidth;
-        #endregion
+    public void Add(int index)
+    {
+        // Pagination
+        var toggle = Instantiate(togglePrefab, scrollSnap.Pagination.transform.position + new Vector3(toggleWidth * (scrollSnap.NumberOfPanels + 1), 0, 0), Quaternion.identity, scrollSnap.Pagination.transform);
+        toggle.group = toggleGroup;
+        scrollSnap.Pagination.transform.position -= new Vector3(toggleWidth / 2f, 0, 0);
 
-        #region Methods
-        private void Awake()
-        {
-            toggleWidth = (togglePrefab.transform as RectTransform).sizeDelta.x * (Screen.width / 2048f); ;
-        }
+        // Panel
+        panelPrefab.GetComponent<Image>().color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+        scrollSnap.Add(panelPrefab, index);
+    }
 
-        public void Add(int index)
+    public void AddAtIndex()
+    {
+        Add(Convert.ToInt32(addInputField.text));
+    }
+
+    public void AddToFront()
+    {
+        Add(0);
+    }
+
+    public void AddToBack()
+    {
+        Add(scrollSnap.NumberOfPanels);
+    }
+
+    public void Remove(int index)
+    {
+        if (scrollSnap.NumberOfPanels > 0)
         {
             // Pagination
-            Toggle toggle = Instantiate(togglePrefab, scrollSnap.Pagination.transform.position + new Vector3(toggleWidth * (scrollSnap.NumberOfPanels + 1), 0, 0), Quaternion.identity, scrollSnap.Pagination.transform);
-            toggle.group = toggleGroup;
-            scrollSnap.Pagination.transform.position -= new Vector3(toggleWidth / 2f, 0, 0);
+            DestroyImmediate(scrollSnap.Pagination.transform.GetChild(scrollSnap.NumberOfPanels - 1).gameObject);
+            scrollSnap.Pagination.transform.position += new Vector3(toggleWidth / 2f, 0, 0);
 
             // Panel
-            panelPrefab.GetComponent<Image>().color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
-            scrollSnap.Add(panelPrefab, index);
+            scrollSnap.Remove(index);
         }
-        public void AddAtIndex()
-        {
-            Add(Convert.ToInt32(addInputField.text));
-        }
-        public void AddToFront()
-        {
-            Add(0);
-        }
-        public void AddToBack()
-        {
-            Add(scrollSnap.NumberOfPanels);
-        }
-
-        public void Remove(int index)
-        {
-            if (scrollSnap.NumberOfPanels > 0)
-            {
-                // Pagination
-                DestroyImmediate(scrollSnap.Pagination.transform.GetChild(scrollSnap.NumberOfPanels - 1).gameObject);
-                scrollSnap.Pagination.transform.position += new Vector3(toggleWidth / 2f, 0, 0);
-
-                // Panel
-                scrollSnap.Remove(index);
-            }
-        }
-        public void RemoveAtIndex()
-        {
-            Remove(Convert.ToInt32(removeInputField.text));
-        }
-        public void RemoveFromFront()
-        {
-            Remove(0);
-        }
-        public void RemoveFromBack()
-        {
-            if (scrollSnap.NumberOfPanels > 0)
-            {
-                Remove(scrollSnap.NumberOfPanels - 1);
-            }
-            else
-            {
-                Remove(0);
-            }
-        }
-        #endregion
     }
+
+    public void RemoveAtIndex()
+    {
+        Remove(Convert.ToInt32(removeInputField.text));
+    }
+
+    public void RemoveFromFront()
+    {
+        Remove(0);
+    }
+
+    public void RemoveFromBack()
+    {
+        if (scrollSnap.NumberOfPanels > 0)
+            Remove(scrollSnap.NumberOfPanels - 1);
+        else
+            Remove(0);
+    }
+
+    #endregion
+}
 }

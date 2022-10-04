@@ -1,6 +1,11 @@
 using System.Collections.Generic;
+using ShopTown.ModelComponent;
+using ShopTown.PresenterComponent;
+using ShopTown.ViewComponent;
 using VContainer.Unity;
 
+namespace ShopTown.ControllerComponent
+{
 public class GameplayController : IStartable
 {
     private readonly GameCellPresenter _gameCellPresenter;
@@ -8,20 +13,17 @@ public class GameplayController : IStartable
     private readonly UpgradeRowPresenter _upgradeRowPresenter;
 
     private readonly GameScreenPresenter _gameScreenPresenter;
-
-    private readonly DataController _dataController;
     private readonly GameScreenView _gameScreenView;
+    private readonly DataController _dataController;
 
-    private readonly List<GameCellPresenter> _gameCells = new List<GameCellPresenter>();
-    private readonly List<ManagerRowPresenter> _managerRows = new List<ManagerRowPresenter>();
-    private readonly List<UpgradeRowPresenter> _upgradeRows = new List<UpgradeRowPresenter>();
+    private readonly List<GameCellPresenter> _gameCells = new();
+    private readonly List<ManagerRowPresenter> _managerRows = new();
+    private readonly List<UpgradeRowPresenter> _upgradeRows = new();
 
-    private int _activationCounter = 0;
+    private int _activationCounter;
 
-    public GameplayController(GameCellPresenter gameCellPresenter,
-    ManagerRowPresenter managerRowPresenter, UpgradeRowPresenter upgradeRowPresenter,
-    DataController dataController, GameScreenView gameScreenView,
-    GameScreenPresenter gameScreenPresenter)
+    public GameplayController(GameCellPresenter gameCellPresenter, ManagerRowPresenter managerRowPresenter, UpgradeRowPresenter upgradeRowPresenter,
+        DataController dataController, GameScreenView gameScreenView, GameScreenPresenter gameScreenPresenter)
     {
         _gameCellPresenter = gameCellPresenter;
         _managerRowPresenter = managerRowPresenter;
@@ -29,7 +31,6 @@ public class GameplayController : IStartable
 
         _dataController = dataController;
         _gameScreenView = gameScreenView;
-
 
         _gameScreenPresenter = gameScreenPresenter;
     }
@@ -48,9 +49,9 @@ public class GameplayController : IStartable
     {
         var data = _dataController.GameData;
 
-        for (int i = 0; i < data.Businesses.Count; i++)
+        foreach (var model in data.Businesses)
         {
-            var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, data.Businesses[i]);
+            var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, model);
             cell.Buy(() => CheckPurchase(cell));
             _gameCells.Add(cell);
         }
@@ -91,10 +92,9 @@ public class GameplayController : IStartable
     private void CreateManagerList()
     {
         var data = _dataController.GameData;
-
-        for (int i = 0; i < data.Managers.Count; i++)
+        foreach (var model in data.Managers)
         {
-            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, data.Managers[i]);
+            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, model);
             _managerRows.Add(row);
         }
     }
@@ -102,11 +102,11 @@ public class GameplayController : IStartable
     private void CreateUpgradeList()
     {
         var data = _dataController.GameData;
-
-        for (int i = 0; i < data.Upgrades.Count; i++)
+        foreach (var model in data.Upgrades)
         {
-            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, data.Upgrades[i]);
+            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, model);
             _upgradeRows.Add(row);
         }
     }
+}
 }

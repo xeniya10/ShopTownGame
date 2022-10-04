@@ -1,58 +1,69 @@
 using System;
+using ShopTown.Data;
 using UnityEngine;
 
+namespace ShopTown.ModelComponent
+{
 public enum CellState
 {
     Lock,
     Unlock,
-    Active
+    Active,
+    Process
 }
 
-[Serializable]
 public class GameCellModel
 {
+    // Description
     public int Level;
-    public string BusinessName { get { return _business.LevelNames[Level - 1]; } }
-    public int BackgroundNumber;
+    public int BackgroundNumber = int.MinValue;
+    public string BusinessName { get { return _businessData.LevelNames[Level - 1]; } }
 
-    public double Cost = 2;
-    public double BaseProfit { get { return _cellData.BaseProfit[Level - 1]; } }
-    public double Profit { get { return BaseProfit * ProfitMultiplier; } }
-    public float CellSize;
-    public Vector2 GridIndexes;
+    // Space Parameters
+    public float Size;
+    public Vector2 GridIndex;
     public Vector2 Position;
 
+    // Time Parameters
+    public TimeSpan CurrentTime;
+    public TimeSpan TotalTime { get { return _cellData.ProcessTime[Level - 1]; } }
     public DateTime ActivatingDate;
+
+    // State Parameters
     public CellState State = CellState.Lock;
+    public bool IsUnlockedManager;
+    public bool IsUnlockedUpgrade;
+    public int UpgradeLevel;
 
-    public bool IsUnlockedManager = false;
-    public bool IsUnlockedUpgrade = false;
-    public int UpgradeLevel = 0;
+    // Monetary Parameters
+    private float ProfitMultiplier { get { return UpgradeLevel + 1; } }
+    public double Profit { get { return _cellData.BaseProfit[Level - 1] * ProfitMultiplier; } }
+    public double Cost = 2;
 
-    public TimeSpan ProcessTime { get { return _cellData.ProcessTime[Level - 1]; } }
-    public float ProfitMultiplier { get { return UpgradeLevel + 1; } }
-
-    private readonly BusinessData _business;
+    // Data Containers
+    private readonly BusinessData _businessData;
     private readonly GameCellData _cellData;
 
-    public GameCellModel(BusinessData business, GameCellData cellData)
+    public GameCellModel(BusinessData businessData, GameCellData cellData)
     {
-        _business = business;
+        _businessData = businessData;
         _cellData = cellData;
     }
 
-    public void SetGridInexes(int rowIndex, int columnIndex)
+    public void SetGridIndex(int rowIndex, int columnIndex)
     {
-        GridIndexes = new Vector2(columnIndex, rowIndex);
+        GridIndex = new Vector2(columnIndex, rowIndex);
     }
 
     public void SetCost(int unlockCountNumber)
     {
-        Cost = _cellData.Cost[unlockCountNumber];
+        var costData = _cellData.Cost;
+        Cost = costData[unlockCountNumber];
 
-        if (unlockCountNumber > _cellData.Cost.Length)
+        if (unlockCountNumber > costData.Length)
         {
-            Cost = _cellData.Cost[_cellData.Cost.Length - 1] * 2;
+            Cost = _cellData.Cost[costData.Length - 1] * 2;
         }
     }
+}
 }

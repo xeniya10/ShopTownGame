@@ -4,6 +4,8 @@ using TMPro;
 using DG.Tweening;
 using System;
 
+namespace ShopTown.ViewComponent
+{
 public class MenuScreenView : MonoBehaviour
 {
     [SerializeField] private Button _hideButton;
@@ -147,4 +149,5 @@ public class MenuScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+}
 }

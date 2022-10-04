@@ -1,8 +1,11 @@
 using System;
+using ShopTown.SpriteContainer;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace ShopTown.ViewComponent
+{
 public class ManagerRowView : MonoBehaviour
 {
     [Header("Components")]
@@ -16,14 +19,14 @@ public class ManagerRowView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceText;
 
     [Header("Collections")]
-    [SerializeField] private ManagerSpriteCollection _managerSpriteCollection;
+    [SerializeField] private ManagerCollection _managerCollection;
 
     [Header("Animation Duration")]
     [SerializeField] private float _fadeTime;
 
-    public void SetSprite(int level)
+    private void SetSprite(int level)
     {
-        _managerImage.sprite = _managerSpriteCollection.ManagerSprites[level - 1];
+        _managerImage.sprite = _managerCollection.AvatarSprites[level - 1];
     }
 
     public void SetMoneyPrice(double price)
@@ -36,12 +39,12 @@ public class ManagerRowView : MonoBehaviour
         _priceText.text = MoneyFormatUtility.GoldDefault(price);
     }
 
-    public void SetName(string name)
+    private void SetName(string managerName)
     {
-        _nameText.text = name;
+        _nameText.text = managerName;
     }
 
-    public void SetDescription(string description)
+    private void SetDescription(string description)
     {
         _descriptionText.text = description;
     }
@@ -51,19 +54,19 @@ public class ManagerRowView : MonoBehaviour
         _hireButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public ManagerRowView Create(Transform parent, int level, string name, string description)
+    public ManagerRowView Create(Transform parent, int level, string managerName,
+        string description)
     {
         var row = Instantiate(this, parent);
         row.SetSprite(level);
-        row.SetName(name);
+        row.SetName(managerName);
         row.SetDescription(description);
         return row;
     }
 
     public void Lock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
-        () =>
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () =>
         {
             _lockImage.gameObject.SetActive(true);
             AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
@@ -72,7 +75,7 @@ public class ManagerRowView : MonoBehaviour
 
     public void Unlock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
-        () => _lockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () => _lockImage.gameObject.SetActive(false));
     }
+}
 }

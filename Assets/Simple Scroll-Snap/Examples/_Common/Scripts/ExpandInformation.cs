@@ -3,20 +3,24 @@
 
 using UnityEngine;
 
-namespace DanielLochner.Assets.SimpleScrollSnap
+namespace Simple_Scroll_Snap.Examples._Common.Scripts
 {
-    public class ExpandInformation : MonoBehaviour
-    {
-        #region Fields
-        private bool expanded = false;
-        #endregion
+public class ExpandInformation : MonoBehaviour
+{
+    #region Fields
 
-        #region Methods
-        public void Expand()
-        {
-            expanded = !expanded;
-            GetComponent<Animator>().SetBool("expanded", expanded);
-        }
-        #endregion
+    private bool expanded;
+
+    #endregion
+
+    #region Methods
+
+    public void Expand()
+    {
+        expanded = !expanded;
+        GetComponent<Animator>().SetBool("expanded", expanded);
     }
+
+    #endregion
+}
 }

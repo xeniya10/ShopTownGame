@@ -6,37 +6,37 @@ using UnityEngine;
 
 public static class AnimationUtility
 {
-    public static void Fade(Image image, int alpha, float time, Sequence sequence, Action CallBack)
+    public static void Fade(Image image, int alpha, float time, Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
             sequence.Append(image.DOFade(alpha, time)
-            .OnComplete(() => CallBack?.Invoke()));
+            .OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            var animation = image.DOFade(alpha, time)
-            .OnComplete(() => CallBack?.Invoke());
+            image.DOFade(alpha, time)
+                .OnComplete(() => callBack?.Invoke());
         }
     }
 
-    public static void Fade(TextMeshProUGUI text, int alpha, float time, Sequence sequence, Action CallBack)
+    public static void Fade(TextMeshProUGUI text, int alpha, float time, Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
             sequence.Append(text.DOFade(alpha, time)
-            .OnComplete(() => CallBack?.Invoke()));
+            .OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            var animation = text.DOFade(alpha, time)
-            .OnComplete(() => CallBack?.Invoke());
+            text.DOFade(alpha, time)
+                .OnComplete(() => callBack?.Invoke());
         }
     }
 
-    public static void Fill(Image image, TextMeshProUGUI text, float duration, Sequence sequence, Action CallBack)
+    public static void Fill(Image image, TextMeshProUGUI text, float duration, Sequence sequence, Action callBack)
     {
         float currentTime = 0;
 
@@ -44,14 +44,14 @@ public static class AnimationUtility
         {
             sequence.Append(image.DOFillAmount(0, duration)
             .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
-            .OnComplete(() => CallBack?.Invoke()));
+            .OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            var animation = image.DOFillAmount(0, duration)
-            .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
-            .OnComplete(() => CallBack?.Invoke());
+            image.DOFillAmount(0, duration)
+                .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
+                .OnComplete(() => callBack?.Invoke());
         }
     }
 
@@ -59,41 +59,29 @@ public static class AnimationUtility
     {
         if (timeSpan.Hours == 0 && timeSpan.Minutes == 0)
         {
-            if (timeSpan.Seconds < 10)
-            {
-                return timeSpan.ToString(@"s\.f");
-            }
-            return timeSpan.ToString(@"ss\.f");
+            return timeSpan.ToString(timeSpan.Seconds < 10 ? @"s\.f" : @"ss\.f");
         }
 
         if (timeSpan.Hours == 0)
         {
-            if (timeSpan.Minutes < 10)
-            {
-                return timeSpan.ToString(@"m\:ss");
-            }
-            return timeSpan.ToString(@"mm\:ss");
+            return timeSpan.ToString(timeSpan.Minutes < 10 ? @"m\:ss" : @"mm\:ss");
         }
 
-        if (timeSpan.Hours < 10)
-        {
-            return timeSpan.ToString(@"h\:mm\:ss");
-        }
-        return timeSpan.ToString(@"hh\:mm\:ss");
+        return timeSpan.ToString(timeSpan.Hours < 10 ? @"h\:mm\:ss" : @"hh\:mm\:ss");
     }
 
-    public static void Scale(Transform objectTransform, Vector2 scale, float time, Sequence sequence, Action CallBack)
+    public static void Scale(Transform objectTransform, Vector2 scale, float time, Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
             sequence.Append(objectTransform.DOScale(scale, time)
-            .OnComplete(() => CallBack?.Invoke()));
+            .OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            var animation = objectTransform.DOScale(scale, time)
-            .OnComplete(() => CallBack?.Invoke());
+            objectTransform.DOScale(scale, time)
+                .OnComplete(() => callBack?.Invoke());
         }
     }
 
@@ -106,7 +94,7 @@ public static class AnimationUtility
 
         else
         {
-            var moveAnimation = objectTransform.DOLocalMove(targetPosition, time);
+            objectTransform.DOLocalMove(targetPosition, time);
         }
     }
 
@@ -122,12 +110,12 @@ public static class AnimationUtility
 
         if (sequence != null)
         {
-            sequence?.Append(objectTransform.DOLocalMove(targetPosition, time));
+            sequence.Append(objectTransform.DOLocalMove(targetPosition, time));
         }
 
         else
         {
-            var moveAnimation = objectTransform.DOLocalMove(targetPosition, time);
+            objectTransform.DOLocalMove(targetPosition, time);
         }
     }
 
@@ -141,12 +129,12 @@ public static class AnimationUtility
 
         if (sequence != null)
         {
-            sequence?.Append(objectTransform.DOLocalMove(targetPosition, time));
+            sequence.Append(objectTransform.DOLocalMove(targetPosition, time));
         }
 
         else
         {
-            var moveAnimation = objectTransform.DOLocalMove(targetPosition, time);
+            objectTransform.DOLocalMove(targetPosition, time);
         }
     }
 }

@@ -1,10 +1,10 @@
-using System;
-
-[Serializable]
+namespace ShopTown.ModelComponent
+{
 public class GameSettingModel
 {
-    public bool Music { get; set; }
-    public bool Sound { get; set; }
-    public bool Notifications { get; set; }
-    public bool Ads { get; set; }
+    public bool Music;
+    public bool Sound;
+    public bool Notifications;
+    public bool Ads;
+}
 }

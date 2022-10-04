@@ -1,27 +1,28 @@
+using ShopTown.ModelComponent;
+using ShopTown.ViewComponent;
 using UnityEngine;
 
+namespace ShopTown.PresenterComponent
+{
 public class UpgradeRowPresenter
 {
-    private readonly UpgradeRowView _upgradeRowView;
     private readonly UpgradeRowModel _upgradeRowModel;
+    private readonly UpgradeRowView _upgradeRowView;
 
-    public UpgradeRowPresenter(UpgradeRowView upgradeRowView,
-    UpgradeRowModel upgradeRowModel)
+    private UpgradeRowPresenter(UpgradeRowView upgradeRowView, UpgradeRowModel upgradeRowModel)
     {
         _upgradeRowView = upgradeRowView;
         _upgradeRowModel = upgradeRowModel;
     }
 
-    public UpgradeRowPresenter Create(Transform parent, UpgradeRowModel _upgradeRowModel)
+    public UpgradeRowPresenter Create(Transform parent, UpgradeRowModel model)
     {
-        var rowView = _upgradeRowView.Create(parent, _upgradeRowModel.UpgradeLevel, _upgradeRowModel.Level, _upgradeRowModel.Name, _upgradeRowModel.Description);
-        rowView.SetMoneyPrice(_upgradeRowModel.MoneyCost);
-        if (_upgradeRowModel.MoneyCost == 0)
-        {
-            rowView.SetGoldPrice(_upgradeRowModel.GoldCost);
-        }
+        var rowView = _upgradeRowView.Create(parent);
+        rowView.Initialize(model.UpgradeLevel, model.Level, model.Name, model.Description, model.MoneyCost,
+            model.GoldCost);
 
-        var rowPresenter = new UpgradeRowPresenter(rowView, _upgradeRowModel);
+        var rowPresenter = new UpgradeRowPresenter(rowView, model);
         return rowPresenter;
     }
+}
 }

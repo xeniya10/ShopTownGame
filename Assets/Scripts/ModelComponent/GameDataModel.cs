@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
 
-[Serializable]
+namespace ShopTown.ModelComponent
+{
 public class GameDataModel
 {
+    // Monetary Parameters
     public double CurrentMoneyBalance;
     public double TotalMoneyBalance;
-    public int CurrentGoldBalance;
-    public int TotalGoldBalance;
+    public double CurrentGoldBalance;
+    public double TotalGoldBalance;
+
+    // Level Parameters
     public int MaxOpenedLevel;
     public int NumberOfLevels;
 
-    public DateTime TimeStamp;
+    // Models
     public GameSettingModel Settings;
     public GameBoardModel GameBoardModel; // to save row and column numbers
 
@@ -21,22 +25,29 @@ public class GameDataModel
 
     public Action BalanceChangeEvent;
 
-    public void SetBalance(double amount)
+    public DateTime TimeStamp;
+
+    public void SetMoneyBalance(double amount)
     {
         CurrentMoneyBalance = amount;
+        BalanceChangeEvent.Invoke();
         // Update text field
     }
 
-    public void AddToBalance(double amount)
+    public void AddToMoneyBalance(double amount)
     {
         CurrentMoneyBalance += amount;
+        BalanceChangeEvent.Invoke();
         // Update text field
     }
+
     public void SubtractFromBalance(double amount)
     {
         CurrentMoneyBalance -= amount;
+        BalanceChangeEvent.Invoke();
         // Update text field
     }
+
     public bool CanBuy(double amount)
     {
         if (amount > CurrentMoneyBalance)
@@ -47,4 +58,5 @@ public class GameDataModel
         SubtractFromBalance(amount);
         return true;
     }
+}
 }

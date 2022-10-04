@@ -1,11 +1,20 @@
+using ShopTown.ControllerComponent;
+using ShopTown.Data;
+using ShopTown.ModelComponent;
+using ShopTown.PresenterComponent;
+using ShopTown.ViewComponent;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VContainer;
 using VContainer.Unity;
 
+namespace ControllerComponent
+{
 public class GameLifetimeScope : LifetimeScope
 {
+    [FormerlySerializedAs("_startScreen")]
     [Header("Screens")]
-    [SerializeField] private StartScreenView _startScreen;
+    [SerializeField] private SplashScreenView _splashScreen;
     [SerializeField] private GameScreenView _gameScreen;
     [SerializeField] private MenuScreenView _menuScreen;
     [SerializeField] private PurchaseScreenView _purchaseScreen;
@@ -14,13 +23,12 @@ public class GameLifetimeScope : LifetimeScope
 
     [Header("Prefabs")]
     [SerializeField] private GameCellView _gameCellPrefab;
-    [SerializeField] private StartImageCellView _startImagePrefab;
+    [SerializeField] private SplashCellView _splashPrefab;
     [SerializeField] private ManagerRowView _managerRowPrefab;
     [SerializeField] private UpgradeRowView _upgradeRowPrefab;
     [SerializeField] private PackCellView _packCellPrefab;
 
-    [Header("ScriptableObjects")]
-    // [SerializeField] private GameSettings _gameSettings;
+    [Header("DataContainers")]
     [SerializeField] private BusinessData _businessData;
     [SerializeField] private GameCellData _gameCellData;
     [SerializeField] private ManagerRowData _managerRowData;
@@ -50,7 +58,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<GameDataModel>(Lifetime.Scoped);
         builder.Register<GameSettingModel>(Lifetime.Scoped);
 
-        builder.Register<StartScreenModel>(Lifetime.Scoped);
+        builder.Register<SplashScreenModel>(Lifetime.Scoped);
         builder.Register<GameBoardModel>(Lifetime.Scoped);
 
         builder.Register<GameCellModel>(Lifetime.Scoped);
@@ -60,7 +68,7 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterPresenter(IContainerBuilder builder)
     {
-        builder.Register<StartScreenPresenter>(Lifetime.Scoped);
+        builder.Register<SplashScreenPresenter>(Lifetime.Scoped);
         builder.Register<GameScreenPresenter>(Lifetime.Scoped);
 
         builder.Register<GameCellPresenter>(Lifetime.Scoped);
@@ -70,7 +78,7 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterView(IContainerBuilder builder)
     {
-        builder.RegisterInstance(_startScreen);
+        builder.RegisterInstance(_splashScreen);
         builder.RegisterInstance(_gameScreen);
         builder.RegisterInstance(_menuScreen);
         builder.RegisterInstance(_purchaseScreen);
@@ -78,7 +86,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_welcomeScreen);
 
         builder.RegisterInstance(_gameCellPrefab);
-        builder.RegisterInstance(_startImagePrefab);
+        builder.RegisterInstance(_splashPrefab);
         builder.RegisterInstance(_managerRowPrefab);
         builder.RegisterInstance(_upgradeRowPrefab);
 
@@ -89,4 +97,5 @@ public class GameLifetimeScope : LifetimeScope
 
         builder.RegisterInstance(_audioSource);
     }
+}
 }

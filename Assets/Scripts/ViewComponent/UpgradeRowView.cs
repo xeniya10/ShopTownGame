@@ -1,8 +1,11 @@
 using System;
+using ShopTown.SpriteContainer;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace ShopTown.ViewComponent
+{
 public class UpgradeRowView : MonoBehaviour
 {
     [Header("Components")]
@@ -16,42 +19,44 @@ public class UpgradeRowView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceText;
 
     [Space]
-    [SerializeField] private UpgradeSpriteCollection _upgradeSprites;
+    [SerializeField] private UpgradeCollection _upgradeSprites;
 
     [Header("Animation Duration")]
     [SerializeField] private float _fadeTime;
 
-    public void SetFirstUpgradeSprite(int level)
+    private void SetSprite(int upgradeLevel, int level)
     {
+        if (upgradeLevel == 2)
+        {
+            _upgradeImage.sprite = _upgradeSprites.SecondLevelSprites[level - 1];
+            return;
+        }
+
+        if (upgradeLevel == 3)
+        {
+            _upgradeImage.sprite = _upgradeSprites.ThirdLevelSprites[level - 1];
+            return;
+        }
+
         _upgradeImage.sprite = _upgradeSprites.FirstLevelSprites[level - 1];
     }
 
-    public void SetSecondUpgradeSprite(int level)
-    {
-        _upgradeImage.sprite = _upgradeSprites.SecondLevelSprites[level - 1];
-    }
-
-    public void SetThirdUpgradeSprite(int level)
-    {
-        _upgradeImage.sprite = _upgradeSprites.ThirdLevelSprites[level - 1];
-    }
-
-    public void SetMoneyPrice(double price)
+    private void SetMoneyPrice(double price)
     {
         _priceText.text = MoneyFormatUtility.MoneyDefault(price);
     }
 
-    public void SetGoldPrice(double price)
+    private void SetGoldPrice(double price)
     {
         _priceText.text = MoneyFormatUtility.GoldDefault(price);
     }
 
-    public void SetName(string name)
+    private void SetName(string upgradeName)
     {
-        _nameText.text = name;
+        _nameText.text = upgradeName;
     }
 
-    public void SetDescription(string description)
+    private void SetDescription(string description)
     {
         _descriptionText.text = description;
     }
@@ -61,35 +66,30 @@ public class UpgradeRowView : MonoBehaviour
         _buyButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public UpgradeRowView Create(Transform parent, int upgradeLevel, int level, string name, string description)
+    public UpgradeRowView Create(Transform parent)
     {
         var row = Instantiate(this, parent);
+        return row;
+    }
 
-        switch (upgradeLevel)
+    public void Initialize(int upgradeLevel, int level, string upgradeName,
+        string description, double moneyCost, double goldCost)
+    {
+        SetSprite(upgradeLevel, level);
+        SetName(upgradeName);
+        SetDescription(description);
+        if (moneyCost == 0)
         {
-            case 1:
-                row.SetFirstUpgradeSprite(level);
-                break;
-
-            case 2:
-                row.SetSecondUpgradeSprite(level);
-                break;
-
-            case 3:
-                row.SetThirdUpgradeSprite(level);
-                break;
+            SetGoldPrice(goldCost);
+            return;
         }
 
-        row.SetName(name);
-        row.SetDescription(description);
-
-        return row;
+        SetMoneyPrice(moneyCost);
     }
 
     public void Lock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
-        () =>
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () =>
         {
             _lockImage.gameObject.SetActive(true);
             AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
@@ -98,7 +98,7 @@ public class UpgradeRowView : MonoBehaviour
 
     public void Unlock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null,
-        () => _lockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () => _lockImage.gameObject.SetActive(false));
     }
+}
 }

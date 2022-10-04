@@ -1,8 +1,10 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
+namespace ShopTown.ViewComponent
+{
 public class GameScreenView : MonoBehaviour
 {
     [Header("Boards")]
@@ -23,6 +25,7 @@ public class GameScreenView : MonoBehaviour
     {
         _moneyText.text = MoneyFormatUtility.Default(number);
     }
+
     public void SetGoldNumber(double number)
     {
         _goldText.text = MoneyFormatUtility.Default(number);
@@ -48,4 +51,5 @@ public class GameScreenView : MonoBehaviour
     {
         GameBoard.gameObject.SetActive(true);
     }
+}
 }

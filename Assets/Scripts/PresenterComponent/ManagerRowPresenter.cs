@@ -1,27 +1,31 @@
+using ShopTown.ModelComponent;
+using ShopTown.ViewComponent;
 using UnityEngine;
 
+namespace ShopTown.PresenterComponent
+{
 public class ManagerRowPresenter
 {
-    private readonly ManagerRowView _managerRowView;
     private readonly ManagerRowModel _managerRowModel;
+    private readonly ManagerRowView _managerRowView;
 
-    public ManagerRowPresenter(ManagerRowView managerRowView,
-    ManagerRowModel managerRowModel)
+    private ManagerRowPresenter(ManagerRowView managerRowView, ManagerRowModel managerRowModel)
     {
         _managerRowView = managerRowView;
         _managerRowModel = managerRowModel;
     }
 
-    public ManagerRowPresenter Create(Transform parent, ManagerRowModel _managerRowModel)
+    public ManagerRowPresenter Create(Transform parent, ManagerRowModel model)
     {
-        var rowView = _managerRowView.Create(parent, _managerRowModel.Level, _managerRowModel.Name, _managerRowModel.Description);
-        rowView.SetMoneyPrice(_managerRowModel.MoneyCost);
-        if (_managerRowModel.MoneyCost == 0)
+        var view = _managerRowView.Create(parent, model.Level, model.Name, model.Description);
+        view.SetMoneyPrice(model.MoneyCost);
+        if (model.MoneyCost == 0)
         {
-            rowView.SetGoldPrice(_managerRowModel.GoldCost);
+            view.SetGoldPrice(model.GoldCost);
         }
 
-        var rowPresenter = new ManagerRowPresenter(rowView, _managerRowModel);
+        var rowPresenter = new ManagerRowPresenter(view, model);
         return rowPresenter;
     }
+}
 }

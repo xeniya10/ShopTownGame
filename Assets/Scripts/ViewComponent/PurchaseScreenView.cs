@@ -1,8 +1,10 @@
+using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using System;
 
+namespace ShopTown.ViewComponent
+{
 public class PurchaseScreenView : MonoBehaviour
 {
     [SerializeField] private Button _hideButton;
@@ -36,4 +38,5 @@ public class PurchaseScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+}
 }

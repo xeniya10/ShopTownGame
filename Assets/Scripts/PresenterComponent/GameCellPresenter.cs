@@ -1,35 +1,36 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
+using ShopTown.ModelComponent;
 
+namespace ShopTown.PresenterComponent
+{
 public class GameCellPresenter
 {
     private readonly GameCellView _cellView;
     private readonly GameCellModel _cellModel;
 
-    public Action ClickEvent;
-    public Action BuyEvent;
-
-    public GameCellPresenter(GameCellView cellView,
-    GameCellModel gameModel)
+    private GameCellPresenter(GameCellView cellView, GameCellModel gameModel)
     {
         _cellView = cellView;
         _cellModel = gameModel;
     }
 
-    public GameCellPresenter Create(Transform parent, GameCellModel _cellModel)
+    public GameCellPresenter Create(Transform parent, GameCellModel model)
     {
-        var spriteNumber = _cellView.RandomBackgroundSpriteNumber();
-        _cellModel.BackgroundNumber = spriteNumber;
-        var cellView = _cellView.Create(parent, _cellModel.CellSize, _cellModel.Position, _cellModel.BackgroundNumber);
-        cellView.SetBackgroundSprite(spriteNumber);
-        cellView.SetBusinessSprite(_cellModel.Level);
-        cellView.ChangeState(_cellModel.State);
-        cellView.SetCost(_cellModel.Cost);
-        cellView.Click(() => cellView.SetProcessState(_cellModel.ProcessTime.TotalSeconds));
+        _cellView.SetSize(model.Size);
+        var view = _cellView.Create(parent);
 
-        var cellPresenter = new GameCellPresenter(cellView, _cellModel);
-        return cellPresenter;
+        if (model.BackgroundNumber < 0)
+        {
+            var spriteNumber = view.RandomBackgroundNumber();
+            model.BackgroundNumber = spriteNumber;
+        }
+
+        view.Initialize(model.Level, model.BackgroundNumber, model.Position, model.Cost, model.State);
+        view.Click(() => view.SetProcessState(model.TotalTime.TotalSeconds));
+
+        var presenter = new GameCellPresenter(view, model);
+        return presenter;
     }
 
     public void Buy(Action callBack)
@@ -47,9 +48,10 @@ public class GameCellPresenter
     //     _cellView.CellButton.onClick.AddListener(() => _cellView.SetProcessState(_cellModel.TimerInSeconds));
     // }
 
-    public void SetCost(int counter)
+    // Cost changes depending on number of activated cells.
+    public void SetCost(int activationNumber)
     {
-        _cellModel.SetCost(counter);
+        _cellModel.SetCost(activationNumber);
         _cellView.SetCost(_cellModel.Cost);
     }
 
@@ -63,11 +65,13 @@ public class GameCellPresenter
         _cellModel.State = CellState.Lock;
         _cellView.SetLockState();
     }
+
     public void Unlock()
     {
         _cellModel.State = CellState.Unlock;
         _cellView.SetUnlockState();
     }
+
     public void Activate()
     {
         _cellModel.State = CellState.Active;
@@ -77,17 +81,16 @@ public class GameCellPresenter
 
     public Vector2 GetPosition()
     {
-        return _cellModel.GridIndexes;
+        return _cellModel.GridIndex;
     }
 
     public bool IsNeighbor(Vector2 unlockedPosition)
     {
-        var thisPosition = _cellModel.GridIndexes;
-        var xDiff = unlockedPosition.x - thisPosition.x;
-        var yDiff = unlockedPosition.y - thisPosition.y;
+        var thisPosition = _cellModel.GridIndex;
+        var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
+        var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
 
-        if (Math.Abs(xDiff) == 1 && Math.Abs(yDiff) == 0 ||
-            Math.Abs(xDiff) == 0 && Math.Abs(yDiff) == 1)
+        if (xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1)
         {
             if (_cellModel.State == CellState.Lock)
             {
@@ -99,11 +102,9 @@ public class GameCellPresenter
     }
 
     public void ChangeProgressBar(float currentTime, float totalTime)
-    {
+    {}
 
-    }
-
-    public void Merge() { }
-
-
+    public void Merge()
+    {}
+}
 }

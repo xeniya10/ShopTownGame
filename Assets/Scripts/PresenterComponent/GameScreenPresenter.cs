@@ -1,25 +1,26 @@
+using ShopTown.ModelComponent;
+using ShopTown.ViewComponent;
 using VContainer.Unity;
 
+namespace ShopTown.PresenterComponent
+{
 public class GameScreenPresenter : IInitializable
 {
+    private readonly DataController _dataController;
     private readonly GameScreenView _gameScreenView;
     private readonly MenuScreenView _menuScreenView;
+    private readonly NewBusinessScreenView _newBusinessScreenView;
     private readonly PurchaseScreenView _purchaseScreenView;
     private readonly WelcomeScreenView _welcomeScreenView;
-    private readonly NewBusinessScreenView _newBusinessScreenView;
-    private readonly DataController _dataController;
 
-    public GameScreenPresenter(GameScreenView gameScreenView,
-    MenuScreenView menuScreenView, PurchaseScreenView purchaseScreenView,
-    WelcomeScreenView welcomeScreenView, NewBusinessScreenView newBusinessScreenView,
-    DataController dataController)
+    public GameScreenPresenter(GameScreenView gameScreenView, MenuScreenView menuScreenView, PurchaseScreenView purchaseScreenView,
+        WelcomeScreenView welcomeScreenView, NewBusinessScreenView newBusinessScreenView, DataController dataController)
     {
         _gameScreenView = gameScreenView;
         _menuScreenView = menuScreenView;
         _purchaseScreenView = purchaseScreenView;
         _welcomeScreenView = welcomeScreenView;
         _newBusinessScreenView = newBusinessScreenView;
-
         _dataController = dataController;
     }
 
@@ -36,9 +37,8 @@ public class GameScreenPresenter : IInitializable
     {
         var data = _dataController.GameData;
 
-        data.BalanceChangeEvent += SetMoneyBalance;
         SetMoneyBalance();
-
+        data.BalanceChangeEvent += SetMoneyBalance;
 
         _gameScreenView.SetGoldNumber(data.CurrentGoldBalance);
 
@@ -63,10 +63,12 @@ public class GameScreenPresenter : IInitializable
         // _menuScreenView.ClickTelegramButton();
         // _menuScreenView.ClickTwitterButton();
     }
+
     private void InitializePurchaseScreen()
     {
         _purchaseScreenView.ClickOkButton(_purchaseScreenView.Hide);
     }
+
     private void InitializeWelcomeScreen()
     {
         var data = _dataController.GameData;
@@ -75,6 +77,7 @@ public class GameScreenPresenter : IInitializable
         // _welcomeScreenView.SetGoldNumber();
         _welcomeScreenView.ClickOkButton(_welcomeScreenView.Hide);
     }
+
     private void InitializeNewBusinessScreen()
     {
         var data = _dataController.GameData;
@@ -89,4 +92,5 @@ public class GameScreenPresenter : IInitializable
         var data = _dataController.GameData;
         _gameScreenView.SetMoneyNumber(data.CurrentMoneyBalance);
     }
+}
 }

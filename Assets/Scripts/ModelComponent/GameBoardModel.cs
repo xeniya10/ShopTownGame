@@ -1,22 +1,19 @@
-using System;
 using UnityEngine;
 
-[Serializable]
+namespace ShopTown.ModelComponent
+{
 public class GameBoardModel
 {
     public int Rows;
     public int Columns;
+    private float _paddingRatio = 0.02f;
     private const int _widthReference = 800;
-    private int _padding;
-    public float PaddingRatio = 0.02f;
+    private int _padding { get { return (int)(_widthReference * _paddingRatio); } }
 
     public float CalculateCellSize()
     {
-        _padding = (int)(_widthReference * PaddingRatio);
-
         float cellSpace = _widthReference - 2 * _padding;
         var cellSize = cellSpace / Columns;
-
         return cellSize;
     }
 
@@ -28,4 +25,5 @@ public class GameBoardModel
         var cellPosition = new Vector2(x, y);
         return cellPosition;
     }
+}
 }

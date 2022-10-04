@@ -4,7 +4,9 @@ using TMPro;
 using System;
 using Random = UnityEngine.Random;
 using DG.Tweening;
-using System.Collections.Generic;
+using ShopTown.ModelComponent;
+using ShopTown.SpriteContainer;
+using UnityEngine.Serialization;
 
 public class GameCellView : MonoBehaviour
 {
@@ -28,28 +30,26 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceText;
 
     [Header("Collections")]
-    [SerializeField] private BackgroundSpriteCollection _backgroundSpriteCollection;
-    [SerializeField] private BusinessSpriteCollection _businessSpriteCollection;
+    [SerializeField] private BackgroundCollection _backgroundCollection;
+    [SerializeField] private BusinessCollection _businessCollection;
 
     [Header("Animation Duration")]
     [SerializeField] private float _fadeTime;
 
-    private Vector2[] _hitDirections = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
-
-    public int RandomBackgroundSpriteNumber()
+    public int RandomBackgroundNumber()
     {
-        var randomNumber = Random.Range(0, _backgroundSpriteCollection.BackgroundSprites.Count);
+        var randomNumber = Random.Range(0, _backgroundCollection.Sprites.Count);
         return randomNumber;
     }
 
-    public void SetBackgroundSprite(int i)
+    private void SetBackgroundSprite(int i)
     {
-        _backgroundImage.sprite = _backgroundSpriteCollection.BackgroundSprites[i];
+        _backgroundImage.sprite = _backgroundCollection.Sprites[i];
     }
 
-    public void SetBusinessSprite(int level)
+    private void SetBusinessSprite(int level)
     {
-        _businessImage.sprite = _businessSpriteCollection.BusinessSprites[level - 1];
+        _businessImage.sprite = _businessCollection.Sprites[level - 1];
     }
 
     public void SetCost(double cost)
@@ -57,7 +57,7 @@ public class GameCellView : MonoBehaviour
         _priceText.text = MoneyFormatUtility.Default(cost);
     }
 
-    public void SetPosition(Vector2 position)
+    private void SetPosition(Vector2 position)
     {
         transform.localPosition = position;
     }
@@ -67,13 +67,20 @@ public class GameCellView : MonoBehaviour
         _cellRect.sizeDelta = new Vector2(size, size);
     }
 
-    public GameCellView Create(Transform parent, float size, Vector2 position, int spriteNumber)
+    public GameCellView Create(Transform parent)
     {
         var cell = Instantiate(this, parent);
-        cell.SetSize(size);
-        cell.SetPosition(position);
-        cell.SetLockState();
         return cell;
+    }
+
+    public void Initialize(int level, int spriteNumber, Vector2 position,
+        double cost, CellState state)
+    {
+        SetBusinessSprite(level);
+        SetBackgroundSprite(spriteNumber);
+        SetPosition(position);
+        SetCost(cost);
+        ChangeState(state);
     }
 
     public void SetLockState()
@@ -87,8 +94,7 @@ public class GameCellView : MonoBehaviour
     {
         var sequence = DOTween.Sequence();
 
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, sequence,
-        () => _lockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, sequence, () => _lockImage.gameObject.SetActive(false));
         AnimationUtility.Fade(_unlockImage, 1, _fadeTime, sequence, null);
 
         _unlockImage.gameObject.SetActive(true);
@@ -97,24 +103,23 @@ public class GameCellView : MonoBehaviour
 
     public void SetActiveState()
     {
-        AnimationUtility.Fade(_unlockImage, 0, _fadeTime, null,
-        () => _unlockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_unlockImage, 0, _fadeTime, null, () => _unlockImage.gameObject.SetActive(false));
     }
 
-    public void ChangeState(CellState state)
+    private void ChangeState(CellState state)
     {
         switch (state)
         {
             case CellState.Lock:
-                this.SetLockState();
+                SetLockState();
                 break;
 
             case CellState.Unlock:
-                this.SetUnlockState();
+                SetUnlockState();
                 break;
 
             case CellState.Active:
-                this.SetActiveState();
+                SetActiveState();
                 break;
         }
     }
@@ -132,31 +137,5 @@ public class GameCellView : MonoBehaviour
             _progressImage.fillAmount = 1;
             _progressBar.SetActive(false);
         });
-
-        // _progressImage.fillAmount = currentTime / totalTime;
-        // _progressTimeText.text = currentTime.ToString();
-
-        // if (currentTime < 0.01f)
-        // {
-        //     _progressBar.SetActive(false);
-        // }
     }
-
-    // public List<GameCellView> CheckNeighbors()
-    // {
-    //     var hitedCells = new List<GameCellView>();
-
-    //     for (int i = 0; i < _hitDirections.Length; i++)
-    //     {
-    //         RaycastHit2D hit = Physics2D.Raycast(transform.position, _hitDirections[i]);
-    //         GameCellView hitedCell = hit.collider?.GetComponent<GameCellView>();
-
-    //         if (hitedCell != null)
-    //         {
-    //             hitedCells.Add(hitedCell);
-    //         }
-    //     }
-
-    //     return hitedCells;
-    // }
 }

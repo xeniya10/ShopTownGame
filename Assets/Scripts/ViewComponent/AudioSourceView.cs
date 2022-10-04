@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace ShopTown.ViewComponent
+{
 public class AudioSourceView : MonoBehaviour
 {
     [SerializeField] private AudioSource _backgroundMusic;
@@ -12,20 +14,25 @@ public class AudioSourceView : MonoBehaviour
     {
         _backgroundMusic.Play();
     }
+
     public void PlayClickSound()
     {
         _clickSound.Play();
     }
+
     public void PlayNewBusinessSound()
     {
         _newBusinessSound.Play();
     }
+
     public void PlayNewCoinSound()
     {
         _newCoinSound.Play();
     }
+
     public void PlaySwapSound()
     {
         _swapSound.Play();
     }
+}
 }

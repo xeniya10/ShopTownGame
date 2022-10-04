@@ -13,6 +13,7 @@ public class WelcomeScreenView : MonoBehaviour
 
     [Header("Animation Durations")]
     [SerializeField] private float _moveTime;
+
     private Vector2 _startPosition;
 
     public void SetMoneyNumber(float moneyAmount)
