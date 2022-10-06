@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-public class MoneyModel
+public class MoneyFormat
 {
     public double Number { get; private set; }
     public string FormattedNumber { get; private set; }
     public string Scale { get; private set; }
 
-    public MoneyModel(double number, string formattedNumber, string scale)
+    public MoneyFormat(double number, string formattedNumber, string scale)
     {
         Number = number;
         FormattedNumber = formattedNumber;
@@ -16,7 +16,7 @@ public class MoneyModel
 
 public static class MoneyFormatUtility
 {
-    private static Dictionary<int, string> _scales = new()
+    private static Dictionary<int, string> _scales = new Dictionary<int, string>()
     {
         {3, "K"},
         {6, "M"},
@@ -124,12 +124,12 @@ public static class MoneyFormatUtility
 
     private static int _lowestScale = 3;
 
-    public static MoneyModel GetNumberParameters(string number)
+    public static MoneyFormat GetNumberParameters(string number)
     {
         return GetNumberDetails(double.Parse(number));
     }
 
-    private static MoneyModel GetNumberDetails(double number)
+    private static MoneyFormat GetNumberDetails(double number)
     {
         var textNumber = number.ToString();
         var scale = DigitCount(textNumber) - 1;
@@ -141,10 +141,10 @@ public static class MoneyFormatUtility
 
             if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))
             {
-                return new MoneyModel(number, number.ToString("#,##0"), string.Empty);
+                return new MoneyFormat(number, number.ToString("#,##0"), string.Empty);
             }
 
-            return new MoneyModel(number, formattedTextNumber, string.Empty);
+            return new MoneyFormat(number, formattedTextNumber, string.Empty);
         }
 
         var scaleModulo = scale % _lowestScale;
@@ -159,7 +159,7 @@ public static class MoneyFormatUtility
             formattedTextNumber += fractionText;
         }
 
-        return new MoneyModel(number, formattedTextNumber, textScale);
+        return new MoneyFormat(number, formattedTextNumber, textScale);
     }
 
     private static int DigitCount(string textNumber)
@@ -185,6 +185,11 @@ public static class MoneyFormatUtility
         var money = GetNumberDetails(unformatted);
         return money.FormattedNumber + money.Scale;
     }
+
+    // public static string Default()
+    // {
+    //     
+    // }
 
     public static string MoneyDefault(double unformatted)
     {

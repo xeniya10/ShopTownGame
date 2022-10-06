@@ -11,8 +11,7 @@ public class ManagerRowModel
     public string Description { get { return $"Hire manager to run your {BusinessName}"; } }
 
     // Cost
-    public double MoneyCost { get { return _rowData.MoneyBaseCost[Level - 1]; } }
-    public double GoldCost { get { return _rowData.GoldBaseCost[Level - 1]; } }
+    public MoneyModel Cost { get { return _rowData.BaseCost[Level - 1]; } }
 
     // State
     public bool Unlocked;

@@ -16,9 +16,10 @@ public class GameplayController : IStartable
     private readonly GameScreenView _gameScreenView;
     private readonly DataController _dataController;
 
-    private readonly List<GameCellPresenter> _gameCells = new();
-    private readonly List<ManagerRowPresenter> _managerRows = new();
-    private readonly List<UpgradeRowPresenter> _upgradeRows = new();
+    private readonly List<GameCellPresenter> _gameCells = new List<GameCellPresenter>();
+    private readonly List<ManagerRowPresenter> _managerRows = new List<ManagerRowPresenter>();
+    private readonly List<UpgradeRowPresenter> _upgradeRows = new List<UpgradeRowPresenter>();
+    private readonly List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
 
     private int _activationCounter;
 
@@ -28,10 +29,8 @@ public class GameplayController : IStartable
         _gameCellPresenter = gameCellPresenter;
         _managerRowPresenter = managerRowPresenter;
         _upgradeRowPresenter = upgradeRowPresenter;
-
         _dataController = dataController;
         _gameScreenView = gameScreenView;
-
         _gameScreenPresenter = gameScreenPresenter;
     }
 
@@ -41,8 +40,8 @@ public class GameplayController : IStartable
         _gameScreenPresenter.Initialize();
 
         CreateBoard();
-        CreateManagerList();
-        CreateUpgradeList();
+        CreateManagers();
+        CreateUpgrades();
     }
 
     private void CreateBoard()
@@ -52,27 +51,104 @@ public class GameplayController : IStartable
         foreach (var model in data.Businesses)
         {
             var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, model);
-            cell.Buy(() => CheckPurchase(cell));
+            cell.SubscribeToBuyButton(TryBuy);
+            cell.SubscribeToClick(Select);
             _gameCells.Add(cell);
         }
     }
 
-    private void CheckPurchase(GameCellPresenter cell)
+    private void CreateManagers()
     {
-        var cost = cell.GetCost();
-        if (_dataController.GameData.CanBuy(cost))
+        var data = _dataController.GameData;
+        foreach (var model in data.Managers)
         {
-            cell.Activate();
-            CheckNeighbors(cell);
+            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, model);
+            _managerRows.Add(row);
         }
     }
 
-    private void CheckNeighbors(GameCellPresenter activatedCell)
+    private void CreateUpgrades()
+    {
+        var data = _dataController.GameData;
+        foreach (var model in data.Upgrades)
+        {
+            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, model);
+            _upgradeRows.Add(row);
+        }
+    }
+
+    // TODO more universal method
+    private void TryBuy(GameCellPresenter cell)
+    {
+        if (_dataController.GameData.CanBuy(cell.Cost))
+        {
+            cell.Activate();
+            UnlockNeighbors(cell);
+        }
+    }
+
+    // private void TryBuy(ManagerRowPresenter manager)
+    // {
+    //     if (_dataController.GameData.CanBuy())
+    //     {}
+    // }
+    //
+    // private void TryBuy(UpgradeRowModel upgrade)
+    // {
+    //     if (_dataController.GameData.CanBuy(manager))
+    //     {}
+    // }
+
+    private void Select(GameCellPresenter selectedCell)
+    {
+        var data = _dataController.GameData;
+        _selectedCells.Add(selectedCell);
+        selectedCell.SetActiveSelector(true);
+
+        if (_selectedCells.Count < 2)
+        {
+            return;
+        }
+
+        if (_selectedCells[0] == _selectedCells[1])
+        {
+            var profit = selectedCell.Profit;
+            selectedCell.GetInProgress(() => data.AddToMoneyBalance(profit));
+        }
+
+        // var startPosition1 = _selectedCells[0].GetPosition();
+        // var startPosition2 = _selectedCells[1].GetPosition();
+
+        if (_selectedCells[0].IsNeighborOf(_selectedCells[1]) && _selectedCells[0].HasSameLevelAs(_selectedCells[1]))
+        {
+            Merge(_selectedCells[0], _selectedCells[1]);
+        }
+
+        _selectedCells[0].SetActiveSelector(false);
+        _selectedCells[1].SetActiveSelector(false);
+        _selectedCells.Clear();
+    }
+
+    private void Merge(GameCellPresenter oneCell, GameCellPresenter otherCell)
+    {
+        _activationCounter++;
+        if (oneCell.IsActivatedEarlierThen(otherCell))
+        {
+            oneCell.LevelUp();
+            otherCell.Unlock(_activationCounter);
+            return;
+        }
+
+        otherCell.LevelUp();
+        oneCell.Unlock(_activationCounter);
+    }
+
+    private void UnlockNeighbors(GameCellPresenter activatedCell)
     {
         var neighbors = new List<GameCellPresenter>();
         foreach (var cell in _gameCells)
         {
-            if (cell.IsNeighbor(activatedCell.GetPosition()))
+            if (cell.IsNeighborOf(activatedCell) && cell.State == CellState.Lock)
             {
                 neighbors.Add(cell);
             }
@@ -83,29 +159,8 @@ public class GameplayController : IStartable
             _activationCounter++;
             foreach (var cell in neighbors)
             {
-                cell.SetCost(_activationCounter);
-                cell.Unlock();
+                cell.Unlock(_activationCounter);
             }
-        }
-    }
-
-    private void CreateManagerList()
-    {
-        var data = _dataController.GameData;
-        foreach (var model in data.Managers)
-        {
-            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, model);
-            _managerRows.Add(row);
-        }
-    }
-
-    private void CreateUpgradeList()
-    {
-        var data = _dataController.GameData;
-        foreach (var model in data.Upgrades)
-        {
-            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, model);
-            _upgradeRows.Add(row);
         }
     }
 }

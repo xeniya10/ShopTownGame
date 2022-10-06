@@ -9,6 +9,8 @@ public class UpgradeRowPresenter
     private readonly UpgradeRowModel _upgradeRowModel;
     private readonly UpgradeRowView _upgradeRowView;
 
+    public MoneyModel Cost { get { return _upgradeRowModel.Cost; } }
+
     private UpgradeRowPresenter(UpgradeRowView upgradeRowView, UpgradeRowModel upgradeRowModel)
     {
         _upgradeRowView = upgradeRowView;
@@ -18,11 +20,16 @@ public class UpgradeRowPresenter
     public UpgradeRowPresenter Create(Transform parent, UpgradeRowModel model)
     {
         var rowView = _upgradeRowView.Create(parent);
-        rowView.Initialize(model.UpgradeLevel, model.Level, model.Name, model.Description, model.MoneyCost,
-            model.GoldCost);
+        rowView.Initialize(model);
 
         var rowPresenter = new UpgradeRowPresenter(rowView, model);
         return rowPresenter;
     }
+
+    public void Lock()
+    {}
+
+    public void Unlock()
+    {}
 }
 }

@@ -11,7 +11,7 @@ public class SplashScreenPresenter : IInitializable
     private readonly SplashScreenModel _model;
     private readonly SplashScreenView _splashScreenView;
 
-    private readonly List<SplashCellView> _cells = new();
+    private readonly List<SplashCellView> _cells = new List<SplashCellView>();
 
     public SplashScreenPresenter(SplashCellView viewPrefab, SplashScreenModel model, SplashScreenView splashScreenView)
     {

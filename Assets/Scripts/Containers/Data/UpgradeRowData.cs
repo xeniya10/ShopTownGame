@@ -1,7 +1,9 @@
+using ShopTown.ModelComponent;
 using UnityEngine;
 
 namespace ShopTown.Data
 {
+[CreateAssetMenu(fileName = "UpgradeData", menuName = "UpgradeData")]
 public class UpgradeRowData : ScriptableObject
 {
     public string[] FirstLevelNames =
@@ -97,41 +99,35 @@ public class UpgradeRowData : ScriptableObject
         "Repair Service"
     };
 
-    public double[] MoneyBaseCost =
+    public MoneyModel[] BaseCost =
     {
-        250000,
-        400000,
-        700000,
-        1200000,
-        1500000,
-        2000000,
-        5000000,
-        10000000,
-        15000000,
-        20000000,
-        30000000,
-        40000000,
-        100000000,
-        500000000,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-
-    public double[] GoldBaseCost =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        3,
-        5,
-        10,
-        20,
-        40,
-        80,
-        120,
-        200,
-        250,
-        300,
-        400,
-        600,
-        1000
+        new MoneyModel(250000, Currency.Dollar),
+        new MoneyModel(400000, Currency.Dollar),
+        new MoneyModel(700000, Currency.Dollar),
+        new MoneyModel(1200000, Currency.Dollar),
+        new MoneyModel(1500000, Currency.Dollar),
+        new MoneyModel(2000000, Currency.Dollar),
+        new MoneyModel(5000000, Currency.Dollar),
+        new MoneyModel(10000000, Currency.Dollar),
+        new MoneyModel(15000000, Currency.Dollar),
+        new MoneyModel(20000000, Currency.Dollar),
+        new MoneyModel(30000000, Currency.Dollar),
+        new MoneyModel(40000000, Currency.Dollar),
+        new MoneyModel(100000000, Currency.Dollar),
+        new MoneyModel(500000000, Currency.Dollar),
+        new MoneyModel(3, Currency.Gold),
+        new MoneyModel(5, Currency.Gold),
+        new MoneyModel(10, Currency.Gold),
+        new MoneyModel(20, Currency.Gold),
+        new MoneyModel(40, Currency.Gold),
+        new MoneyModel(80, Currency.Gold),
+        new MoneyModel(120, Currency.Gold),
+        new MoneyModel(200, Currency.Gold),
+        new MoneyModel(250, Currency.Gold),
+        new MoneyModel(300, Currency.Gold),
+        new MoneyModel(400, Currency.Gold),
+        new MoneyModel(600, Currency.Gold),
+        new MoneyModel(1000, Currency.Gold)
     };
 }
 }

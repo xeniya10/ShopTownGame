@@ -9,6 +9,8 @@ public class ManagerRowPresenter
     private readonly ManagerRowModel _managerRowModel;
     private readonly ManagerRowView _managerRowView;
 
+    public MoneyModel Cost { get { return _managerRowModel.Cost; } }
+
     private ManagerRowPresenter(ManagerRowView managerRowView, ManagerRowModel managerRowModel)
     {
         _managerRowView = managerRowView;
@@ -17,15 +19,17 @@ public class ManagerRowPresenter
 
     public ManagerRowPresenter Create(Transform parent, ManagerRowModel model)
     {
-        var view = _managerRowView.Create(parent, model.Level, model.Name, model.Description);
-        view.SetMoneyPrice(model.MoneyCost);
-        if (model.MoneyCost == 0)
-        {
-            view.SetGoldPrice(model.GoldCost);
-        }
+        var view = _managerRowView.Create(parent);
+        view.Initialize(model);
 
         var rowPresenter = new ManagerRowPresenter(view, model);
         return rowPresenter;
     }
+
+    public void Lock()
+    {}
+
+    public void Unlock()
+    {}
 }
 }

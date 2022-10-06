@@ -51,7 +51,7 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = 2,
+            CurrentMoneyBalance = 500,
             CurrentGoldBalance = 0,
             TotalMoneyBalance = 0,
             TotalGoldBalance = 0,

@@ -1,4 +1,5 @@
 using System;
+using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
 using TMPro;
 using UnityEngine;
@@ -41,14 +42,15 @@ public class UpgradeRowView : MonoBehaviour
         _upgradeImage.sprite = _upgradeSprites.FirstLevelSprites[level - 1];
     }
 
-    private void SetMoneyPrice(double price)
+    private void SetCost(MoneyModel cost)
     {
-        _priceText.text = MoneyFormatUtility.MoneyDefault(price);
-    }
+        if (cost.Value == Currency.Gold)
+        {
+            _priceText.text = MoneyFormatUtility.GoldDefault(cost.Number);
+            return;
+        }
 
-    private void SetGoldPrice(double price)
-    {
-        _priceText.text = MoneyFormatUtility.GoldDefault(price);
+        _priceText.text = MoneyFormatUtility.MoneyDefault(cost.Number);
     }
 
     private void SetName(string upgradeName)
@@ -72,19 +74,12 @@ public class UpgradeRowView : MonoBehaviour
         return row;
     }
 
-    public void Initialize(int upgradeLevel, int level, string upgradeName,
-        string description, double moneyCost, double goldCost)
+    public void Initialize(UpgradeRowModel model)
     {
-        SetSprite(upgradeLevel, level);
-        SetName(upgradeName);
-        SetDescription(description);
-        if (moneyCost == 0)
-        {
-            SetGoldPrice(goldCost);
-            return;
-        }
-
-        SetMoneyPrice(moneyCost);
+        SetSprite(model.UpgradeLevel, model.Level);
+        SetName(model.Name);
+        SetDescription(model.Description);
+        SetCost(model.Cost);
     }
 
     public void Lock()

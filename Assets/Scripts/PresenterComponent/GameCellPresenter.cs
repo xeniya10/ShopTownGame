@@ -9,6 +9,10 @@ public class GameCellPresenter
     private readonly GameCellView _cellView;
     private readonly GameCellModel _cellModel;
 
+    public double Cost { get { return _cellModel.Cost; } }
+    public double Profit { get { return _cellModel.Profit; } }
+    public CellState State { get { return _cellModel.State; } }
+
     private GameCellPresenter(GameCellView cellView, GameCellModel gameModel)
     {
         _cellView = cellView;
@@ -26,48 +30,48 @@ public class GameCellPresenter
             model.BackgroundNumber = spriteNumber;
         }
 
-        view.Initialize(model.Level, model.BackgroundNumber, model.Position, model.Cost, model.State);
-        view.Click(() => view.SetProcessState(model.TotalTime.TotalSeconds));
-
+        view.Initialize(model);
         var presenter = new GameCellPresenter(view, model);
         return presenter;
     }
 
-    public void Buy(Action callBack)
+    public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
     {
-        _cellView.BuyButton.onClick.AddListener(() => callBack?.Invoke());
+        _cellView.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 
-    // public void Click(Action callBack)
-    // {
-    //     _cellView.CellButton.onClick.AddListener(() => callBack?.Invoke());
-    // }
-
-    // public void Click()
-    // {
-    //     _cellView.CellButton.onClick.AddListener(() => _cellView.SetProcessState(_cellModel.TimerInSeconds));
-    // }
-
-    // Cost changes depending on number of activated cells.
-    public void SetCost(int activationNumber)
+    public void SubscribeToClick(Action<GameCellPresenter> callBack)
     {
-        _cellModel.SetCost(activationNumber);
-        _cellView.SetCost(_cellModel.Cost);
+        _cellView.CellButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 
-    public double GetCost()
+    public void SetActiveSelector(bool isActive)
     {
-        return _cellModel.Cost;
+        _cellView._selectorImage.gameObject.SetActive(isActive);
+    }
+
+    public void LevelUp()
+    {
+        _cellView.HideBusiness(() =>
+        {
+            _cellModel.Level += 1;
+            _cellView.Initialize(_cellModel);
+            _cellView.SetActiveState();
+        });
     }
 
     public void Lock()
     {
+        _cellModel.ResetLevel();
         _cellModel.State = CellState.Lock;
         _cellView.SetLockState();
     }
 
-    public void Unlock()
+    // Cost changes depending on number of activated cells.
+    public void Unlock(int activationNumber)
     {
+        _cellModel.SetCost(activationNumber);
+        _cellView.SetCost(_cellModel.Cost);
         _cellModel.State = CellState.Unlock;
         _cellView.SetUnlockState();
     }
@@ -79,32 +83,52 @@ public class GameCellPresenter
         _cellView.SetActiveState();
     }
 
-    public Vector2 GetPosition()
+    public void GetInProgress(Action callBack)
     {
-        return _cellModel.GridIndex;
+        _cellModel.State = CellState.InProgress;
+        _cellView.SetInProgressState(_cellModel.TotalTime.TotalSeconds, () => callBack?.Invoke());
     }
 
-    public bool IsNeighbor(Vector2 unlockedPosition)
+    public bool IsNeighborOf(GameCellPresenter cell)
     {
         var thisPosition = _cellModel.GridIndex;
+        var unlockedPosition = cell._cellModel.GridIndex;
         var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
         var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
 
         if (xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1)
         {
-            if (_cellModel.State == CellState.Lock)
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;
     }
 
-    public void ChangeProgressBar(float currentTime, float totalTime)
-    {}
+    public bool HasSameLevelAs(GameCellPresenter otherCell)
+    {
+        var oneCellLevel = _cellModel.Level;
+        var otherCellLevel = otherCell._cellModel.Level;
 
-    public void Merge()
-    {}
+        if (oneCellLevel == otherCellLevel)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsActivatedEarlierThen(GameCellPresenter otherCell)
+    {
+        var oneCellActivatingTime = _cellModel.ActivatingDate;
+        var otherCellActivatingTime = otherCell._cellModel.ActivatingDate;
+
+        var result = DateTime.Compare(oneCellActivatingTime, otherCellActivatingTime);
+        if (result < 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 }

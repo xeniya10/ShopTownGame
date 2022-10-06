@@ -6,12 +6,12 @@ using Random = UnityEngine.Random;
 using DG.Tweening;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
-using UnityEngine.Serialization;
 
 public class GameCellView : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private GameObject _progressBar;
+    [SerializeField] private GameObject _lockObject;
     [SerializeField] private RectTransform _cellRect;
 
     [Space]
@@ -24,6 +24,7 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private Image _progressImage;
     [SerializeField] private Image _unlockImage;
     [SerializeField] private Image _lockImage;
+    public Image _selectorImage;
 
     [Space]
     [SerializeField] private TextMeshProUGUI _progressTimeText;
@@ -73,28 +74,34 @@ public class GameCellView : MonoBehaviour
         return cell;
     }
 
-    public void Initialize(int level, int spriteNumber, Vector2 position,
-        double cost, CellState state)
+    public void Initialize(GameCellModel model)
     {
-        SetBusinessSprite(level);
-        SetBackgroundSprite(spriteNumber);
-        SetPosition(position);
-        SetCost(cost);
-        ChangeState(state);
+        SetBusinessSprite(model.Level);
+        SetBackgroundSprite(model.BackgroundNumber);
+        SetPosition(model.Position);
+        SetCost(model.Cost);
+        ChangeState(model.State);
+    }
+
+    public void HideBusiness(Action callBack)
+    {
+        AnimationUtility.Fade(_businessImage, 0, _fadeTime, null, () => callBack?.Invoke());
     }
 
     public void SetLockState()
     {
         _progressBar.SetActive(false);
-        _lockImage.gameObject.SetActive(true);
-        _unlockImage.gameObject.SetActive(false);
+        _lockObject.SetActive(true);
+        HideBusiness(null);
+        AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
     }
 
     public void SetUnlockState()
     {
         var sequence = DOTween.Sequence();
 
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, sequence, () => _lockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_businessImage, 0, _fadeTime, sequence, null);
+        AnimationUtility.Fade(_lockImage, 0, _fadeTime, sequence, () => _lockObject.SetActive(false));
         AnimationUtility.Fade(_unlockImage, 1, _fadeTime, sequence, null);
 
         _unlockImage.gameObject.SetActive(true);
@@ -103,7 +110,12 @@ public class GameCellView : MonoBehaviour
 
     public void SetActiveState()
     {
-        AnimationUtility.Fade(_unlockImage, 0, _fadeTime, null, () => _unlockImage.gameObject.SetActive(false));
+        var sequence = DOTween.Sequence();
+
+        AnimationUtility.Fade(_unlockImage, 0, _fadeTime, sequence, () => _unlockImage.gameObject.SetActive(false));
+        AnimationUtility.Fade(_businessImage, 1, _fadeTime, sequence, null);
+
+        sequence.Play();
     }
 
     private void ChangeState(CellState state)
@@ -124,18 +136,14 @@ public class GameCellView : MonoBehaviour
         }
     }
 
-    public void Click(Action callBack)
-    {
-        CellButton.onClick.AddListener(() => callBack?.Invoke());
-    }
-
-    public void SetProcessState(double totalTime)
+    public void SetInProgressState(double totalTime, Action callBack)
     {
         _progressBar.SetActive(true);
         AnimationUtility.Fill(_progressImage, _progressTimeText, (float)totalTime, null, () =>
         {
             _progressImage.fillAmount = 1;
             _progressBar.SetActive(false);
+            callBack?.Invoke();
         });
     }
 }

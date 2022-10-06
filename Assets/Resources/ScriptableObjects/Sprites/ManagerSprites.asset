@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10fba5befbf08bd46abafe20023f2cb6, type: 3}
   m_Name: ManagerSprites
   m_EditorClassIdentifier: 
-  ManagerSprites:
+  AvatarSprites:
   - {fileID: 21300000, guid: 15ddc0c126195b04b949b688b10157a7, type: 3}
   - {fileID: 21300000, guid: 4a611922411620242b60cf655d260527, type: 3}
   - {fileID: 21300000, guid: d973fd471212c32448cbb9c99d969f01, type: 3}

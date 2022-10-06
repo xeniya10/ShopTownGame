@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a439cd93258c9a46bcf4534360835f5, type: 3}
   m_Name: CellSprites
   m_EditorClassIdentifier: 
-  CellSprites:
+  Sprites:
   - {fileID: 21300000, guid: 11cb7f9cbb0725d4080dc96feddf2116, type: 3}
   - {fileID: 21300000, guid: 95d0571916a940d46a32172a16d93b9b, type: 3}
   - {fileID: 21300000, guid: 32da1526ef1583343987212db2c03df2, type: 3}

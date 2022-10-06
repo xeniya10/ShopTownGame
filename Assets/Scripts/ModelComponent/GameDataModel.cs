@@ -3,6 +3,22 @@ using System.Collections.Generic;
 
 namespace ShopTown.ModelComponent
 {
+// [Serializable]
+public enum Currency { Dollar, Gold }
+
+[Serializable]
+public class MoneyModel
+{
+    public double Number;
+    public Currency Value;
+
+    public MoneyModel(double number, Currency value)
+    {
+        Number = number;
+        Value = value;
+    }
+}
+
 public class GameDataModel
 {
     // Monetary Parameters

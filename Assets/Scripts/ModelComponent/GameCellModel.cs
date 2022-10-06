@@ -9,7 +9,7 @@ public enum CellState
     Lock,
     Unlock,
     Active,
-    Process
+    InProgress
 }
 
 public class GameCellModel
@@ -50,6 +50,11 @@ public class GameCellModel
         _cellData = cellData;
     }
 
+    public void ResetLevel()
+    {
+        Level = 1;
+    }
+
     public void SetGridIndex(int rowIndex, int columnIndex)
     {
         GridIndex = new Vector2(columnIndex, rowIndex);
@@ -58,11 +63,11 @@ public class GameCellModel
     public void SetCost(int unlockCountNumber)
     {
         var costData = _cellData.Cost;
-        Cost = costData[unlockCountNumber];
+        Cost = costData[unlockCountNumber].Number;
 
         if (unlockCountNumber > costData.Length)
         {
-            Cost = _cellData.Cost[costData.Length - 1] * 2;
+            Cost = _cellData.Cost[costData.Length - 1].Number * 2;
         }
     }
 }

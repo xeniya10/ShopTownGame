@@ -1,4 +1,5 @@
 using System;
+using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
 using TMPro;
 using UnityEngine;
@@ -29,15 +30,22 @@ public class ManagerRowView : MonoBehaviour
         _managerImage.sprite = _managerCollection.AvatarSprites[level - 1];
     }
 
-    public void SetMoneyPrice(double price)
+    private void SetCost(MoneyModel cost)
     {
-        _priceText.text = MoneyFormatUtility.MoneyDefault(price);
+        if (cost.Value == Currency.Gold)
+        {
+            _priceText.text = MoneyFormatUtility.GoldDefault(cost.Number);
+            return;
+        }
+
+        _priceText.text = MoneyFormatUtility.MoneyDefault(cost.Number);
     }
 
+    public void SetMoneyPrice(double price)
+    {}
+
     public void SetGoldPrice(double price)
-    {
-        _priceText.text = MoneyFormatUtility.GoldDefault(price);
-    }
+    {}
 
     private void SetName(string managerName)
     {
@@ -54,14 +62,18 @@ public class ManagerRowView : MonoBehaviour
         _hireButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public ManagerRowView Create(Transform parent, int level, string managerName,
-        string description)
+    public ManagerRowView Create(Transform parent)
     {
         var row = Instantiate(this, parent);
-        row.SetSprite(level);
-        row.SetName(managerName);
-        row.SetDescription(description);
         return row;
+    }
+
+    public void Initialize(ManagerRowModel model)
+    {
+        SetSprite(model.Level);
+        SetName(model.Name);
+        SetDescription(model.Description);
+        SetCost(model.Cost);
     }
 
     public void Lock()

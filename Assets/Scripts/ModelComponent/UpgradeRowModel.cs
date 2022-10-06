@@ -12,10 +12,8 @@ public class UpgradeRowModel
     public string Name { get { return GetName(); } }
 
     // Cost
-    private double BaseMoneyCost { get { return _rowData.MoneyBaseCost[Level - 1]; } }
-    public double MoneyCost { get { return BaseMoneyCost * UpgradeLevel; } }
-    private double BaseGoldCost { get { return _rowData.GoldBaseCost[Level - 1]; } }
-    public double GoldCost { get { return BaseGoldCost * UpgradeLevel; } }
+    private MoneyModel BaseCost { get { return _rowData.BaseCost[Level - 1]; } }
+    public MoneyModel Cost { get { return new MoneyModel(BaseCost.Number * UpgradeLevel, BaseCost.Value); } }
 
     // State
     public bool Unlocked;
