@@ -53,9 +53,9 @@ public class GameCellView : MonoBehaviour
         _businessImage.sprite = _businessCollection.Sprites[level - 1];
     }
 
-    public void SetCost(double cost)
+    public void SetCost(MoneyModel cost)
     {
-        _priceText.text = MoneyFormatUtility.Default(cost);
+        _priceText.text = MoneyFormatUtility.Default(cost.Number);
     }
 
     private void SetPosition(Vector2 position)

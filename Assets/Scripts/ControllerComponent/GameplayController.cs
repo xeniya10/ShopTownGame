@@ -113,7 +113,7 @@ public class GameplayController : IStartable
         if (_selectedCells[0] == _selectedCells[1])
         {
             var profit = selectedCell.Profit;
-            selectedCell.GetInProgress(() => data.AddToMoneyBalance(profit));
+            selectedCell.GetInProgress(() => data.AddToBalance(profit));
         }
 
         // var startPosition1 = _selectedCells[0].GetPosition();

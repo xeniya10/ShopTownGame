@@ -44,13 +44,7 @@ public class UpgradeRowView : MonoBehaviour
 
     private void SetCost(MoneyModel cost)
     {
-        if (cost.Value == Currency.Gold)
-        {
-            _priceText.text = MoneyFormatUtility.GoldDefault(cost.Number);
-            return;
-        }
-
-        _priceText.text = MoneyFormatUtility.MoneyDefault(cost.Number);
+        _priceText.text = MoneyFormatUtility.Default(cost);
     }
 
     private void SetName(string upgradeName)

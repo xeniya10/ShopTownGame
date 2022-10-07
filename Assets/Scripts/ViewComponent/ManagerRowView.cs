@@ -32,20 +32,8 @@ public class ManagerRowView : MonoBehaviour
 
     private void SetCost(MoneyModel cost)
     {
-        if (cost.Value == Currency.Gold)
-        {
-            _priceText.text = MoneyFormatUtility.GoldDefault(cost.Number);
-            return;
-        }
-
-        _priceText.text = MoneyFormatUtility.MoneyDefault(cost.Number);
+        _priceText.text = MoneyFormatUtility.Default(cost);
     }
-
-    public void SetMoneyPrice(double price)
-    {}
-
-    public void SetGoldPrice(double price)
-    {}
 
     private void SetName(string managerName)
     {

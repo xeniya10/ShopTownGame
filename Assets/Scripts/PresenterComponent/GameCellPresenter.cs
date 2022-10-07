@@ -9,8 +9,8 @@ public class GameCellPresenter
     private readonly GameCellView _cellView;
     private readonly GameCellModel _cellModel;
 
-    public double Cost { get { return _cellModel.Cost; } }
-    public double Profit { get { return _cellModel.Profit; } }
+    public MoneyModel Cost { get { return _cellModel.Cost; } }
+    public MoneyModel Profit { get { return _cellModel.Profit; } }
     public CellState State { get { return _cellModel.State; } }
 
     private GameCellPresenter(GameCellView cellView, GameCellModel gameModel)

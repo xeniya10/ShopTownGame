@@ -37,8 +37,9 @@ public class GameCellModel
 
     // Monetary Parameters
     private float ProfitMultiplier { get { return UpgradeLevel + 1; } }
-    public double Profit { get { return _cellData.BaseProfit[Level - 1] * ProfitMultiplier; } }
-    public double Cost = 2;
+    private MoneyModel BaseProfit { get { return _cellData.BaseProfit[Level - 1]; } }
+    public MoneyModel Profit { get { return new MoneyModel(BaseProfit.Number * ProfitMultiplier, BaseProfit.Value); } }
+    public MoneyModel Cost;
 
     // Data Containers
     private readonly BusinessData _businessData;
@@ -63,11 +64,12 @@ public class GameCellModel
     public void SetCost(int unlockCountNumber)
     {
         var costData = _cellData.Cost;
-        Cost = costData[unlockCountNumber].Number;
+        Cost = costData[unlockCountNumber];
 
         if (unlockCountNumber > costData.Length)
         {
-            Cost = _cellData.Cost[costData.Length - 1].Number * 2;
+            var lastElement = _cellData.Cost[costData.Length - 1];
+            Cost = new MoneyModel(lastElement.Number * 2, lastElement.Value);
         }
     }
 }

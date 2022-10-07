@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ShopTown.ModelComponent;
 
 public class MoneyFormat
 {
@@ -186,20 +187,15 @@ public static class MoneyFormatUtility
         return money.FormattedNumber + money.Scale;
     }
 
-    // public static string Default()
-    // {
-    //     
-    // }
-
-    public static string MoneyDefault(double unformatted)
+    public static string Default(MoneyModel money)
     {
-        var money = GetNumberDetails(unformatted);
-        return "$ " + money.FormattedNumber + money.Scale;
-    }
+        var number = GetNumberDetails(money.Number);
 
-    public static string GoldDefault(double unformatted)
-    {
-        var money = GetNumberDetails(unformatted);
-        return "G " + money.FormattedNumber + money.Scale;
+        if (money.Value == Currency.Dollar)
+        {
+            return "$ " + number.FormattedNumber + number.Scale;
+        }
+
+        return "G " + number.FormattedNumber + number.Scale;
     }
 }

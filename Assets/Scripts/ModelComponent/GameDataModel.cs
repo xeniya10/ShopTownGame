@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace ShopTown.ModelComponent
 {
-// [Serializable]
 public enum Currency { Dollar, Gold }
 
 [Serializable]
@@ -43,35 +42,59 @@ public class GameDataModel
 
     public DateTime TimeStamp;
 
-    public void SetMoneyBalance(double amount)
+    public void SetBalance(MoneyModel number)
     {
-        CurrentMoneyBalance = amount;
+        if (number.Value == Currency.Dollar)
+        {
+            CurrentMoneyBalance = number.Number;
+        }
+
+        else
+        {
+            CurrentGoldBalance = number.Number;
+        }
+
         BalanceChangeEvent.Invoke();
-        // Update text field
     }
 
-    public void AddToMoneyBalance(double amount)
+    public void AddToBalance(MoneyModel number)
     {
-        CurrentMoneyBalance += amount;
+        if (number.Value == Currency.Dollar)
+        {
+            CurrentMoneyBalance += number.Number;
+        }
+
+        else
+        {
+            CurrentGoldBalance += number.Number;
+        }
+
         BalanceChangeEvent.Invoke();
-        // Update text field
     }
 
-    public void SubtractFromBalance(double amount)
+    private void SubtractFromBalance(MoneyModel number)
     {
-        CurrentMoneyBalance -= amount;
+        if (number.Value == Currency.Dollar)
+        {
+            CurrentMoneyBalance -= number.Number;
+        }
+
+        else
+        {
+            CurrentGoldBalance -= number.Number;
+        }
+
         BalanceChangeEvent.Invoke();
-        // Update text field
     }
 
-    public bool CanBuy(double amount)
+    public bool CanBuy(MoneyModel number)
     {
-        if (amount > CurrentMoneyBalance)
+        if (number.Number > CurrentMoneyBalance)
         {
             return false;
         }
 
-        SubtractFromBalance(amount);
+        SubtractFromBalance(number);
         return true;
     }
 }

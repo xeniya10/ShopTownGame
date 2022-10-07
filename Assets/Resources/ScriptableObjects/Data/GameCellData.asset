@@ -41,24 +41,45 @@ MonoBehaviour:
   - 1000000000
   - 1500000000
   Cost:
-  - 2
-  - 20
-  - 50
-  - 100
-  - 500
-  - 1500
-  - 3000
-  - 8000
-  - 15000
-  - 40000
-  - 100000
-  - 300000
-  - 1000000
-  - 3000000
-  - 10000000
-  - 20000000
-  - 50000000
-  - 100000000
-  - 200000000
-  - 500000000
-  - 1000000000
+  - Number: 2
+    Value: 0
+  - Number: 20
+    Value: 0
+  - Number: 50
+    Value: 0
+  - Number: 100
+    Value: 0
+  - Number: 500
+    Value: 0
+  - Number: 1500
+    Value: 0
+  - Number: 3000
+    Value: 0
+  - Number: 8000
+    Value: 0
+  - Number: 15000
+    Value: 0
+  - Number: 40000
+    Value: 0
+  - Number: 100000
+    Value: 0
+  - Number: 300000
+    Value: 0
+  - Number: 1000000
+    Value: 0
+  - Number: 3000000
+    Value: 0
+  - Number: 10000000
+    Value: 0
+  - Number: 20000000
+    Value: 0
+  - Number: 50000000
+    Value: 0
+  - Number: 100000000
+    Value: 0
+  - Number: 200000000
+    Value: 0
+  - Number: 500000000
+    Value: 0
+  - Number: 1000000000
+    Value: 0

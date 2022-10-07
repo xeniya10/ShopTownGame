@@ -5,38 +5,38 @@ using UnityEngine;
 namespace ShopTown.Data
 {
 [CreateAssetMenu(fileName = "GameCellData", menuName = "GameCellData")]
-[Serializable]
 public class GameCellData : ScriptableObject
 {
-    public double[] BaseProfit =
+    public MoneyModel[] BaseProfit =
     {
-        1,
-        6,
-        14,
-        25,
-        80,
-        140,
-        300,
-        720,
-        2000,
-        4100,
-        10000,
-        20000,
-        50000,
-        150000,
-        500000,
-        1000000,
-        2000000,
-        5000000,
-        10000000,
-        20000000,
-        40000000,
-        90000000,
-        150000000,
-        300000000,
-        500000000,
-        1000000000,
-        1500000000
+        new MoneyModel(1, Currency.Dollar),
+        new MoneyModel(6, Currency.Dollar),
+        new MoneyModel(14, Currency.Dollar),
+        new MoneyModel(25, Currency.Dollar),
+        new MoneyModel(80, Currency.Dollar),
+        new MoneyModel(140, Currency.Dollar),
+        new MoneyModel(300, Currency.Dollar),
+        new MoneyModel(720, Currency.Dollar),
+        new MoneyModel(2000, Currency.Dollar),
+        new MoneyModel(4100, Currency.Dollar),
+        new MoneyModel(10000, Currency.Dollar),
+        new MoneyModel(20000, Currency.Dollar),
+        new MoneyModel(50000, Currency.Dollar),
+        new MoneyModel(50000, Currency.Dollar),
+        new MoneyModel(150000, Currency.Dollar),
+        new MoneyModel(500000, Currency.Dollar),
+        new MoneyModel(1000000, Currency.Dollar),
+        new MoneyModel(2000000, Currency.Dollar),
+        new MoneyModel(5000000, Currency.Dollar),
+        new MoneyModel(10000000, Currency.Dollar),
+        new MoneyModel(20000000, Currency.Dollar),
+        new MoneyModel(40000000, Currency.Dollar),
+        new MoneyModel(90000000, Currency.Dollar),
+        new MoneyModel(150000000, Currency.Dollar),
+        new MoneyModel(300000000, Currency.Dollar),
+        new MoneyModel(500000000, Currency.Dollar),
+        new MoneyModel(1000000000, Currency.Dollar),
+        new MoneyModel(1500000000, Currency.Dollar)
     };
 
     public TimeSpan[] ProcessTime =

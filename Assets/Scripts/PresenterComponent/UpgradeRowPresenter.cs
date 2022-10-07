@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace ShopTown.PresenterComponent
 {
+public static class StringExtension
+{
+    public static string PlusHello(this string str)
+    {
+        return str + "Hello";
+    }
+}
+
 public class UpgradeRowPresenter
 {
     private readonly UpgradeRowModel _upgradeRowModel;
@@ -13,6 +21,8 @@ public class UpgradeRowPresenter
 
     private UpgradeRowPresenter(UpgradeRowView upgradeRowView, UpgradeRowModel upgradeRowModel)
     {
+        var str = "aaa";
+        str.PlusHello();
         _upgradeRowView = upgradeRowView;
         _upgradeRowModel = upgradeRowModel;
     }
