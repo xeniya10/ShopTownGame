@@ -47,9 +47,7 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterController(IContainerBuilder builder)
     {
-        builder.Register<GameController>(Lifetime.Scoped);
         builder.Register<DataController>(Lifetime.Scoped);
-
         builder.RegisterEntryPoint<GameplayController>(Lifetime.Scoped);
     }
 

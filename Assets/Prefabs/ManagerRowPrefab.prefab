@@ -447,7 +447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6514741227196318012
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1392,7 +1392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eac7a50dc98d1314aa7cae2debb5c181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hireButton: {fileID: 5916342858564497767}
+  HireButton: {fileID: 5916342858564497767}
   _managerImage: {fileID: 8568159226380776440}
   _lockImage: {fileID: 8393723764564323258}
   _nameText: {fileID: 3641624121910351034}

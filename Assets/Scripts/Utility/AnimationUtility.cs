@@ -6,52 +6,47 @@ using UnityEngine;
 
 public static class AnimationUtility
 {
-    public static void Fade(Image image, int alpha, float time, Sequence sequence, Action callBack)
+    public static void Fade(Image image, float alpha, float time,
+        Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
-            sequence.Append(image.DOFade(alpha, time)
-            .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(image.DOFade(alpha, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            image.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke());
+            image.DOFade(alpha, time).OnComplete(() => callBack?.Invoke());
         }
     }
 
-    public static void Fade(TextMeshProUGUI text, int alpha, float time, Sequence sequence, Action callBack)
+    public static void Fade(TextMeshProUGUI text, float alpha, float time,
+        Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
-            sequence.Append(text.DOFade(alpha, time)
-            .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            text.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke());
+            text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke());
         }
     }
 
-    public static void Fill(Image image, TextMeshProUGUI text, float duration, Sequence sequence, Action callBack)
+    public static void Fill(Image image, TextMeshProUGUI text, float duration,
+        Sequence sequence, Action callBack)
     {
         float currentTime = 0;
 
         if (sequence != null)
         {
-            sequence.Append(image.DOFillAmount(0, duration)
-            .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
-            .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(image.DOFillAmount(0, duration).OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime))))).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            image.DOFillAmount(0, duration)
-                .OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)))))
-                .OnComplete(() => callBack?.Invoke());
+            image.DOFillAmount(0, duration).OnUpdate(() => text.SetText(TimeToString(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime))))).OnComplete(() => callBack?.Invoke());
         }
     }
 
@@ -70,22 +65,22 @@ public static class AnimationUtility
         return timeSpan.ToString(timeSpan.Hours < 10 ? @"h\:mm\:ss" : @"hh\:mm\:ss");
     }
 
-    public static void Scale(Transform objectTransform, Vector2 scale, float time, Sequence sequence, Action callBack)
+    public static void Scale(Transform objectTransform, Vector2 scale, float time,
+        Sequence sequence, Action callBack)
     {
         if (sequence != null)
         {
-            sequence.Append(objectTransform.DOScale(scale, time)
-            .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(objectTransform.DOScale(scale, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            objectTransform.DOScale(scale, time)
-                .OnComplete(() => callBack?.Invoke());
+            objectTransform.DOScale(scale, time).OnComplete(() => callBack?.Invoke());
         }
     }
 
-    public static void Move(Transform objectTransform, Vector2 targetPosition, float time, Sequence sequence)
+    public static void Move(Transform objectTransform, Vector2 targetPosition, float time,
+        Sequence sequence)
     {
         if (sequence != null)
         {
@@ -98,7 +93,8 @@ public static class AnimationUtility
         }
     }
 
-    public static void MoveFromScreenBorder(Transform objectTransform, float xFactor, float yFactor, float time, Sequence sequence)
+    public static void MoveFromScreenBorder(Transform objectTransform, float xFactor, float yFactor,
+        float time, Sequence sequence)
     {
         var targetPosition = objectTransform.localPosition;
 
@@ -119,7 +115,8 @@ public static class AnimationUtility
         }
     }
 
-    public static void MoveToScreenBorder(Transform objectTransform, float xFactor, float yFactor, float time, Sequence sequence)
+    public static void MoveToScreenBorder(Transform objectTransform, float xFactor, float yFactor,
+        float time, Sequence sequence)
     {
         var startPosition = objectTransform.localPosition;
 

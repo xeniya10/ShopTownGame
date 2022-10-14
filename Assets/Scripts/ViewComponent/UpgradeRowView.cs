@@ -10,7 +10,7 @@ namespace ShopTown.ViewComponent
 public class UpgradeRowView : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] private Button _buyButton;
+    public Button BuyButton;
     [SerializeField] private Image _upgradeImage;
     [SerializeField] private Image _lockImage;
 
@@ -59,7 +59,7 @@ public class UpgradeRowView : MonoBehaviour
 
     public void ClickBuyButton(Action callBack)
     {
-        _buyButton.onClick.AddListener(() => callBack?.Invoke());
+        BuyButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
     public UpgradeRowView Create(Transform parent)
@@ -81,7 +81,7 @@ public class UpgradeRowView : MonoBehaviour
         AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () =>
         {
             _lockImage.gameObject.SetActive(true);
-            AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
+            AnimationUtility.Fade(_lockImage, 0.35f, _fadeTime, null, null);
         });
     }
 

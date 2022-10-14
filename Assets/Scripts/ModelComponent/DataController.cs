@@ -51,11 +51,11 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = 500,
+            CurrentMoneyBalance = 100000,
             CurrentGoldBalance = 0,
             TotalMoneyBalance = 0,
             TotalGoldBalance = 0,
-            MaxOpenedLevel = 1,
+            MaxOpenedLevel = 0,
             NumberOfLevels = 27,
             TimeStamp = DateTime.Now,
 
@@ -74,6 +74,8 @@ public class DataController : IInitializable
             {
                 var cell = new GameCellModel(_businessData, _gameCellData);
                 cell.Level = 1;
+                cell.UpgradeLevel = 1;
+                cell.SetCost(0);
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
                 cell.Position = GameData.GameBoardModel.CalculateCellPosition(j, i, cell.Size);
@@ -91,10 +93,15 @@ public class DataController : IInitializable
         {
             var manager = new ManagerRowModel(_businessData, _managerRowData);
             manager.Level = i + 1;
+            manager.Unlocked = false;
             GameData.Managers.Add(manager);
+        }
 
+        for (var i = 0; i < GameData.NumberOfLevels; i++)
+        {
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
             upgrade.Level = i + 1;
+            upgrade.Unlocked = false;
             GameData.Upgrades.Add(upgrade);
         }
     }

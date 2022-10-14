@@ -9,6 +9,7 @@ public class GameCellPresenter
     private readonly GameCellView _cellView;
     private readonly GameCellModel _cellModel;
 
+    public int Level { get { return _cellModel.Level; } }
     public MoneyModel Cost { get { return _cellModel.Cost; } }
     public MoneyModel Profit { get { return _cellModel.Profit; } }
     public CellState State { get { return _cellModel.State; } }
@@ -50,6 +51,16 @@ public class GameCellPresenter
         _cellView._selectorImage.gameObject.SetActive(isActive);
     }
 
+    public void ManagerUnlock()
+    {
+        _cellModel.IsUnlockedManager = true;
+    }
+
+    public void UpgradeUp()
+    {
+        _cellModel.UpgradeLevel += 1;
+    }
+
     public void LevelUp()
     {
         _cellView.HideBusiness(() =>
@@ -62,7 +73,7 @@ public class GameCellPresenter
 
     public void Lock()
     {
-        _cellModel.ResetLevel();
+        _cellModel.Reset();
         _cellModel.State = CellState.Lock;
         _cellView.SetLockState();
     }

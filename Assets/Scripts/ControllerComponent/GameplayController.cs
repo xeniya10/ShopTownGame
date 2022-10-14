@@ -63,6 +63,7 @@ public class GameplayController : IStartable
         foreach (var model in data.Managers)
         {
             var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, model);
+            row.SubscribeToHireButton(TryBuy);
             _managerRows.Add(row);
         }
     }
@@ -73,6 +74,7 @@ public class GameplayController : IStartable
         foreach (var model in data.Upgrades)
         {
             var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, model);
+            row.SubscribeToBuyButton(TryBuy);
             _upgradeRows.Add(row);
         }
     }
@@ -83,21 +85,28 @@ public class GameplayController : IStartable
         if (_dataController.GameData.CanBuy(cell.Cost))
         {
             cell.Activate();
+            ShowNewLevelProfiler(cell.Level);
             UnlockNeighbors(cell);
+            _managerRows.Find(manager => manager.Level == cell.Level).SetActive(true);
         }
     }
 
-    // private void TryBuy(ManagerRowPresenter manager)
-    // {
-    //     if (_dataController.GameData.CanBuy())
-    //     {}
-    // }
-    //
-    // private void TryBuy(UpgradeRowModel upgrade)
-    // {
-    //     if (_dataController.GameData.CanBuy(manager))
-    //     {}
-    // }
+    private void TryBuy(ManagerRowPresenter manager)
+    {
+        if (_dataController.GameData.CanBuy(manager.Cost))
+        {
+            manager.SetActive(false);
+            _gameCells.Find(cell => cell.Level == manager.Level).ManagerUnlock();
+        }
+    }
+
+    private void TryBuy(UpgradeRowPresenter upgrade)
+    {
+        if (_dataController.GameData.CanBuy(upgrade.Cost))
+        {
+            upgrade.SetActive(false);
+        }
+    }
 
     private void Select(GameCellPresenter selectedCell)
     {
@@ -116,9 +125,6 @@ public class GameplayController : IStartable
             selectedCell.GetInProgress(() => data.AddToBalance(profit));
         }
 
-        // var startPosition1 = _selectedCells[0].GetPosition();
-        // var startPosition2 = _selectedCells[1].GetPosition();
-
         if (_selectedCells[0].IsNeighborOf(_selectedCells[1]) && _selectedCells[0].HasSameLevelAs(_selectedCells[1]))
         {
             Merge(_selectedCells[0], _selectedCells[1]);
@@ -132,15 +138,30 @@ public class GameplayController : IStartable
     private void Merge(GameCellPresenter oneCell, GameCellPresenter otherCell)
     {
         _activationCounter++;
+        var cellUp = otherCell;
+        var cellUnlock = oneCell;
         if (oneCell.IsActivatedEarlierThen(otherCell))
         {
-            oneCell.LevelUp();
-            otherCell.Unlock(_activationCounter);
-            return;
+            cellUp = oneCell;
+            cellUnlock = otherCell;
         }
 
-        otherCell.LevelUp();
-        oneCell.Unlock(_activationCounter);
+        cellUp.LevelUp();
+        cellUnlock.Unlock(_activationCounter);
+        ShowNewLevelProfiler(cellUp.Level + 1);
+    }
+
+    private void ShowNewLevelProfiler(int level)
+    {
+        var data = _dataController.GameData;
+        if (level > data.MaxOpenedLevel)
+        {
+            _gameScreenPresenter.ShowNewBusinessScreen(level);
+            data.MaxOpenedLevel = level;
+        }
+
+        _managerRows.Find(manager => manager.Level == level).SetActive(true);
+        _upgradeRows.Find(upgrade => upgrade.Level == level).SetActive(true);
     }
 
     private void UnlockNeighbors(GameCellPresenter activatedCell)

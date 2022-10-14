@@ -32,7 +32,7 @@
     <property name="rider.code.cleanup.on.save" value="true" />
     <property name="rider.code.cleanup.on.save.profile" value="KSU" />
     <property name="rider.run.widget.enabled.cache" value="false" />
-    <property name="settings.editor.selected.configurable" value="CodeCleanupOptionsPage" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
@@ -45,10 +45,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="23784">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="23784" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -72,6 +72,7 @@
       <workItem from="1664722958628" duration="280000" />
       <workItem from="1664723259800" duration="21508000" />
       <workItem from="1664790753818" duration="11466000" />
+      <workItem from="1665566069358" duration="19157000" />
     </task>
     <servers />
   </component>

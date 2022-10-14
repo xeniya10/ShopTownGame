@@ -32,7 +32,6 @@ public class GameCellModel
     // State Parameters
     public CellState State = CellState.Lock;
     public bool IsUnlockedManager;
-    public bool IsUnlockedUpgrade;
     public int UpgradeLevel;
 
     // Monetary Parameters
@@ -51,7 +50,7 @@ public class GameCellModel
         _cellData = cellData;
     }
 
-    public void ResetLevel()
+    public void Reset()
     {
         Level = 1;
     }

@@ -80,10 +80,6 @@ public class GameScreenPresenter : IInitializable
 
     private void InitializeNewBusinessScreen()
     {
-        var data = _dataController.GameData;
-
-        // _newBusinessScreenView.SetNameText();
-        // _newBusinessScreenView.SetSprite();
         _newBusinessScreenView.ClickOkButton(_newBusinessScreenView.Hide);
     }
 
@@ -91,6 +87,12 @@ public class GameScreenPresenter : IInitializable
     {
         var data = _dataController.GameData;
         _gameScreenView.SetMoneyNumber(data.CurrentMoneyBalance);
+    }
+
+    public void ShowNewBusinessScreen(int level)
+    {
+        _newBusinessScreenView.Initialize(level);
+        _newBusinessScreenView.Show();
     }
 }
 }

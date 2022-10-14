@@ -9,12 +9,13 @@ namespace ShopTown.ViewComponent
 {
 public class ManagerRowView : MonoBehaviour
 {
-    [Header("Components")]
-    [SerializeField] private Button _hireButton;
+    public Button HireButton;
+
+    [Header("Images")]
     [SerializeField] private Image _managerImage;
     [SerializeField] private Image _lockImage;
 
-    [Space]
+    [Header("Text Fields")]
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descriptionText;
     [SerializeField] private TextMeshProUGUI _priceText;
@@ -45,11 +46,6 @@ public class ManagerRowView : MonoBehaviour
         _descriptionText.text = description;
     }
 
-    public void ClickHireButton(Action callBack)
-    {
-        _hireButton.onClick.AddListener(() => callBack?.Invoke());
-    }
-
     public ManagerRowView Create(Transform parent)
     {
         var row = Instantiate(this, parent);
@@ -69,7 +65,7 @@ public class ManagerRowView : MonoBehaviour
         AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () =>
         {
             _lockImage.gameObject.SetActive(true);
-            AnimationUtility.Fade(_lockImage, 1, _fadeTime, null, null);
+            AnimationUtility.Fade(_lockImage, 0.35f, _fadeTime, null, null);
         });
     }
 

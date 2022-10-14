@@ -1,28 +1,20 @@
+using System;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
 using UnityEngine;
 
 namespace ShopTown.PresenterComponent
 {
-public static class StringExtension
-{
-    public static string PlusHello(this string str)
-    {
-        return str + "Hello";
-    }
-}
-
 public class UpgradeRowPresenter
 {
     private readonly UpgradeRowModel _upgradeRowModel;
     private readonly UpgradeRowView _upgradeRowView;
 
+    public int Level { get { return _upgradeRowModel.Level; } }
     public MoneyModel Cost { get { return _upgradeRowModel.Cost; } }
 
     private UpgradeRowPresenter(UpgradeRowView upgradeRowView, UpgradeRowModel upgradeRowModel)
     {
-        var str = "aaa";
-        str.PlusHello();
         _upgradeRowView = upgradeRowView;
         _upgradeRowModel = upgradeRowModel;
     }
@@ -36,10 +28,21 @@ public class UpgradeRowPresenter
         return rowPresenter;
     }
 
-    public void Lock()
-    {}
+    public void SetActive(bool isActivated)
+    {
+        _upgradeRowModel.Unlocked = isActivated;
+        if (isActivated == true)
+        {
+            _upgradeRowView.Unlock();
+            return;
+        }
 
-    public void Unlock()
-    {}
+        _upgradeRowView.Lock();
+    }
+
+    public void SubscribeToBuyButton(Action<UpgradeRowPresenter> callBack)
+    {
+        _upgradeRowView.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
+    }
 }
 }
