@@ -40,8 +40,6 @@ public class GameScreenPresenter : IInitializable
         SetMoneyBalance();
         data.BalanceChangeEvent += SetMoneyBalance;
 
-        _gameScreenView.SetGoldNumber(data.CurrentGoldBalance);
-
         _gameScreenView.ClickAddButton(_purchaseScreenView.Show);
         _gameScreenView.ClickMenuButton(_menuScreenView.Show);
     }
@@ -87,6 +85,7 @@ public class GameScreenPresenter : IInitializable
     {
         var data = _dataController.GameData;
         _gameScreenView.SetMoneyNumber(data.CurrentMoneyBalance);
+        _gameScreenView.SetMoneyNumber(data.CurrentGoldBalance);
     }
 
     public void ShowNewBusinessScreen(int level)

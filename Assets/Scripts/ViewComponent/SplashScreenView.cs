@@ -46,26 +46,26 @@ public class SplashScreenView : MonoBehaviour
 
     public void AppearCell(SplashCellView cell)
     {
-        AnimationUtility.Move(cell.transform, cell.TargetPosition, _moveTime * 0.5f, _appearSequence);
+        cell.transform.Move(cell.TargetPosition, _moveTime * 0.5f, _appearSequence);
     }
 
     public void AppearTextFields()
     {
-        AnimationUtility.MoveFromScreenBorder(_gameNameText.transform, -1.5f, 0f, _moveTime, _appearSequence);
-        AnimationUtility.MoveFromScreenBorder(_startButton.transform, -1.5f, 0f, _moveTime, _appearSequence);
+        _gameNameText.transform.MoveFromScreenBorder(-1.5f, 0f, _moveTime, _appearSequence);
+        _startButton.transform.MoveFromScreenBorder(-1.5f, 0f, _moveTime, _appearSequence);
     }
 
     public void DisappearTextFields()
     {
-        AnimationUtility.Fade(_startButtonText, 0, _fadeTime, _disappearSequence, null);
-        AnimationUtility.Fade(_gameNameText, 0, _fadeTime, _disappearSequence, null);
-        AnimationUtility.Fade(_splashScreenImage, 0, _fadeTime, _disappearSequence, () => gameObject.SetActive(false));
+        _startButtonText.Fade(0, _fadeTime, _disappearSequence, null);
+        _gameNameText.Fade(0, _fadeTime, _disappearSequence, null);
+        _splashScreenImage.Fade(0, _fadeTime, _disappearSequence, () => gameObject.SetActive(false));
     }
 
     public void DisappearCells(SplashCellView cell)
     {
         var scale = new Vector2(0, 0);
-        AnimationUtility.Scale(cell.transform, scale, _scaleTime, _disappearSequence, null);
+        cell.transform.Scale(scale, _scaleTime, _disappearSequence, null);
     }
 }
 }

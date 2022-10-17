@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace ShopTown.ControllerComponent
@@ -47,7 +48,6 @@ public class GameplayController : IStartable
     private void CreateBoard()
     {
         var data = _dataController.GameData;
-
         foreach (var model in data.Businesses)
         {
             var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, model);
@@ -79,7 +79,6 @@ public class GameplayController : IStartable
         }
     }
 
-    // TODO more universal method
     private void TryBuy(GameCellPresenter cell)
     {
         if (_dataController.GameData.CanBuy(cell.Cost))
@@ -87,7 +86,6 @@ public class GameplayController : IStartable
             cell.Activate();
             ShowNewLevelProfiler(cell.Level);
             UnlockNeighbors(cell);
-            _managerRows.Find(manager => manager.Level == cell.Level).SetActive(true);
         }
     }
 
@@ -96,7 +94,8 @@ public class GameplayController : IStartable
         if (_dataController.GameData.CanBuy(manager.Cost))
         {
             manager.SetActive(false);
-            _gameCells.Find(cell => cell.Level == manager.Level).ManagerUnlock();
+            _gameCells.Find(cell => cell.Level == manager.Level)
+                .ManagerUnlock();
         }
     }
 
@@ -105,6 +104,8 @@ public class GameplayController : IStartable
         if (_dataController.GameData.CanBuy(upgrade.Cost))
         {
             upgrade.SetActive(false);
+            _gameCells.Find(cell => cell.Level == upgrade.Level)
+                .UpgradeUp();
         }
     }
 
@@ -125,13 +126,19 @@ public class GameplayController : IStartable
             selectedCell.GetInProgress(() => data.AddToBalance(profit));
         }
 
-        if (_selectedCells[0].IsNeighborOf(_selectedCells[1]) && _selectedCells[0].HasSameLevelAs(_selectedCells[1]))
+        if (_selectedCells[0]
+                .IsNeighborOf(_selectedCells[1]) && _selectedCells[0]
+                .HasSameLevelAs(_selectedCells[1]))
         {
             Merge(_selectedCells[0], _selectedCells[1]);
         }
 
-        _selectedCells[0].SetActiveSelector(false);
-        _selectedCells[1].SetActiveSelector(false);
+        _selectedCells[0]
+            .SetActiveSelector(false);
+
+        _selectedCells[1]
+            .SetActiveSelector(false);
+
         _selectedCells.Clear();
     }
 
@@ -160,8 +167,11 @@ public class GameplayController : IStartable
             data.MaxOpenedLevel = level;
         }
 
-        _managerRows.Find(manager => manager.Level == level).SetActive(true);
-        _upgradeRows.Find(upgrade => upgrade.Level == level).SetActive(true);
+        var manager = _managerRows.Find(manager => manager.Level == level);
+        manager?.SetActive(true);
+
+        var upgrade = _upgradeRows.Find(upgrade => upgrade.Level == level);
+        upgrade?.SetActive(true);
     }
 
     private void UnlockNeighbors(GameCellPresenter activatedCell)

@@ -54,11 +54,13 @@ public class GameCellPresenter
     public void ManagerUnlock()
     {
         _cellModel.IsUnlockedManager = true;
+        _cellView.SetActiveImprovements(_cellModel);
     }
 
     public void UpgradeUp()
     {
         _cellModel.UpgradeLevel += 1;
+        _cellView.SetActiveImprovements(_cellModel);
     }
 
     public void LevelUp()
@@ -92,12 +94,20 @@ public class GameCellPresenter
         _cellModel.State = CellState.Active;
         _cellModel.ActivatingDate = DateTime.Now;
         _cellView.SetActiveState();
+        _cellView.Initialize(_cellModel);
     }
 
     public void GetInProgress(Action callBack)
     {
         _cellModel.State = CellState.InProgress;
-        _cellView.SetInProgressState(_cellModel.TotalTime.TotalSeconds, () => callBack?.Invoke());
+        _cellView.SetInProgressState(_cellModel.TotalTime.TotalSeconds, () =>
+        {
+            callBack?.Invoke();
+            if (_cellModel.IsUnlockedManager == true)
+            {
+                GetInProgress(callBack);
+            }
+        });
     }
 
     public bool IsNeighborOf(GameCellPresenter cell)

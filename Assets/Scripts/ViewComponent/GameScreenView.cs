@@ -1,4 +1,5 @@
 using System;
+using ShopTown.ModelComponent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,14 +22,15 @@ public class GameScreenView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _moneyText;
     [SerializeField] private TextMeshProUGUI _goldText;
 
-    public void SetMoneyNumber(double number)
+    public void SetMoneyNumber(MoneyModel number)
     {
-        _moneyText.text = MoneyFormatUtility.Default(number);
-    }
+        if (number.Value == Currency.Dollar)
+        {
+            _moneyText.text = number.ToFormattedString();
+            return;
+        }
 
-    public void SetGoldNumber(double number)
-    {
-        _goldText.text = MoneyFormatUtility.Default(number);
+        _goldText.text = number.ToFormattedString();
     }
 
     public void ClickAddButton(Action callBack)

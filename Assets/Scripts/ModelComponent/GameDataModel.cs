@@ -3,28 +3,13 @@ using System.Collections.Generic;
 
 namespace ShopTown.ModelComponent
 {
-public enum Currency { Dollar, Gold }
-
-[Serializable]
-public class MoneyModel
-{
-    public double Number;
-    public Currency Value;
-
-    public MoneyModel(double number, Currency value)
-    {
-        Number = number;
-        Value = value;
-    }
-}
-
 public class GameDataModel
 {
     // Monetary Parameters
-    public double CurrentMoneyBalance;
-    public double TotalMoneyBalance;
-    public double CurrentGoldBalance;
-    public double TotalGoldBalance;
+    public MoneyModel CurrentMoneyBalance;
+    public MoneyModel TotalMoneyBalance;
+    public MoneyModel CurrentGoldBalance;
+    public MoneyModel TotalGoldBalance;
 
     // Level Parameters
     public int MaxOpenedLevel;
@@ -46,12 +31,12 @@ public class GameDataModel
     {
         if (number.Value == Currency.Dollar)
         {
-            CurrentMoneyBalance = number.Number;
+            CurrentMoneyBalance = new MoneyModel(number.Number, number.Value);
         }
 
         else
         {
-            CurrentGoldBalance = number.Number;
+            CurrentGoldBalance = new MoneyModel(number.Number, number.Value);
         }
 
         BalanceChangeEvent.Invoke();
@@ -61,12 +46,12 @@ public class GameDataModel
     {
         if (number.Value == Currency.Dollar)
         {
-            CurrentMoneyBalance += number.Number;
+            CurrentMoneyBalance.Number += number.Number;
         }
 
         else
         {
-            CurrentGoldBalance += number.Number;
+            CurrentGoldBalance.Number += number.Number;
         }
 
         BalanceChangeEvent.Invoke();
@@ -76,12 +61,12 @@ public class GameDataModel
     {
         if (number.Value == Currency.Dollar)
         {
-            CurrentMoneyBalance -= number.Number;
+            CurrentMoneyBalance.Number -= number.Number;
         }
 
         else
         {
-            CurrentGoldBalance -= number.Number;
+            CurrentGoldBalance.Number -= number.Number;
         }
 
         BalanceChangeEvent.Invoke();
@@ -89,7 +74,7 @@ public class GameDataModel
 
     public bool CanBuy(MoneyModel number)
     {
-        if (number.Number > CurrentMoneyBalance)
+        if (number.Number > CurrentMoneyBalance.Number)
         {
             return false;
         }

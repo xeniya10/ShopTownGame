@@ -8,7 +8,7 @@ public class UpgradeRowModel
     public int Level;
     public int UpgradeLevel = 1;
     private string BusinessName { get { return _business.LevelNames[Level - 1]; } }
-    public string Description { get { return $"{BusinessName} profit x{UpgradeLevel + 1}"; } }
+    public string Description { get { return $"Increase {BusinessName} profit x{UpgradeLevel + 1}"; } }
     public string Name { get { return GetName(); } }
 
     // Cost

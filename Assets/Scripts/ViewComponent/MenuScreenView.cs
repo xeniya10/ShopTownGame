@@ -136,13 +136,13 @@ public class MenuScreenView : MonoBehaviour
     {
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AnimationUtility.MoveFromScreenBorder(transform, 0f, 1.5f, _moveTime, null);
+        transform.MoveFromScreenBorder(0f, 1.5f, _moveTime, null);
     }
 
     public void Hide()
     {
         var sequence = DOTween.Sequence();
-        AnimationUtility.MoveToScreenBorder(transform, 0f, 1.5f, _moveTime, sequence);
+        transform.MoveToScreenBorder(0f, 1.5f, _moveTime, sequence);
         sequence.OnComplete(() =>
         {
             gameObject.SetActive(false);

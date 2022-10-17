@@ -1,21 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
+using ShopTown.ModelComponent;
 
 public class UtilityTester
 {
-    // Testing time formater in AnimationUtility
+    // Testing time TimeSpanExtension
 
     [Test]
     public void SecondFormatTest()
     {
-        var twoSecondsResult = AnimationUtility.TimeToString(new TimeSpan(0, 0, 2));
+        var twoSecondsResult = new TimeSpan(0, 0, 2).ToFormattedString();
         var twoSecondsExpectedResult = "2.0";
 
-        var tenSecondsResult = AnimationUtility.TimeToString(new TimeSpan(0, 0, 10));
+        var tenSecondsResult = new TimeSpan(0, 0, 10).ToFormattedString();
         var tenSecondsExpectedResult = "10.0";
 
         Assert.AreEqual(twoSecondsExpectedResult, twoSecondsResult);
@@ -25,10 +22,10 @@ public class UtilityTester
     [Test]
     public void MinuteFormatTest()
     {
-        var twoMinutesResult = AnimationUtility.TimeToString(new TimeSpan(0, 2, 2));
+        var twoMinutesResult = new TimeSpan(0, 2, 2).ToFormattedString();
         var twoMinutesExpectedResult = "2:02";
 
-        var tenMinutesResult = AnimationUtility.TimeToString(new TimeSpan(0, 10, 10));
+        var tenMinutesResult = new TimeSpan(0, 10, 10).ToFormattedString();
         var tenMinutesExpectedResult = "10:10";
 
         Assert.AreEqual(twoMinutesExpectedResult, twoMinutesResult);
@@ -38,10 +35,10 @@ public class UtilityTester
     [Test]
     public void HourFormatTest()
     {
-        var twoHoursResult = AnimationUtility.TimeToString(new TimeSpan(2, 2, 2));
+        var twoHoursResult = new TimeSpan(2, 2, 2).ToFormattedString();
         var twoHoursExpectedResult = "2:02:02";
 
-        var tenHoursResult = AnimationUtility.TimeToString(new TimeSpan(10, 10, 10));
+        var tenHoursResult = new TimeSpan(10, 10, 10).ToFormattedString();
         var tenHoursExpectedResult = "10:10:10";
 
         Assert.AreEqual(twoHoursExpectedResult, twoHoursResult);
@@ -53,10 +50,10 @@ public class UtilityTester
     [Test]
     public void UnitFormatTest()
     {
-        var fiveUnitsResult = MoneyFormatUtility.Default(5);
+        var fiveUnitsResult = new MoneyModel(5, Currency.Dollar).ToFormattedString();
         var fiveUnitsExpectedResult = "5";
 
-        var nineAndHalfResult = MoneyFormatUtility.Default(9.5);
+        var nineAndHalfResult = new MoneyModel(9.5, Currency.Dollar).ToFormattedString();
         var nineAndHalfExpectedResult = "9.5";
 
         Assert.AreEqual(fiveUnitsExpectedResult, fiveUnitsResult);
@@ -66,10 +63,10 @@ public class UtilityTester
     [Test]
     public void HundredsFormatTest()
     {
-        var fiveHundredsResult = MoneyFormatUtility.Default(500);
+        var fiveHundredsResult = new MoneyModel(500, Currency.Dollar).ToFormattedString();
         var fiveHundredsExpectedResult = "500";
 
-        var nineHundredsAndHalfResult = MoneyFormatUtility.Default(900.5);
+        var nineHundredsAndHalfResult = new MoneyModel(900.5, Currency.Dollar).ToFormattedString();
         var nineHundredsAndHalfExpectedResult = "900.5";
 
         Assert.AreEqual(fiveHundredsExpectedResult, fiveHundredsResult);
@@ -79,10 +76,10 @@ public class UtilityTester
     [Test]
     public void MillionsFormatTest()
     {
-        var fiveMillionsResult = MoneyFormatUtility.Default(5000000);
+        var fiveMillionsResult = new MoneyModel(5000000, Currency.Dollar).ToFormattedString();
         var fiveMillionsExpectedResult = "5M";
 
-        var nineMillionsAndHalfResult = MoneyFormatUtility.Default(9510000);
+        var nineMillionsAndHalfResult = new MoneyModel(9510000, Currency.Dollar).ToFormattedString();
         var nineMillionsAndHalfExpectedResult = "9.5M";
 
         Assert.AreEqual(fiveMillionsExpectedResult, fiveMillionsResult);

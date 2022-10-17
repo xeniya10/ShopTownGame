@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
 using TMPro;
@@ -9,10 +10,16 @@ namespace ShopTown.ViewComponent
 {
 public class UpgradeRowView : MonoBehaviour
 {
-    [Header("Components")]
     public Button BuyButton;
+
+    [Header("Currency Sprites")]
+    [SerializeField] private Sprite _dollarIcon;
+    [SerializeField] private Sprite _goldIcon;
+
+    [Header("Images")]
     [SerializeField] private Image _upgradeImage;
     [SerializeField] private Image _lockImage;
+    [SerializeField] private Image _currencyImage;
 
     [Space]
     [SerializeField] private TextMeshProUGUI _nameText;
@@ -44,7 +51,14 @@ public class UpgradeRowView : MonoBehaviour
 
     private void SetCost(MoneyModel cost)
     {
-        _priceText.text = MoneyFormatUtility.Default(cost);
+        _priceText.text = cost.ToFormattedString();
+        if (cost.Value == Currency.Dollar)
+        {
+            _currencyImage.sprite = _dollarIcon;
+            return;
+        }
+
+        _currencyImage.sprite = _goldIcon;
     }
 
     private void SetName(string upgradeName)
@@ -78,16 +92,18 @@ public class UpgradeRowView : MonoBehaviour
 
     public void Lock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () =>
-        {
-            _lockImage.gameObject.SetActive(true);
-            AnimationUtility.Fade(_lockImage, 0.35f, _fadeTime, null, null);
-        });
+        _lockImage.DOFade(0, _fadeTime)
+            .OnComplete(() =>
+            {
+                _lockImage.gameObject.SetActive(true);
+                _lockImage.Fade(0.35f, _fadeTime, null, null);
+            });
     }
 
     public void Unlock()
     {
-        AnimationUtility.Fade(_lockImage, 0, _fadeTime, null, () => _lockImage.gameObject.SetActive(false));
+        _lockImage.DOFade(0, _fadeTime)
+            .OnComplete(() => _lockImage.gameObject.SetActive(false));
     }
 }
 }

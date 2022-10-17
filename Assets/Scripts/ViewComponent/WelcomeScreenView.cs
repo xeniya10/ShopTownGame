@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using ShopTown.ModelComponent;
 
 public class WelcomeScreenView : MonoBehaviour
 {
@@ -16,14 +17,15 @@ public class WelcomeScreenView : MonoBehaviour
 
     private Vector2 _startPosition;
 
-    public void SetMoneyNumber(float moneyAmount)
+    private void SetMoneyNumber(MoneyModel number)
     {
-        _moneyText.text = moneyAmount.ToString();
-    }
+        if (number.Value == Currency.Dollar)
+        {
+            _moneyText.text = number.ToFormattedString();
+            return;
+        }
 
-    public void SetGoldNumber(float goldAmount)
-    {
-        _goldText.text = goldAmount.ToString();
+        _goldText.text = number.ToFormattedString();
     }
 
     private void SetPosition(Vector2 position)
@@ -36,19 +38,19 @@ public class WelcomeScreenView : MonoBehaviour
         _okButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void Show(float moneyAmount, float goldAmount)
+    public void Show(MoneyModel moneyAmount, MoneyModel goldAmount)
     {
         SetMoneyNumber(moneyAmount);
-        SetGoldNumber(goldAmount);
+        SetMoneyNumber(goldAmount);
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AnimationUtility.MoveFromScreenBorder(transform, 0f, -1.5f, _moveTime, null);
+        transform.MoveFromScreenBorder(0f, -1.5f, _moveTime, null);
     }
 
     public void Hide()
     {
         var sequence = DOTween.Sequence();
-        AnimationUtility.MoveToScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        transform.MoveToScreenBorder(0f, -1.5f, _moveTime, sequence);
         sequence.OnComplete(() =>
         {
             gameObject.SetActive(false);

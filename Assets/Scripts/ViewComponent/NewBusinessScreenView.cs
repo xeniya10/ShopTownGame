@@ -21,6 +21,8 @@ public class NewBusinessScreenView : MonoBehaviour
 
     [Header("Text Fields")]
     [SerializeField] private TextMeshProUGUI _businessName;
+    [SerializeField] private TextMeshProUGUI _time;
+    [SerializeField] private TextMeshProUGUI _profit;
     [SerializeField] private TextMeshProUGUI _managerName;
     [SerializeField] private TextMeshProUGUI _firstUpgradeName;
     [SerializeField] private TextMeshProUGUI _secondUpgradeName;
@@ -35,6 +37,7 @@ public class NewBusinessScreenView : MonoBehaviour
     [SerializeField] private UpgradeCollection _upgradeCollection;
     [SerializeField] private ManagerCollection _managerCollection;
     [SerializeField] private BusinessData _businessData;
+    [SerializeField] private GameCellData _gameCellData;
     [SerializeField] private UpgradeRowData _upgradeData;
     [SerializeField] private ManagerRowData _managerData;
 
@@ -63,6 +66,15 @@ public class NewBusinessScreenView : MonoBehaviour
     private void SetBusinessName(int level)
     {
         _businessName.text = _businessData.LevelNames[level - 1];
+    }
+
+    private void SetBusinessParams(int level)
+    {
+        _time.text = _gameCellData.ProcessTime[level - 1]
+            .ToFormattedString();
+
+        _profit.text = _gameCellData.BaseProfit[level - 1]
+            .ToFormattedString();
     }
 
     private void SetManagerName(int level)
@@ -94,6 +106,7 @@ public class NewBusinessScreenView : MonoBehaviour
         SetUpgradeSprites(level);
 
         SetBusinessName(level);
+        SetBusinessParams(level);
         SetManagerName(level);
         SetUpgradeNames(level);
     }
@@ -103,7 +116,7 @@ public class NewBusinessScreenView : MonoBehaviour
         var sequence = DOTween.Sequence();
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        AnimationUtility.MoveFromScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        transform.MoveFromScreenBorder(0f, -1.5f, _moveTime, sequence);
         sequence.OnComplete(() =>
         {
             _leftConfetti.Play();
@@ -114,7 +127,7 @@ public class NewBusinessScreenView : MonoBehaviour
     public void Hide()
     {
         var sequence = DOTween.Sequence();
-        AnimationUtility.MoveToScreenBorder(transform, 0f, -1.5f, _moveTime, sequence);
+        transform.MoveToScreenBorder(0f, -1.5f, _moveTime, sequence);
         sequence.OnComplete(() =>
         {
             gameObject.SetActive(false);

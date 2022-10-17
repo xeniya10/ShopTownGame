@@ -1,5 +1,28 @@
+using System;
 using System.Collections.Generic;
-using ShopTown.ModelComponent;
+
+namespace ShopTown.ModelComponent
+{
+public enum Currency { Dollar, Gold }
+
+[Serializable]
+public class MoneyModel
+{
+    public double Number;
+    public Currency Value;
+
+    public MoneyModel(double number, Currency value)
+    {
+        Number = number;
+        Value = value;
+    }
+
+    public string ToFormattedString()
+    {
+        var number = MoneyFormat.GetNumberDetails(Number);
+        return number.FormattedNumber + number.Scale;
+    }
+}
 
 public class MoneyFormat
 {
@@ -7,17 +30,7 @@ public class MoneyFormat
     public string FormattedNumber { get; private set; }
     public string Scale { get; private set; }
 
-    public MoneyFormat(double number, string formattedNumber, string scale)
-    {
-        Number = number;
-        FormattedNumber = formattedNumber;
-        Scale = scale;
-    }
-}
-
-public static class MoneyFormatUtility
-{
-    private static Dictionary<int, string> _scales = new Dictionary<int, string>()
+    public static Dictionary<int, string> Scales = new Dictionary<int, string>()
     {
         {3, "K"},
         {6, "M"},
@@ -123,24 +136,32 @@ public static class MoneyFormatUtility
         {306, "UC"}
     };
 
-    private static int _lowestScale = 3;
+    public static int LowestScale = 3;
 
-    public static MoneyFormat GetNumberParameters(string number)
+    public MoneyFormat(double number, string formattedNumber, string scale)
     {
-        return GetNumberDetails(double.Parse(number));
+        Number = number;
+        FormattedNumber = formattedNumber;
+        Scale = scale;
     }
 
-    private static MoneyFormat GetNumberDetails(double number)
+    // public static MoneyFormat GetNumberParameters(string number)
+    // {
+    //     return GetNumberDetails(double.Parse(number));
+    // }
+
+    public static MoneyFormat GetNumberDetails(double number)
     {
         var textNumber = number.ToString();
         var scale = DigitCount(textNumber) - 1;
         string formattedTextNumber;
 
-        if (scale < _lowestScale)
+        if (scale < LowestScale)
         {
             formattedTextNumber = number.ToString("#,##0.0");
 
-            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))
+            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2)
+                .Equals(".0"))
             {
                 return new MoneyFormat(number, number.ToString("#,##0"), string.Empty);
             }
@@ -148,9 +169,9 @@ public static class MoneyFormatUtility
             return new MoneyFormat(number, formattedTextNumber, string.Empty);
         }
 
-        var scaleModulo = scale % _lowestScale;
+        var scaleModulo = scale % LowestScale;
         var key = scale - scaleModulo;
-        _scales.TryGetValue(key, out var textScale);
+        Scales.TryGetValue(key, out var textScale);
 
         formattedTextNumber = textNumber.Substring(0, scaleModulo + 1);
         var fractionText = "." + textNumber.Substring(scaleModulo + 1, 1);
@@ -180,22 +201,5 @@ public static class MoneyFormatUtility
 
         return textNumber.Length;
     }
-
-    public static string Default(double unformatted)
-    {
-        var money = GetNumberDetails(unformatted);
-        return money.FormattedNumber + money.Scale;
-    }
-
-    public static string Default(MoneyModel money)
-    {
-        var number = GetNumberDetails(money.Number);
-
-        if (money.Value == Currency.Dollar)
-        {
-            return "$ " + number.FormattedNumber + number.Scale;
-        }
-
-        return "G " + number.FormattedNumber + number.Scale;
-    }
+}
 }

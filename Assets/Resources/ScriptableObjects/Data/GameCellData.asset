@@ -13,33 +13,60 @@ MonoBehaviour:
   m_Name: GameCellData
   m_EditorClassIdentifier: 
   BaseProfit:
-  - 1
-  - 6
-  - 14
-  - 25
-  - 80
-  - 140
-  - 300
-  - 720
-  - 2000
-  - 4100
-  - 10000
-  - 20000
-  - 50000
-  - 150000
-  - 500000
-  - 1000000
-  - 2000000
-  - 5000000
-  - 10000000
-  - 20000000
-  - 40000000
-  - 90000000
-  - 150000000
-  - 300000000
-  - 500000000
-  - 1000000000
-  - 1500000000
+  - Number: 1
+    Value: 0
+  - Number: 5
+    Value: 0
+  - Number: 15
+    Value: 0
+  - Number: 30
+    Value: 0
+  - Number: 80
+    Value: 0
+  - Number: 150
+    Value: 0
+  - Number: 300
+    Value: 0
+  - Number: 700
+    Value: 0
+  - Number: 2000
+    Value: 0
+  - Number: 4000
+    Value: 0
+  - Number: 10000
+    Value: 0
+  - Number: 20000
+    Value: 0
+  - Number: 50000
+    Value: 0
+  - Number: 150000
+    Value: 0
+  - Number: 500000
+    Value: 0
+  - Number: 1000000
+    Value: 0
+  - Number: 2000000
+    Value: 0
+  - Number: 5000000
+    Value: 0
+  - Number: 10000000
+    Value: 0
+  - Number: 20000000
+    Value: 0
+  - Number: 40000000
+    Value: 0
+  - Number: 90000000
+    Value: 0
+  - Number: 150000000
+    Value: 0
+  - Number: 300000000
+    Value: 0
+  - Number: 500000000
+    Value: 0
+  - Number: 1000000000
+    Value: 0
+  - Number: 1500000000
+    Value: 0
   Cost:
   - Number: 2
     Value: 0
