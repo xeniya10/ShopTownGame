@@ -10,6 +10,7 @@ namespace ShopTown.ViewComponent
 public class ManagerRowView : MonoBehaviour
 {
     public Button HireButton;
+    public ParticleSystem Salute;
 
     [Header("Currency Sprites")]
     [SerializeField] private Sprite _dollarIcon;
@@ -72,8 +73,18 @@ public class ManagerRowView : MonoBehaviour
         SetCost(model.Cost);
     }
 
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Lock()
     {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
         _lockImage.DOFade(0, _fadeTime)
             .OnComplete(() =>
             {
@@ -84,8 +95,12 @@ public class ManagerRowView : MonoBehaviour
 
     public void Unlock()
     {
-        _lockImage.DOFade(0, _fadeTime)
-            .OnComplete(() => _lockImage.gameObject.SetActive(false));
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        _lockImage.DOFade(0, _fadeTime).OnComplete(() => _lockImage.gameObject.SetActive(false));
     }
 }
 }

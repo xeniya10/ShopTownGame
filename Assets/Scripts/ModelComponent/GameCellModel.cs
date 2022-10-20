@@ -17,7 +17,6 @@ public class GameCellModel
     // Description
     public int Level;
     public int BackgroundNumber = int.MinValue;
-    public string BusinessName { get { return _businessData.LevelNames[Level - 1]; } }
 
     // Space Parameters
     public float Size;
@@ -31,7 +30,7 @@ public class GameCellModel
 
     // State Parameters
     public CellState State = CellState.Lock;
-    public bool IsUnlockedManager;
+    public bool IsActivatedManager;
     public int UpgradeLevel;
 
     // Monetary Parameters
@@ -41,18 +40,16 @@ public class GameCellModel
     public MoneyModel Cost;
 
     // Data Containers
-    private readonly BusinessData _businessData;
     private readonly GameCellData _cellData;
 
-    public GameCellModel(BusinessData businessData, GameCellData cellData)
+    public GameCellModel(GameCellData cellData)
     {
-        _businessData = businessData;
         _cellData = cellData;
     }
 
     public void Reset()
     {
-        Level = 1;
+        Level = 0;
     }
 
     public void SetGridIndex(int rowIndex, int columnIndex)

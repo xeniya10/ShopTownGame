@@ -30,7 +30,7 @@ public class MoneyFormat
     public string FormattedNumber { get; private set; }
     public string Scale { get; private set; }
 
-    public static Dictionary<int, string> Scales = new Dictionary<int, string>()
+    private static Dictionary<int, string> _scales = new Dictionary<int, string>()
     {
         {3, "K"},
         {6, "M"},
@@ -136,9 +136,9 @@ public class MoneyFormat
         {306, "UC"}
     };
 
-    public static int LowestScale = 3;
+    private static readonly int _lowestScale = 3;
 
-    public MoneyFormat(double number, string formattedNumber, string scale)
+    private MoneyFormat(double number, string formattedNumber, string scale)
     {
         Number = number;
         FormattedNumber = formattedNumber;
@@ -156,7 +156,7 @@ public class MoneyFormat
         var scale = DigitCount(textNumber) - 1;
         string formattedTextNumber;
 
-        if (scale < LowestScale)
+        if (scale < _lowestScale)
         {
             formattedTextNumber = number.ToString("#,##0.0");
 
@@ -169,9 +169,9 @@ public class MoneyFormat
             return new MoneyFormat(number, formattedTextNumber, string.Empty);
         }
 
-        var scaleModulo = scale % LowestScale;
+        var scaleModulo = scale % _lowestScale;
         var key = scale - scaleModulo;
-        Scales.TryGetValue(key, out var textScale);
+        _scales.TryGetValue(key, out var textScale);
 
         formattedTextNumber = textNumber.Substring(0, scaleModulo + 1);
         var fractionText = "." + textNumber.Substring(scaleModulo + 1, 1);

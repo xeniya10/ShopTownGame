@@ -7,17 +7,12 @@ namespace ShopTown.PresenterComponent
 public class GameCellPresenter
 {
     private readonly GameCellView _cellView;
-    private readonly GameCellModel _cellModel;
+    public readonly GameCellModel CellModel;
 
-    public int Level { get { return _cellModel.Level; } }
-    public MoneyModel Cost { get { return _cellModel.Cost; } }
-    public MoneyModel Profit { get { return _cellModel.Profit; } }
-    public CellState State { get { return _cellModel.State; } }
-
-    private GameCellPresenter(GameCellView cellView, GameCellModel gameModel)
+    private GameCellPresenter(GameCellView cellView, GameCellModel cellModel)
     {
         _cellView = cellView;
-        _cellModel = gameModel;
+        CellModel = cellModel;
     }
 
     public GameCellPresenter Create(Transform parent, GameCellModel model)
@@ -35,6 +30,28 @@ public class GameCellPresenter
         var presenter = new GameCellPresenter(view, model);
         return presenter;
     }
+    //
+    // private void SetState(CellState state)
+    // {
+    //     switch (state)
+    //     {
+    //         case CellState.Lock:
+    //             Lock();
+    //             break;
+    //
+    //         case CellState.Unlock:
+    //             Unlock();
+    //             break;
+    //
+    //         case CellState.Active:
+    //             Activate();
+    //             break;
+    //
+    //         case CellState.InProgress:
+    //             GetInProgress(CellModel.TotalTime,);
+    //             break;
+    //     }
+    // }
 
     public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
     {
@@ -51,59 +68,77 @@ public class GameCellPresenter
         _cellView._selectorImage.gameObject.SetActive(isActive);
     }
 
-    public void ManagerUnlock()
+    public void SetActiveManager(ManagerRowModel manager)
     {
-        _cellModel.IsUnlockedManager = true;
-        _cellView.SetActiveImprovements(_cellModel);
+        CellModel.IsActivatedManager = manager.IsActivated;
+        _cellView.SetActiveImprovements(CellModel);
     }
 
-    public void UpgradeUp()
+    public void SetActiveUpgrade(UpgradeRowModel upgrade)
     {
-        _cellModel.UpgradeLevel += 1;
-        _cellView.SetActiveImprovements(_cellModel);
+        if (upgrade.IsActivated)
+        {
+            CellModel.UpgradeLevel = upgrade.UpgradeLevel;
+        }
+        else
+        {
+            CellModel.UpgradeLevel = 0;
+        }
+
+        _cellView.SetActiveImprovements(CellModel);
     }
 
-    public void LevelUp()
+    public void LevelUp(ManagerRowModel manager, UpgradeRowModel upgrade)
     {
+        CellModel.Level += 1;
+        if (CellModel.State == CellState.InProgress)
+        {
+            _cellView.StopInProgressAnimation();
+        }
+
         _cellView.HideBusiness(() =>
         {
-            _cellModel.Level += 1;
-            _cellView.Initialize(_cellModel);
-            _cellView.SetActiveState();
+            _cellView.Initialize(CellModel);
+            Activate(null);
         });
+
+        SetActiveManager(manager);
+        SetActiveUpgrade(upgrade);
     }
 
     public void Lock()
     {
-        _cellModel.Reset();
-        _cellModel.State = CellState.Lock;
+        CellModel.State = CellState.Lock;
+        CellModel.Reset();
         _cellView.SetLockState();
     }
 
     // Cost changes depending on number of activated cells.
     public void Unlock(int activationNumber)
     {
-        _cellModel.SetCost(activationNumber);
-        _cellView.SetCost(_cellModel.Cost);
-        _cellModel.State = CellState.Unlock;
+        CellModel.State = CellState.Unlock;
+        CellModel.Reset();
+        CellModel.SetCost(activationNumber);
+        _cellView.SetCost(CellModel.Cost);
         _cellView.SetUnlockState();
+        _cellView.StopInProgressAnimation();
     }
 
-    public void Activate()
+    public void Activate(Action callBack)
     {
-        _cellModel.State = CellState.Active;
-        _cellModel.ActivatingDate = DateTime.Now;
-        _cellView.SetActiveState();
-        _cellView.Initialize(_cellModel);
+        CellModel.State = CellState.Active;
+        CellModel.ActivatingDate = DateTime.Now;
+        _cellView.SetActiveState(callBack);
+        _cellView.Initialize(CellModel);
     }
 
     public void GetInProgress(Action callBack)
     {
-        _cellModel.State = CellState.InProgress;
-        _cellView.SetInProgressState(_cellModel.TotalTime.TotalSeconds, () =>
+        CellModel.State = CellState.InProgress;
+        _cellView.SetInProgressState(CellModel.TotalTime.TotalSeconds, () =>
         {
             callBack?.Invoke();
-            if (_cellModel.IsUnlockedManager == true)
+            if (CellModel.IsActivatedManager)
             {
                 GetInProgress(callBack);
             }
@@ -112,8 +147,8 @@ public class GameCellPresenter
 
     public bool IsNeighborOf(GameCellPresenter cell)
     {
-        var thisPosition = _cellModel.GridIndex;
-        var unlockedPosition = cell._cellModel.GridIndex;
+        var thisPosition = CellModel.GridIndex;
+        var unlockedPosition = cell.CellModel.GridIndex;
         var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
         var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
 
@@ -127,8 +162,8 @@ public class GameCellPresenter
 
     public bool HasSameLevelAs(GameCellPresenter otherCell)
     {
-        var oneCellLevel = _cellModel.Level;
-        var otherCellLevel = otherCell._cellModel.Level;
+        var oneCellLevel = CellModel.Level;
+        var otherCellLevel = otherCell.CellModel.Level;
 
         if (oneCellLevel == otherCellLevel)
         {
@@ -140,8 +175,8 @@ public class GameCellPresenter
 
     public bool IsActivatedEarlierThen(GameCellPresenter otherCell)
     {
-        var oneCellActivatingTime = _cellModel.ActivatingDate;
-        var otherCellActivatingTime = otherCell._cellModel.ActivatingDate;
+        var oneCellActivatingTime = CellModel.ActivatingDate;
+        var otherCellActivatingTime = otherCell.CellModel.ActivatingDate;
 
         var result = DateTime.Compare(oneCellActivatingTime, otherCellActivatingTime);
         if (result < 0)

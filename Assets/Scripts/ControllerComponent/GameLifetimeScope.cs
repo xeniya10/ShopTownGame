@@ -4,7 +4,6 @@ using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VContainer;
 using VContainer.Unity;
 
@@ -12,7 +11,6 @@ namespace ControllerComponent
 {
 public class GameLifetimeScope : LifetimeScope
 {
-    [FormerlySerializedAs("_startScreen")]
     [Header("Screens")]
     [SerializeField] private SplashScreenView _splashScreen;
     [SerializeField] private GameScreenView _gameScreen;

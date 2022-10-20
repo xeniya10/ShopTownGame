@@ -11,14 +11,12 @@ public static class AnimationExtensions
     {
         if (sequence != null)
         {
-            sequence.Append(image.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(image.DOFade(alpha, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            image.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke());
+            image.DOFade(alpha, time).OnComplete(() => callBack?.Invoke());
         }
     }
 
@@ -27,26 +25,21 @@ public static class AnimationExtensions
     {
         if (sequence != null)
         {
-            sequence.Append(text.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            text.DOFade(alpha, time)
-                .OnComplete(() => callBack?.Invoke());
+            text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke());
         }
     }
 
     public static void Fill(this Image image, TextMeshProUGUI text, float duration,
-        Action callBack)
+        Sequence sequence, Action callBack)
     {
         float currentTime = 0;
 
-        image.DOFillAmount(0, duration)
-            .OnUpdate(() => text.SetText(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime))
-                .ToFormattedString()))
-            .OnComplete(() => callBack?.Invoke());
+        sequence.Append(image.DOFillAmount(0, duration).OnUpdate(() => text.SetText(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)).ToFormattedString())).OnComplete(() => callBack?.Invoke()));
     }
 
     public static void Scale(this Transform objectTransform, Vector2 scale, float time,
@@ -54,14 +47,12 @@ public static class AnimationExtensions
     {
         if (sequence != null)
         {
-            sequence.Append(objectTransform.DOScale(scale, time)
-                .OnComplete(() => callBack?.Invoke()));
+            sequence.Append(objectTransform.DOScale(scale, time).OnComplete(() => callBack?.Invoke()));
         }
 
         else
         {
-            objectTransform.DOScale(scale, time)
-                .OnComplete(() => callBack?.Invoke());
+            objectTransform.DOScale(scale, time).OnComplete(() => callBack?.Invoke());
         }
     }
 

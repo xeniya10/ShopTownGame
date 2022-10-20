@@ -7,42 +7,53 @@ namespace ShopTown.PresenterComponent
 {
 public class ManagerRowPresenter
 {
-    private readonly ManagerRowModel _managerRowModel;
+    public ManagerRowModel ManagerRowModel;
     private readonly ManagerRowView _managerRowView;
-
-    public int Level { get { return _managerRowModel.Level; } }
-    public MoneyModel Cost { get { return _managerRowModel.Cost; } }
 
     private ManagerRowPresenter(ManagerRowView managerRowView, ManagerRowModel managerRowModel)
     {
         _managerRowView = managerRowView;
-        _managerRowModel = managerRowModel;
+        ManagerRowModel = managerRowModel;
     }
 
     public ManagerRowPresenter Create(Transform parent, ManagerRowModel model)
     {
         var view = _managerRowView.Create(parent);
         view.Initialize(model);
+        SetState(model.State);
 
         var rowPresenter = new ManagerRowPresenter(view, model);
         return rowPresenter;
     }
 
-    public void SetActive(bool isActivated)
+    public void SetState(ManagerState state)
     {
-        _managerRowModel.Unlocked = isActivated;
-        if (isActivated == true)
-        {
-            _managerRowView.Unlock();
-            return;
-        }
+        ManagerRowModel.State = state;
 
-        _managerRowView.Lock();
+        switch (state)
+        {
+            case ManagerState.Hide:
+                _managerRowView.Hide();
+                break;
+
+            case ManagerState.Lock:
+                _managerRowView.Lock();
+                break;
+
+            case ManagerState.Unlock:
+                _managerRowView.Unlock();
+                break;
+        }
     }
 
     public void SubscribeToHireButton(Action<ManagerRowPresenter> callBack)
     {
         _managerRowView.HireButton.onClick.AddListener(() => callBack?.Invoke(this));
+    }
+
+    public void PlaySalute()
+    {
+        _managerRowView.Salute.Play();
     }
 }
 }

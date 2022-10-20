@@ -90,8 +90,18 @@ public class UpgradeRowView : MonoBehaviour
         SetCost(model.Cost);
     }
 
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Lock()
     {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
         _lockImage.DOFade(0, _fadeTime)
             .OnComplete(() =>
             {
@@ -102,8 +112,12 @@ public class UpgradeRowView : MonoBehaviour
 
     public void Unlock()
     {
-        _lockImage.DOFade(0, _fadeTime)
-            .OnComplete(() => _lockImage.gameObject.SetActive(false));
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        _lockImage.DOFade(0, _fadeTime).OnComplete(() => _lockImage.gameObject.SetActive(false));
     }
 }
 }

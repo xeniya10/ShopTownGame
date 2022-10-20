@@ -2,6 +2,13 @@ using ShopTown.Data;
 
 namespace ShopTown.ModelComponent
 {
+public enum UpgradeState
+{
+    Hide,
+    Lock,
+    Unlock
+}
+
 public class UpgradeRowModel
 {
     // Description
@@ -16,7 +23,8 @@ public class UpgradeRowModel
     public MoneyModel Cost { get { return new MoneyModel(BaseCost.Number * UpgradeLevel, BaseCost.Value); } }
 
     // State
-    public bool Unlocked;
+    public UpgradeState State;
+    public bool IsActivated;
 
     // Data Containers
     private readonly BusinessData _business;

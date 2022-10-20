@@ -2,6 +2,13 @@ using ShopTown.Data;
 
 namespace ShopTown.ModelComponent
 {
+public enum ManagerState
+{
+    Hide,
+    Lock,
+    Unlock
+}
+
 public class ManagerRowModel
 {
     // Description
@@ -14,7 +21,8 @@ public class ManagerRowModel
     public MoneyModel Cost { get { return _rowData.BaseCost[Level - 1]; } }
 
     // State
-    public bool Unlocked;
+    public ManagerState State;
+    public bool IsActivated;
 
     // Data Containers
     private readonly BusinessData _business;

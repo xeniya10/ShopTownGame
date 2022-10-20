@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShopTown.Data;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace ShopTown.ModelComponent
@@ -51,7 +52,7 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = new MoneyModel(100000, Currency.Dollar),
+            CurrentMoneyBalance = new MoneyModel(300000, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
             // TotalMoneyBalance = 0,
             // TotalGoldBalance = 0,
@@ -72,8 +73,7 @@ public class DataController : IInitializable
         {
             for (var j = 0; j < boardModel.Columns; j++)
             {
-                var cell = new GameCellModel(_businessData, _gameCellData);
-                cell.Level = 1;
+                var cell = new GameCellModel(_gameCellData);
                 cell.UpgradeLevel = 0;
                 cell.SetCost(0);
                 cell.SetGridIndex(i, j);
@@ -83,6 +83,7 @@ public class DataController : IInitializable
 
                 if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
                 {
+                    cell.Level = 1;
                     cell.State = CellState.Unlock;
                 }
             }
@@ -93,7 +94,8 @@ public class DataController : IInitializable
         {
             var manager = new ManagerRowModel(_businessData, _managerRowData);
             manager.Level = i + 1;
-            manager.Unlocked = false;
+            manager.State = ManagerState.Hide;
+            manager.IsActivated = false;
             GameData.Managers.Add(manager);
         }
 
@@ -101,7 +103,8 @@ public class DataController : IInitializable
         {
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
             upgrade.Level = i + 1;
-            upgrade.Unlocked = false;
+            upgrade.State = UpgradeState.Hide;
+            upgrade.IsActivated = false;
             GameData.Upgrades.Add(upgrade);
         }
     }
