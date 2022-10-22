@@ -11,6 +11,7 @@ namespace ShopTown.ViewComponent
 public class UpgradeRowView : MonoBehaviour
 {
     public Button BuyButton;
+    public ParticleSystem Salute;
 
     [Header("Currency Sprites")]
     [SerializeField] private Sprite _dollarIcon;
@@ -69,11 +70,6 @@ public class UpgradeRowView : MonoBehaviour
     private void SetDescription(string description)
     {
         _descriptionText.text = description;
-    }
-
-    public void ClickBuyButton(Action callBack)
-    {
-        BuyButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
     public UpgradeRowView Create(Transform parent)

@@ -48,6 +48,8 @@ public class UpgradeRowPresenter
 
     public void LevelUp()
     {
+        UpgradeRowModel.IsActivatedLevel[UpgradeRowModel.UpgradeLevel - 1] = true;
+
         if (UpgradeRowModel.UpgradeLevel == 3)
         {
             SetState(UpgradeState.Lock);
@@ -65,7 +67,7 @@ public class UpgradeRowPresenter
 
     public void PlaySalute()
     {
-        // _managerRowView.Salute.Play();
+        _upgradeRowView.Salute.Play();
     }
 }
 }

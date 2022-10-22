@@ -12,6 +12,7 @@ public class GameDataModel
     public MoneyModel TotalGoldBalance;
 
     // Level Parameters
+    public int MinOpenedLevel;
     public int MaxOpenedLevel;
     public int NumberOfLevels;
 

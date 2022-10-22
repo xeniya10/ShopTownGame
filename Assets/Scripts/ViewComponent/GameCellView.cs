@@ -15,9 +15,7 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private GameObject _progressBar;
     [SerializeField] private GameObject _lockObject;
     [SerializeField] private GameObject _manager;
-    [SerializeField] private GameObject _firstUpgrade;
-    [SerializeField] private GameObject _secondUpgrade;
-    [SerializeField] private GameObject _thirdUpgrade;
+    [SerializeField] private GameObject[] _upgrades = new GameObject[3];
 
     [Header("Buttons")]
     public Button CellButton;
@@ -30,9 +28,7 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private Image _unlockImage;
     [SerializeField] private Image _lockImage;
     [SerializeField] private Image _managerImage;
-    [SerializeField] private Image _firstUpgradeImage;
-    [SerializeField] private Image _secondUpgradeImage;
-    [SerializeField] private Image _thirdUpgradeImage;
+    [SerializeField] private Image[] _upgradeImages = new Image[3];
     public Image _selectorImage;
 
     [Header("Text Fields")]
@@ -47,7 +43,7 @@ public class GameCellView : MonoBehaviour
 
     [Header("Animation Duration")]
     [SerializeField] private float _fadeTime;
-    private Sequence _inProgressAnimationSequence;
+    private Sequence _inProgressAnimation;
 
     public int RandomBackgroundNumber()
     {
@@ -78,21 +74,14 @@ public class GameCellView : MonoBehaviour
         }
 
         _managerImage.sprite = _managerCollection.AvatarSprites[level - 1];
-        _firstUpgradeImage.sprite = _upgradeCollection.FirstLevelSprites[level - 1];
-        _secondUpgradeImage.sprite = _upgradeCollection.SecondLevelSprites[level - 1];
-        _thirdUpgradeImage.sprite = _upgradeCollection.ThirdLevelSprites[level - 1];
+        _upgradeImages[0].sprite = _upgradeCollection.FirstLevelSprites[level - 1];
+        _upgradeImages[1].sprite = _upgradeCollection.SecondLevelSprites[level - 1];
+        _upgradeImages[2].sprite = _upgradeCollection.ThirdLevelSprites[level - 1];
     }
 
     private void SetActivateManager(bool isActivated)
     {
         _manager.SetActive(isActivated);
-    }
-
-    private void SetActivateUpgrades(bool isFirstUpgradeActivated, bool isSecondUpgradeActivated, bool isThirdUpgradeActivated)
-    {
-        _firstUpgrade.SetActive(isFirstUpgradeActivated);
-        _secondUpgrade.SetActive(isSecondUpgradeActivated);
-        _thirdUpgrade.SetActive(isThirdUpgradeActivated);
     }
 
     public void SetCost(MoneyModel cost)
@@ -131,30 +120,19 @@ public class GameCellView : MonoBehaviour
     {
         SetActivateManager(model.IsActivatedManager);
 
-        switch (model.UpgradeLevel)
+        for (var i = 0; i < _upgrades.Length; i++)
         {
-            case 0:
-                SetActivateUpgrades(false, false, false);
-                break;
-
-            case 1:
-                SetActivateUpgrades(true, false, false);
-                break;
-
-            case 2:
-                SetActivateUpgrades(true, true, false);
-                break;
-
-            case 3:
-                SetActivateUpgrades(true, true, true);
-                break;
+            _upgrades[i].SetActive(model.IsActivatedUpgrades[i]);
         }
     }
 
-    public void HideImprovements()
+    private void HideImprovements()
     {
         SetActivateManager(false);
-        SetActivateUpgrades(false, false, false);
+        foreach (var upgrade in _upgrades)
+        {
+            upgrade.SetActive(false);
+        }
     }
 
     public void HideBusiness(Action callBack)
@@ -212,9 +190,9 @@ public class GameCellView : MonoBehaviour
 
     public void SetInProgressState(double totalTime, Action callBack)
     {
-        _inProgressAnimationSequence = DOTween.Sequence();
+        _inProgressAnimation = DOTween.Sequence();
         _progressBar.SetActive(true);
-        _progressImage.Fill(_progressTimeText, (float)totalTime, _inProgressAnimationSequence, () =>
+        _progressImage.Fill(_progressTimeText, (float)totalTime, _inProgressAnimation, () =>
         {
             _progressImage.fillAmount = 1;
             _progressBar.SetActive(false);
@@ -224,7 +202,7 @@ public class GameCellView : MonoBehaviour
 
     public void StopInProgressAnimation()
     {
-        _inProgressAnimationSequence.Kill();
+        _inProgressAnimation.Kill();
         _progressBar.SetActive(false);
     }
 }

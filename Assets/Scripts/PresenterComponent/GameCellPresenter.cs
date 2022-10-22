@@ -76,15 +76,17 @@ public class GameCellPresenter
 
     public void SetActiveUpgrade(UpgradeRowModel upgrade)
     {
-        if (upgrade.IsActivated)
+        var counter = 0;
+        for (var i = 0; i < CellModel.IsActivatedUpgrades.Length; i++)
         {
-            CellModel.UpgradeLevel = upgrade.UpgradeLevel;
-        }
-        else
-        {
-            CellModel.UpgradeLevel = 0;
+            CellModel.IsActivatedUpgrades[i] = upgrade.IsActivatedLevel[i];
+            if (!CellModel.IsActivatedUpgrades[i])
+            {
+                counter++;
+            }
         }
 
+        CellModel.UpgradeLevel = upgrade.IsActivatedLevel.Length - counter;
         _cellView.SetActiveImprovements(CellModel);
     }
 

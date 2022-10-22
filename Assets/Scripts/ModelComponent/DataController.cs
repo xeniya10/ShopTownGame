@@ -52,10 +52,11 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = new MoneyModel(300000, Currency.Dollar),
+            CurrentMoneyBalance = new MoneyModel(10000000, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
             // TotalMoneyBalance = 0,
             // TotalGoldBalance = 0,
+            MinOpenedLevel = 1,
             MaxOpenedLevel = 0,
             NumberOfLevels = 27,
             TimeStamp = DateTime.Now,
@@ -75,6 +76,7 @@ public class DataController : IInitializable
             {
                 var cell = new GameCellModel(_gameCellData);
                 cell.UpgradeLevel = 0;
+                cell.IsActivatedUpgrades = new[] {false, false, false};
                 cell.SetCost(0);
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
@@ -83,7 +85,7 @@ public class DataController : IInitializable
 
                 if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
                 {
-                    cell.Level = 1;
+                    cell.Level = GameData.MinOpenedLevel;
                     cell.State = CellState.Unlock;
                 }
             }
@@ -103,8 +105,9 @@ public class DataController : IInitializable
         {
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
             upgrade.Level = i + 1;
+            upgrade.UpgradeLevel = 1;
             upgrade.State = UpgradeState.Hide;
-            upgrade.IsActivated = false;
+            upgrade.IsActivatedLevel = new[] {false, false, false};
             GameData.Upgrades.Add(upgrade);
         }
     }

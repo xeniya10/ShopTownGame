@@ -6281,7 +6281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &783631141347946597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6371,6 +6371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuyButton: {fileID: 5916342858564497767}
+  Salute: {fileID: 1831032632629809738}
   _dollarIcon: {fileID: 21300000, guid: 73059e536af825448a968aa2272739d6, type: 3}
   _goldIcon: {fileID: 21300000, guid: 3d00702d96ddb9f4bb05ee9e82593372, type: 3}
   _upgradeImage: {fileID: 8568159226380776440}

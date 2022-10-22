@@ -32,6 +32,7 @@ public class GameCellModel
     public CellState State = CellState.Lock;
     public bool IsActivatedManager;
     public int UpgradeLevel;
+    public bool[] IsActivatedUpgrades;
 
     // Monetary Parameters
     private float ProfitMultiplier { get { return UpgradeLevel + 1; } }

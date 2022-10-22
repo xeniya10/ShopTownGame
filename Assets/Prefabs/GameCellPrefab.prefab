@@ -110,9 +110,10 @@ MonoBehaviour:
   _progressBar: {fileID: 3414868392192021135}
   _lockObject: {fileID: 7691994964365097992}
   _manager: {fileID: 297791839497315789}
-  _firstUpgrade: {fileID: 2436449155779444126}
-  _secondUpgrade: {fileID: 5512517445960525740}
-  _thirdUpgrade: {fileID: 8692566545992690530}
+  _upgrades:
+  - {fileID: 2436449155779444126}
+  - {fileID: 5512517445960525740}
+  - {fileID: 8692566545992690530}
   CellButton: {fileID: 3980533619817171365}
   BuyButton: {fileID: 4824023392377640321}
   _backgroundImage: {fileID: 8158304643091286275}
@@ -121,9 +122,10 @@ MonoBehaviour:
   _unlockImage: {fileID: 6047103670924477731}
   _lockImage: {fileID: 8771666012425852737}
   _managerImage: {fileID: 8254153150411621095}
-  _firstUpgradeImage: {fileID: 4202050037448393383}
-  _secondUpgradeImage: {fileID: 2134823680080106965}
-  _thirdUpgradeImage: {fileID: 2722506753168927797}
+  _upgradeImages:
+  - {fileID: 4202050037448393383}
+  - {fileID: 2134823680080106965}
+  - {fileID: 2722506753168927797}
   _selectorImage: {fileID: 7407008955260418198}
   _progressTimeText: {fileID: 4765561674394547569}
   _priceText: {fileID: 523893662949467066}

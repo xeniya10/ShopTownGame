@@ -1,3 +1,5 @@
+using System;
+
 namespace ShopTown.ModelComponent
 {
 public class GameSettingModel
