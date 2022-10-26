@@ -46,9 +46,15 @@ public class UpgradeRowPresenter
         }
     }
 
-    public void LevelUp()
+    public void Activate()
     {
-        UpgradeRowModel.IsActivatedLevel[UpgradeRowModel.UpgradeLevel - 1] = true;
+        _upgradeRowView.Salute.Play();
+        LevelUp();
+    }
+
+    private void LevelUp()
+    {
+        UpgradeRowModel.IsLevelActivated[UpgradeRowModel.UpgradeLevel - 1] = true;
 
         if (UpgradeRowModel.UpgradeLevel == 3)
         {
@@ -63,11 +69,6 @@ public class UpgradeRowPresenter
     public void SubscribeToBuyButton(Action<UpgradeRowPresenter> callBack)
     {
         _upgradeRowView.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
-    }
-
-    public void PlaySalute()
-    {
-        _upgradeRowView.Salute.Play();
     }
 }
 }

@@ -46,14 +46,16 @@ public class ManagerRowPresenter
         }
     }
 
+    public void Activate()
+    {
+        _managerRowView.Salute.Play();
+        SetState(ManagerState.Lock);
+        ManagerRowModel.IsActivated = true;
+    }
+
     public void SubscribeToHireButton(Action<ManagerRowPresenter> callBack)
     {
         _managerRowView.HireButton.onClick.AddListener(() => callBack?.Invoke(this));
-    }
-
-    public void PlaySalute()
-    {
-        _managerRowView.Salute.Play();
     }
 }
 }

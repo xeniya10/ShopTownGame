@@ -6286,7 +6286,7 @@ MonoBehaviour:
   _managerCollection: {fileID: 11400000, guid: f72b93b7b381b094983bdc2ced0c7c48, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
-  _upgradeData: {fileID: 11400000, guid: 98d1dd801719ffc4b8f1b7aceb59f245, type: 2}
+  _upgradeData: {fileID: 11400000, guid: 3764e5a6670b2234aa0a85604688fb52, type: 2}
   _managerData: {fileID: 11400000, guid: b44bfa7679c29934f93f9276b8964849, type: 2}
   _moveTime: 0.4
 --- !u!1 &611250540
@@ -8156,7 +8156,7 @@ MonoBehaviour:
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
   _managerRowData: {fileID: 11400000, guid: b44bfa7679c29934f93f9276b8964849, type: 2}
-  _upgradeRowData: {fileID: 11400000, guid: 98d1dd801719ffc4b8f1b7aceb59f245, type: 2}
+  _upgradeRowData: {fileID: 11400000, guid: 3764e5a6670b2234aa0a85604688fb52, type: 2}
   _audioSource: {fileID: 63194435}
 --- !u!1 &780398080
 GameObject:

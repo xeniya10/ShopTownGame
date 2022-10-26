@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fea538524ab87459144776ebbef0c1, type: 3}
   m_Name: UpgradeRowData
   m_EditorClassIdentifier: 
-  FirstNames:
+  FirstLevelNames:
   - Bouquets
   - Delivery
   - Takeaway
@@ -30,53 +30,53 @@ MonoBehaviour:
   - Stylish Dresses
   - Gift Box
   - Bestsellers
-  - Antique Instruments
+  - Pianos
   - Delivery
   - Teddy Bears
   - Stylish Sofas
   - Puzzles
   - Balls
-  - Modern Equipments
+  - Modern Equipment
   - Necklaces
   - Tech Support
   - Brand Watches
-  SecondNames:
+  SecondLevelNames:
   - Ornamental Plants
   - Quality Control
-  - New Varieties of Coffee
+  - New Coffee Varieties
   - Aromatic Tea
   - New Ice Cream Machine
-  - Modern Equipments
+  - New Equipment
   - Delivery
   - 24/7
   - BBQ
   - Snacks
   - Sea Food Dishes
-  - Brand Parfume
+  - New Brand Perfume
   - Suitcases
-  - Shoe Repair Service
+  - Repair Service
   - Eco Fabrics
-  - Postcards and souvenirs
+  - Postcards
   - E-books
-  - Musical Equipments
+  - Musical Equipment
   - Grooming Services
   - Radio Control Toys
   - Home Decor
   - Video Games
-  - Sportswears
-  - Sports Programmes
+  - Sportswear
+  - Sports Training Program
   - Jeweller
   - Warranty Service
   - Rolex
-  ThirdNames:
+  ThirdLevelNames:
   - Florist Services
   - Exotic Fruits
   - New Coffee Machine
-  - Colorful Decor
+  - New Decoration
   - Italian Gelato
   - Professional Baker
-  - Butcher
-  - Children's Parties
+  - Professional Butcher
+  - Kids Parties
   - Online Ordering
   - Bar Activities
   - Service Staff
@@ -87,68 +87,67 @@ MonoBehaviour:
   - Online Ordering
   - Book Club
   - Musical Evenings
-  - Veterinarian Services
-  - Equipment for Hobbies
+  - Veterinarian
+  - Hobby Equipment
   - Lighting
   - Board Games
-  - Sport Equipment
+  - Gym  Equipment
   - Sauna
   - Online Ordering
   - YouTube Channel
   - Repair Service
-  MoneyBaseCost:
-  - 250000
-  - 400000
-  - 700000
-  - 1200000
-  - 1500000
-  - 2000000
-  - 5000000
-  - 10000000
-  - 15000000
-  - 20000000
-  - 30000000
-  - 40000000
-  - 100000000
-  - 500000000
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  GoldBaseCost:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 3
-  - 5
-  - 10
-  - 20
-  - 40
-  - 80
-  - 120
-  - 200
-  - 250
-  - 300
-  - 400
-  - 600
-  - 1000
+  BaseCost:
+  - Number: 250000
+    Value: 0
+  - Number: 400000
+    Value: 0
+  - Number: 700000
+    Value: 0
+  - Number: 1200000
+    Value: 0
+  - Number: 1500000
+    Value: 0
+  - Number: 2000000
+    Value: 0
+  - Number: 5000000
+    Value: 0
+  - Number: 10000000
+    Value: 0
+  - Number: 15000000
+    Value: 0
+  - Number: 20000000
+    Value: 0
+  - Number: 30000000
+    Value: 0
+  - Number: 40000000
+    Value: 0
+  - Number: 100000000
+    Value: 0
+  - Number: 500000000
+    Value: 0
+  - Number: 3
+    Value: 1
+  - Number: 5
+    Value: 1
+  - Number: 10
+    Value: 1
+  - Number: 20
+    Value: 1
+  - Number: 40
+    Value: 1
+  - Number: 80
+    Value: 1
+  - Number: 120
+    Value: 1
+  - Number: 200
+    Value: 1
+  - Number: 250
+    Value: 1
+  - Number: 300
+    Value: 1
+  - Number: 400
+    Value: 1
+  - Number: 600
+    Value: 1
+  - Number: 1000
+    Value: 1

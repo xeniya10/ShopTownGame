@@ -9,35 +9,35 @@ namespace ShopTown.ControllerComponent
 {
 public class GameplayController : IInitializable
 {
-    private readonly GameCellPresenter _gameCellPresenter;
-    private readonly ManagerRowPresenter _managerRowPresenter;
-    private readonly UpgradeRowPresenter _upgradeRowPresenter;
+    private readonly GameCellPresenter _gameCell;
+    private readonly ManagerRowPresenter _managerRow;
+    private readonly UpgradeRowPresenter _upgradeRow;
 
     private readonly GameScreenPresenter _gameScreenPresenter;
     private readonly GameScreenView _gameScreenView;
-    private readonly DataController _dataController;
+    private readonly DataController _data;
 
-    private readonly List<GameCellPresenter> _gameCells = new List<GameCellPresenter>();
-    private readonly List<ManagerRowPresenter> _managerRows = new List<ManagerRowPresenter>();
-    private readonly List<UpgradeRowPresenter> _upgradeRows = new List<UpgradeRowPresenter>();
+    private readonly List<GameCellPresenter> _cells = new List<GameCellPresenter>();
+    private readonly List<ManagerRowPresenter> _managers = new List<ManagerRowPresenter>();
+    private readonly List<UpgradeRowPresenter> _upgrades = new List<UpgradeRowPresenter>();
     private readonly List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
 
     private int _activationCounter;
 
-    public GameplayController(GameCellPresenter gameCellPresenter, ManagerRowPresenter managerRowPresenter, UpgradeRowPresenter upgradeRowPresenter,
-        DataController dataController, GameScreenView gameScreenView, GameScreenPresenter gameScreenPresenter)
+    public GameplayController(GameCellPresenter gameCell, ManagerRowPresenter managerRow, UpgradeRowPresenter upgradeRow,
+        DataController data, GameScreenView gameScreenView, GameScreenPresenter gameScreenPresenter)
     {
-        _gameCellPresenter = gameCellPresenter;
-        _managerRowPresenter = managerRowPresenter;
-        _upgradeRowPresenter = upgradeRowPresenter;
-        _dataController = dataController;
+        _gameCell = gameCell;
+        _managerRow = managerRow;
+        _upgradeRow = upgradeRow;
+        _data = data;
         _gameScreenView = gameScreenView;
         _gameScreenPresenter = gameScreenPresenter;
     }
 
     public void Initialize()
     {
-        _dataController.CreateDefaultGameData();
+        _data.CreateDefaultGameData();
         _gameScreenPresenter.Initialize();
 
         CreateBoard();
@@ -47,114 +47,78 @@ public class GameplayController : IInitializable
 
     private void CreateBoard()
     {
-        var data = _dataController.GameData;
-        foreach (var model in data.Businesses)
+        foreach (var model in _data.GameData.Businesses)
         {
-            var cell = _gameCellPresenter.Create(_gameScreenView.GameBoard, model);
+            var cell = _gameCell.Create(_gameScreenView.GameBoard, model);
             cell.SubscribeToBuyButton(TryBuy);
             cell.SubscribeToClick(Select);
-            _gameCells.Add(cell);
+            _cells.Add(cell);
         }
     }
 
     private void CreateManagers()
     {
-        var data = _dataController.GameData;
-        foreach (var model in data.Managers)
+        foreach (var model in _data.GameData.Managers)
         {
-            var row = _managerRowPresenter.Create(_gameScreenView.ManagerBoard, model);
+            var row = _managerRow.Create(_gameScreenView.ManagerBoard, model);
             row.SubscribeToHireButton(TryBuy);
-            _managerRows.Add(row);
+            _managers.Add(row);
         }
 
-        var lockedManager = _managerRows.Find(manager => manager.ManagerRowModel.State == ManagerState.Lock);
-        var unlockedManager = _managerRows.Find(manager => manager.ManagerRowModel.State == ManagerState.Unlock);
-
-        if (lockedManager == null && unlockedManager == null)
-        {
-            var manager = _managerRows.Find(manager => manager.ManagerRowModel.Level == data.MinOpenedLevel);
-            manager.SetState(ManagerState.Lock);
-        }
+        FindManager(_data.GameData.MinLevel)?.SetState(ManagerState.Lock);
     }
 
     private void CreateUpgrades()
     {
-        var data = _dataController.GameData;
-        foreach (var model in data.Upgrades)
+        foreach (var model in _data.GameData.Upgrades)
         {
-            var row = _upgradeRowPresenter.Create(_gameScreenView.UpgradeBoard, model);
+            var row = _upgradeRow.Create(_gameScreenView.UpgradeBoard, model);
             row.SubscribeToBuyButton(TryBuy);
-            _upgradeRows.Add(row);
+            _upgrades.Add(row);
         }
 
-        var lockedUpgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.State == UpgradeState.Lock);
-        var unlockedUpgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.State == UpgradeState.Unlock);
-
-        if (lockedUpgrade == null && unlockedUpgrade == null)
-        {
-            var upgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.Level == data.MinOpenedLevel);
-            upgrade.SetState(UpgradeState.Lock);
-        }
+        FindUpgrade(_data.GameData.MinLevel)?.SetState(UpgradeState.Lock);
     }
 
     private void TryBuy(GameCellPresenter cell)
     {
-        var data = _dataController.GameData;
-        if (data.CanBuy(cell.CellModel.Cost))
+        if (_data.GameData.CanBuy(cell.CellModel.Cost))
         {
-            cell.CellModel.Level = data.MinOpenedLevel;
+            cell.CellModel.Level = _data.GameData.MinLevel;
+
             cell.Activate(() =>
             {
-                var manager = _managerRows.Find(manager => manager.ManagerRowModel.Level == data.MinOpenedLevel);
-                if (manager.ManagerRowModel.IsActivated)
-                {
-                    cell.SetActiveManager(manager.ManagerRowModel);
-                    cell.GetInProgress(() => data.AddToBalance(cell.CellModel.Profit));
-                }
-
-                var upgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.Level == data.MinOpenedLevel);
-                cell.SetActiveUpgrade(upgrade.UpgradeRowModel);
+                InitializeImprovements(cell);
+                CheckImprovements(cell);
             });
 
-            ShowNewLevelProfiler(data.MinOpenedLevel);
+            ShowNewLevelProfiler(_data.GameData.MinLevel);
             UnlockNeighbors(cell);
         }
     }
 
     private void TryBuy(ManagerRowPresenter manager)
     {
-        var data = _dataController.GameData;
-        if (data.CanBuy(manager.ManagerRowModel.Cost))
+        if (_data.GameData.CanBuy(manager.ManagerRowModel.Cost))
         {
-            manager.PlaySalute();
-            manager.SetState(ManagerState.Lock);
-            manager.ManagerRowModel.IsActivated = true;
-            var cells = _gameCells.FindAll(cell => cell.CellModel.Level == manager.ManagerRowModel.Level);
-            cells.ForEach(cell =>
-            {
-                cell.GetInProgress(() => data.AddToBalance(cell.CellModel.Profit));
-                cell.SetActiveManager(manager.ManagerRowModel);
-            });
+            manager.Activate();
+            FindAllCells(manager.ManagerRowModel.Level).ForEach(InitializeManager);
         }
     }
 
     private void TryBuy(UpgradeRowPresenter upgrade)
     {
-        var data = _dataController.GameData;
-        if (data.CanBuy(upgrade.UpgradeRowModel.Cost))
+        if (_data.GameData.CanBuy(upgrade.UpgradeRowModel.Cost))
         {
-            upgrade.PlaySalute();
-            upgrade.LevelUp();
-            var cells = _gameCells.FindAll(cell => cell.CellModel.Level == upgrade.UpgradeRowModel.Level);
-            cells.ForEach(cell => cell.SetActiveUpgrade(upgrade.UpgradeRowModel));
+            upgrade.Activate();
+            FindAllCells(upgrade.UpgradeRowModel.Level).ForEach(cell => cell.InitializeUpgrade(upgrade.UpgradeRowModel));
         }
     }
 
     private void Select(GameCellPresenter selectedCell)
     {
-        var data = _dataController.GameData;
-        _selectedCells.Add(selectedCell);
         selectedCell.SetActiveSelector(true);
+        _selectedCells.Add(selectedCell);
 
         if (_selectedCells.Count < 2)
         {
@@ -168,119 +132,126 @@ public class GameplayController : IInitializable
         {
             selectedCell.GetInProgress(() =>
             {
-                data.AddToBalance(selectedCell.CellModel.Profit);
+                _data.GameData.AddToBalance(selectedCell.CellModel.Profit);
                 selectedCell.CellModel.State = CellState.Active;
             });
         }
 
-        if (oneCell.IsNeighborOf(otherCell) && oneCell.HasSameLevelAs(otherCell))
+        if (oneCell.IsNeighborOf(otherCell) && oneCell.HasSameLevelAs(otherCell) && oneCell.CellModel.Level < _data.GameData.MaxLevel)
         {
             Merge(oneCell, otherCell);
         }
 
-        oneCell.SetActiveSelector(false);
-        otherCell.SetActiveSelector(false);
+        _selectedCells.ForEach(cell => cell.SetActiveSelector(false));
         _selectedCells.Clear();
     }
 
     private void Merge(GameCellPresenter oneCell, GameCellPresenter otherCell)
     {
-        var data = _dataController.GameData;
         _activationCounter++;
-        var cellUp = otherCell;
-        var cellUnlock = oneCell;
-        if (oneCell.IsActivatedEarlierThen(otherCell))
-        {
-            cellUp = oneCell;
-            cellUnlock = otherCell;
-        }
-
-        var level = cellUnlock.CellModel.Level;
-        cellUp.LevelUp(FindManager(level), FindUpgrade(level));
-        cellUnlock.Unlock(_activationCounter);
-        LockNeedlessManager(level);
-        LockNeedlessUpgrade(level);
-        ShowNewLevelProfiler(cellUp.CellModel.Level);
-
-        if (FindManager(level).IsActivated)
-        {
-            cellUp.GetInProgress(() => data.AddToBalance(cellUp.CellModel.Profit));
-        }
+        otherCell.Unlock(_activationCounter);
+        oneCell.LevelUp();
+        InitializeImprovements(oneCell);
+        ShowNewLevelProfiler(oneCell.CellModel.Level);
+        CheckImprovements(oneCell);
+        CheckImprovements(otherCell);
     }
 
-    private ManagerRowModel FindManager(int level)
+    private void CheckImprovements(GameCellPresenter cell)
     {
-        var activatedManager = _managerRows.Find(manager => manager.ManagerRowModel.Level == level + 1);
-        return activatedManager.ManagerRowModel;
+        var level = cell.CellModel.Level;
+        CheckManager(level);
+        CheckUpgrade(level);
     }
 
-    private UpgradeRowModel FindUpgrade(int level)
+    private void CheckManager(int level)
     {
-        var activatedUpgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.Level == level + 1);
-        return activatedUpgrade.UpgradeRowModel;
-    }
-
-    private void LockNeedlessManager(int level)
-    {
-        var gameCell = _gameCells.Find(cell => cell.CellModel.Level == level);
-        var manager = _managerRows.Find(manager => manager.ManagerRowModel.Level == level);
+        var gameCell = FindCell(level);
         if (gameCell == null || gameCell.CellModel.IsActivatedManager)
         {
-            manager?.SetState(ManagerState.Lock);
+            FindManager(level)?.SetState(ManagerState.Lock);
+            Debug.Log("I'm here");
+            return;
         }
-        else
+
+        FindManager(level)?.SetState(ManagerState.Unlock);
+    }
+
+    private void CheckUpgrade(int level)
+    {
+        var gameCell = FindCell(level);
+        var maxUpgradeLevel = _data.GameData.MaxUpgradeLevel;
+
+        if (gameCell == null || gameCell.CellModel.IsUpgradeActivated[maxUpgradeLevel - 1])
         {
-            manager?.SetState(ManagerState.Unlock);
+            FindUpgrade(level)?.SetState(UpgradeState.Lock);
+            Debug.Log("I'm here too");
+            return;
+        }
+
+        FindUpgrade(level)?.SetState(UpgradeState.Unlock);
+    }
+
+    private void InitializeImprovements(GameCellPresenter cell)
+    {
+        InitializeManager(cell);
+        InitializeUpgrade(cell);
+    }
+
+    private void InitializeManager(GameCellPresenter cell)
+    {
+        var level = cell.CellModel.Level;
+        var managerModel = FindManager(level).ManagerRowModel;
+        if (managerModel.IsActivated)
+        {
+            cell.InitializeManager(managerModel);
+            cell.GetInProgress(() => _data.GameData.AddToBalance(cell.CellModel.Profit));
         }
     }
 
-    private void LockNeedlessUpgrade(int level)
+    private void InitializeUpgrade(GameCellPresenter cell)
     {
-        var gameCell = _gameCells.Find(cell => cell.CellModel.Level == level);
-        var upgrade = _upgradeRows.Find(upgrade => upgrade.UpgradeRowModel.Level == level);
-        var isActivatedUpgrades = gameCell?.CellModel.IsActivatedUpgrades;
-        if (gameCell == null || isActivatedUpgrades[isActivatedUpgrades.Length - 1])
-        {
-            upgrade?.SetState(UpgradeState.Lock);
-        }
-        else
-        {
-            upgrade?.SetState(UpgradeState.Unlock);
-        }
+        var upgradeModel = FindUpgrade(cell.CellModel.Level).UpgradeRowModel;
+        cell.InitializeUpgrade(upgradeModel);
     }
 
     private void ShowNewLevelProfiler(int level)
     {
-        var data = _dataController.GameData;
-        if (level > data.MaxOpenedLevel)
+        if (level > _data.GameData.MaxOpenedLevel)
         {
             _gameScreenPresenter.ShowNewBusinessScreen(level);
-            data.MaxOpenedLevel = level;
+            _data.GameData.MaxOpenedLevel = level;
         }
-
-        LockNeedlessUpgrade(level);
-        LockNeedlessManager(level);
     }
 
     private void UnlockNeighbors(GameCellPresenter activatedCell)
     {
-        var neighbors = new List<GameCellPresenter>();
-        foreach (var cell in _gameCells)
-        {
-            if (cell.IsNeighborOf(activatedCell) && cell.CellModel.State == CellState.Lock)
-            {
-                neighbors.Add(cell);
-            }
-        }
-
+        var neighbors = _cells.FindAll(cell => cell.IsNeighborOf(activatedCell) && cell.CellModel.State == CellState.Lock);
         if (neighbors.Count > 0)
         {
             _activationCounter++;
-            foreach (var cell in neighbors)
-            {
-                cell.Unlock(_activationCounter);
-            }
+            neighbors.ForEach(cell => cell.Unlock(_activationCounter));
         }
+    }
+
+    private GameCellPresenter FindCell(int level)
+    {
+        return _cells.Find(cell => cell.CellModel.Level == level);
+    }
+
+    private List<GameCellPresenter> FindAllCells(int level)
+    {
+        return _cells.FindAll(cell => cell.CellModel.Level == level);
+    }
+
+    private ManagerRowPresenter FindManager(int level)
+    {
+        return _managers.Find(manager => manager.ManagerRowModel.Level == level);
+    }
+
+    private UpgradeRowPresenter FindUpgrade(int level)
+    {
+        return _upgrades.Find(upgrade => upgrade.UpgradeRowModel.Level == level);
     }
 }
 }

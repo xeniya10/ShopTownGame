@@ -47,8 +47,7 @@ public class GameCellView : MonoBehaviour
 
     public int RandomBackgroundNumber()
     {
-        var randomNumber = Random.Range(0, _backgroundCollection.Sprites.Count);
-        return randomNumber;
+        return Random.Range(0, _backgroundCollection.Sprites.Count);
     }
 
     private void SetBackgroundSprite(int i)
@@ -122,7 +121,7 @@ public class GameCellView : MonoBehaviour
 
         for (var i = 0; i < _upgrades.Length; i++)
         {
-            _upgrades[i].SetActive(model.IsActivatedUpgrades[i]);
+            _upgrades[i].SetActive(model.IsUpgradeActivated[i]);
         }
     }
 

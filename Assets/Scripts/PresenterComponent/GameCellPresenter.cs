@@ -30,28 +30,6 @@ public class GameCellPresenter
         var presenter = new GameCellPresenter(view, model);
         return presenter;
     }
-    //
-    // private void SetState(CellState state)
-    // {
-    //     switch (state)
-    //     {
-    //         case CellState.Lock:
-    //             Lock();
-    //             break;
-    //
-    //         case CellState.Unlock:
-    //             Unlock();
-    //             break;
-    //
-    //         case CellState.Active:
-    //             Activate();
-    //             break;
-    //
-    //         case CellState.InProgress:
-    //             GetInProgress(CellModel.TotalTime,);
-    //             break;
-    //     }
-    // }
 
     public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
     {
@@ -68,29 +46,29 @@ public class GameCellPresenter
         _cellView._selectorImage.gameObject.SetActive(isActive);
     }
 
-    public void SetActiveManager(ManagerRowModel manager)
+    public void InitializeManager(ManagerRowModel manager)
     {
         CellModel.IsActivatedManager = manager.IsActivated;
         _cellView.SetActiveImprovements(CellModel);
     }
 
-    public void SetActiveUpgrade(UpgradeRowModel upgrade)
+    public void InitializeUpgrade(UpgradeRowModel upgrade)
     {
         var counter = 0;
-        for (var i = 0; i < CellModel.IsActivatedUpgrades.Length; i++)
+        for (var i = 0; i < CellModel.IsUpgradeActivated.Length; i++)
         {
-            CellModel.IsActivatedUpgrades[i] = upgrade.IsActivatedLevel[i];
-            if (!CellModel.IsActivatedUpgrades[i])
+            CellModel.IsUpgradeActivated[i] = upgrade.IsLevelActivated[i];
+            if (!CellModel.IsUpgradeActivated[i])
             {
                 counter++;
             }
         }
 
-        CellModel.UpgradeLevel = upgrade.IsActivatedLevel.Length - counter;
+        CellModel.UpgradeLevel = upgrade.IsLevelActivated.Length - counter;
         _cellView.SetActiveImprovements(CellModel);
     }
 
-    public void LevelUp(ManagerRowModel manager, UpgradeRowModel upgrade)
+    public void LevelUp()
     {
         CellModel.Level += 1;
         if (CellModel.State == CellState.InProgress)
@@ -103,9 +81,6 @@ public class GameCellPresenter
             _cellView.Initialize(CellModel);
             Activate(null);
         });
-
-        SetActiveManager(manager);
-        SetActiveUpgrade(upgrade);
     }
 
     public void Lock()
@@ -118,8 +93,8 @@ public class GameCellPresenter
     // Cost changes depending on number of activated cells.
     public void Unlock(int activationNumber)
     {
-        CellModel.State = CellState.Unlock;
         CellModel.Reset();
+        CellModel.State = CellState.Unlock;
         CellModel.SetCost(activationNumber);
         _cellView.SetCost(CellModel.Cost);
         _cellView.SetUnlockState();
@@ -168,20 +143,6 @@ public class GameCellPresenter
         var otherCellLevel = otherCell.CellModel.Level;
 
         if (oneCellLevel == otherCellLevel)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool IsActivatedEarlierThen(GameCellPresenter otherCell)
-    {
-        var oneCellActivatingTime = CellModel.ActivatingDate;
-        var otherCellActivatingTime = otherCell.CellModel.ActivatingDate;
-
-        var result = DateTime.Compare(oneCellActivatingTime, otherCellActivatingTime);
-        if (result < 0)
         {
             return true;
         }

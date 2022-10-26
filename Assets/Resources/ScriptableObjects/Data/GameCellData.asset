@@ -39,6 +39,8 @@ MonoBehaviour:
     Value: 0
   - Number: 50000
     Value: 0
+  - Number: 50000
+    Value: 0
   - Number: 150000
     Value: 0
   - Number: 500000
@@ -70,43 +72,179 @@ MonoBehaviour:
   Cost:
   - Number: 2
     Value: 0
+  - Number: 5
+    Value: 0
+  - Number: 10
+    Value: 0
+  - Number: 15
+    Value: 0
   - Number: 20
+    Value: 0
+  - Number: 30
+    Value: 0
+  - Number: 40
     Value: 0
   - Number: 50
     Value: 0
-  - Number: 100
+  - Number: 70
+    Value: 0
+  - Number: 90
+    Value: 0
+  - Number: 120
+    Value: 0
+  - Number: 150
+    Value: 0
+  - Number: 200
+    Value: 0
+  - Number: 250
+    Value: 0
+  - Number: 300
+    Value: 0
+  - Number: 400
     Value: 0
   - Number: 500
     Value: 0
+  - Number: 650
+    Value: 0
+  - Number: 800
+    Value: 0
+  - Number: 950
+    Value: 0
+  - Number: 1100
+    Value: 0
+  - Number: 1300
+    Value: 0
   - Number: 1500
     Value: 0
-  - Number: 3000
+  - Number: 1800
+    Value: 0
+  - Number: 2100
+    Value: 0
+  - Number: 2400
+    Value: 0
+  - Number: 2800
+    Value: 0
+  - Number: 3200
+    Value: 0
+  - Number: 3600
+    Value: 0
+  - Number: 4100
+    Value: 0
+  - Number: 4500
+    Value: 0
+  - Number: 5000
+    Value: 0
+  - Number: 5500
+    Value: 0
+  - Number: 6000
+    Value: 0
+  - Number: 7000
     Value: 0
   - Number: 8000
     Value: 0
-  - Number: 15000
+  - Number: 10000
+    Value: 0
+  - Number: 12000
+    Value: 0
+  - Number: 14000
+    Value: 0
+  - Number: 17000
+    Value: 0
+  - Number: 20000
+    Value: 0
+  - Number: 25000
+    Value: 0
+  - Number: 30000
     Value: 0
   - Number: 40000
     Value: 0
+  - Number: 50000
+    Value: 0
+  - Number: 60000
+    Value: 0
+  - Number: 80000
+    Value: 0
   - Number: 100000
+    Value: 0
+  - Number: 150000
     Value: 0
   - Number: 300000
     Value: 0
+  - Number: 400000
+    Value: 0
+  - Number: 600000
+    Value: 0
+  - Number: 800000
+    Value: 0
   - Number: 1000000
+    Value: 0
+  - Number: 2000000
     Value: 0
   - Number: 3000000
     Value: 0
+  - Number: 4000000
+    Value: 0
+  - Number: 5000000
+    Value: 0
+  - Number: 6000000
+    Value: 0
+  - Number: 7000000
+    Value: 0
+  - Number: 8000000
+    Value: 0
+  - Number: 9000000
+    Value: 0
   - Number: 10000000
+    Value: 0
+  - Number: 15000000
     Value: 0
   - Number: 20000000
     Value: 0
+  - Number: 25000000
+    Value: 0
+  - Number: 30000000
+    Value: 0
+  - Number: 35000000
+    Value: 0
+  - Number: 40000000
+    Value: 0
+  - Number: 45000000
+    Value: 0
   - Number: 50000000
+    Value: 0
+  - Number: 60000000
+    Value: 0
+  - Number: 70000000
+    Value: 0
+  - Number: 80000000
+    Value: 0
+  - Number: 90000000
     Value: 0
   - Number: 100000000
     Value: 0
+  - Number: 150000000
+    Value: 0
   - Number: 200000000
     Value: 0
+  - Number: 250000000
+    Value: 0
+  - Number: 300000000
+    Value: 0
+  - Number: 350000000
+    Value: 0
+  - Number: 400000000
+    Value: 0
+  - Number: 450000000
+    Value: 0
   - Number: 500000000
+    Value: 0
+  - Number: 600000000
+    Value: 0
+  - Number: 700000000
+    Value: 0
+  - Number: 800000000
+    Value: 0
+  - Number: 900000000
     Value: 0
   - Number: 1000000000
     Value: 0

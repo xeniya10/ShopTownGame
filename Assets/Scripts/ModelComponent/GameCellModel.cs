@@ -32,7 +32,7 @@ public class GameCellModel
     public CellState State = CellState.Lock;
     public bool IsActivatedManager;
     public int UpgradeLevel;
-    public bool[] IsActivatedUpgrades;
+    public bool[] IsUpgradeActivated;
 
     // Monetary Parameters
     private float ProfitMultiplier { get { return UpgradeLevel + 1; } }
@@ -61,13 +61,15 @@ public class GameCellModel
     public void SetCost(int unlockCountNumber)
     {
         var costData = _cellData.Cost;
-        Cost = costData[unlockCountNumber];
 
-        if (unlockCountNumber > costData.Length)
+        if (unlockCountNumber > costData.Length - 1)
         {
             var lastElement = _cellData.Cost[costData.Length - 1];
-            Cost = new MoneyModel(lastElement.Number * 2, lastElement.Value);
+            Cost = new MoneyModel(lastElement.Number * (unlockCountNumber - costData.Length + 2), lastElement.Value);
+            return;
         }
+
+        Cost = costData[unlockCountNumber];
     }
 }
 }

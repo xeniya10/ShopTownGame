@@ -52,13 +52,14 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = new MoneyModel(10000000, Currency.Dollar),
+            CurrentMoneyBalance = new MoneyModel(2, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
             // TotalMoneyBalance = 0,
             // TotalGoldBalance = 0,
-            MinOpenedLevel = 1,
+            MinLevel = 1,
+            MaxLevel = 27,
             MaxOpenedLevel = 0,
-            NumberOfLevels = 27,
+            MaxUpgradeLevel = 3,
             TimeStamp = DateTime.Now,
 
             Settings = settings,
@@ -76,7 +77,7 @@ public class DataController : IInitializable
             {
                 var cell = new GameCellModel(_gameCellData);
                 cell.UpgradeLevel = 0;
-                cell.IsActivatedUpgrades = new[] {false, false, false};
+                cell.IsUpgradeActivated = new[] {false, false, false};
                 cell.SetCost(0);
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
@@ -85,14 +86,14 @@ public class DataController : IInitializable
 
                 if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
                 {
-                    cell.Level = GameData.MinOpenedLevel;
+                    cell.Level = GameData.MinLevel;
                     cell.State = CellState.Unlock;
                 }
             }
         }
 
         // Creation default manager and upgrade models
-        for (var i = 0; i < GameData.NumberOfLevels; i++)
+        for (var i = 0; i < GameData.MaxLevel; i++)
         {
             var manager = new ManagerRowModel(_businessData, _managerRowData);
             manager.Level = i + 1;
@@ -101,13 +102,13 @@ public class DataController : IInitializable
             GameData.Managers.Add(manager);
         }
 
-        for (var i = 0; i < GameData.NumberOfLevels; i++)
+        for (var i = 0; i < GameData.MaxLevel; i++)
         {
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
             upgrade.Level = i + 1;
             upgrade.UpgradeLevel = 1;
             upgrade.State = UpgradeState.Hide;
-            upgrade.IsActivatedLevel = new[] {false, false, false};
+            upgrade.IsLevelActivated = new[] {false, false, false};
             GameData.Upgrades.Add(upgrade);
         }
     }

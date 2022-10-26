@@ -12,9 +12,13 @@ public class GameDataModel
     public MoneyModel TotalGoldBalance;
 
     // Level Parameters
-    public int MinOpenedLevel;
+    public int MinLevel;
+    public int MaxLevel;
     public int MaxOpenedLevel;
-    public int NumberOfLevels;
+    public int MaxUpgradeLevel;
+
+    // Time
+    public DateTime TimeStamp;
 
     // Models
     public GameSettingModel Settings;
@@ -25,8 +29,6 @@ public class GameDataModel
     public List<UpgradeRowModel> Upgrades;
 
     public Action BalanceChangeEvent;
-
-    public DateTime TimeStamp;
 
     public void SetBalance(MoneyModel number)
     {

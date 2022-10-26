@@ -24,7 +24,7 @@ public class UpgradeRowModel
 
     // State
     public UpgradeState State;
-    public bool[] IsActivatedLevel;
+    public bool[] IsLevelActivated;
 
     // Data Containers
     private readonly BusinessData _business;

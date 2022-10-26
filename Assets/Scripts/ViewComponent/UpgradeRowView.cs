@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
@@ -22,12 +21,12 @@ public class UpgradeRowView : MonoBehaviour
     [SerializeField] private Image _lockImage;
     [SerializeField] private Image _currencyImage;
 
-    [Space]
+    [Header("Text Fields")]
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descriptionText;
     [SerializeField] private TextMeshProUGUI _priceText;
 
-    [Space]
+    [Header("Collections")]
     [SerializeField] private UpgradeCollection _upgradeSprites;
 
     [Header("Animation Duration")]
