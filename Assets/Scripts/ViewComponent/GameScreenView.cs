@@ -33,13 +33,13 @@ public class GameScreenView : MonoBehaviour
         _goldText.text = number.ToFormattedString();
     }
 
-    public void ClickAddButton(Action callBack)
+    public void SubscribeToAddButton(Action callBack)
     {
         _moneyAddButton.onClick.AddListener(() => callBack?.Invoke());
         _goldAddButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickMenuButton(Action callBack)
+    public void SubscribeToMenuButton(Action callBack)
     {
         _menuButton.onClick.AddListener(() => callBack?.Invoke());
     }

@@ -1,13 +1,13 @@
+using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ShopTown.Data
 {
 [CreateAssetMenu(fileName = "ManagerData", menuName = "ManagerData")]
 public class ManagerRowData : ScriptableObject
 {
-    public string[] ManagerNames =
+    public List<string> ManagerNames = new List<string>()
     {
         "Flora",
         "Jackie",
@@ -38,7 +38,7 @@ public class ManagerRowData : ScriptableObject
         "Irene"
     };
 
-    public MoneyModel[] BaseCost =
+    public List<MoneyModel> BaseCost = new List<MoneyModel>()
     {
         new MoneyModel(1000, Currency.Dollar),
         new MoneyModel(5000, Currency.Dollar),

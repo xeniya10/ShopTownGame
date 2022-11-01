@@ -1,9 +1,9 @@
+using System;
+using DG.Tweening;
+using ShopTown.ModelComponent;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using System;
-using ShopTown.ModelComponent;
 
 public class WelcomeScreenView : MonoBehaviour
 {
@@ -14,7 +14,6 @@ public class WelcomeScreenView : MonoBehaviour
 
     [Header("Animation Durations")]
     [SerializeField] private float _moveTime;
-
     private Vector2 _startPosition;
 
     private void SetMoneyNumber(MoneyModel number)
@@ -33,15 +32,19 @@ public class WelcomeScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    public void ClickOkButton(Action callBack)
+    public void SubscribeToOkButton(Action callBack)
     {
         _okButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void Show(MoneyModel moneyAmount, MoneyModel goldAmount)
+    public void Initialize(MoneyModel moneyAmount, MoneyModel goldAmount)
     {
         SetMoneyNumber(moneyAmount);
         SetMoneyNumber(goldAmount);
+    }
+
+    public void Show()
+    {
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
         transform.MoveFromScreenBorder(0f, -1.5f, _moveTime, null);

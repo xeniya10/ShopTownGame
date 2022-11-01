@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace ShopTown.Data
 [CreateAssetMenu(fileName = "GameCellData", menuName = "GameCellData")]
 public class GameCellData : ScriptableObject
 {
-    public MoneyModel[] BaseProfit =
+    public List<MoneyModel> BaseProfit = new List<MoneyModel>()
     {
         new MoneyModel(1, Currency.Dollar),
         new MoneyModel(5, Currency.Dollar),
@@ -39,7 +40,7 @@ public class GameCellData : ScriptableObject
         new MoneyModel(1500000000, Currency.Dollar)
     };
 
-    public TimeSpan[] ProcessTime =
+    public List<TimeSpan> ProcessTime = new List<TimeSpan>()
     {
         new TimeSpan(0, 0, 2),
         new TimeSpan(0, 0, 5),
@@ -70,7 +71,7 @@ public class GameCellData : ScriptableObject
         new TimeSpan(48, 0, 0)
     };
 
-    public MoneyModel[] Cost =
+    public List<MoneyModel> Cost = new List<MoneyModel>()
     {
         new MoneyModel(2, Currency.Dollar),
         new MoneyModel(5, Currency.Dollar),

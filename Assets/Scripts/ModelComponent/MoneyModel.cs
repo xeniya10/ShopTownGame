@@ -160,8 +160,7 @@ public class MoneyFormat
         {
             formattedTextNumber = number.ToString("#,##0.0");
 
-            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2)
-                .Equals(".0"))
+            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))
             {
                 return new MoneyFormat(number, number.ToString("#,##0"), string.Empty);
             }
@@ -200,6 +199,14 @@ public class MoneyFormat
         }
 
         return textNumber.Length;
+    }
+}
+
+public static class DoubleExtension
+{
+    public static string ToFormattedString(this double number)
+    {
+        return "$" + number.ToString("#,##0.00");
     }
 }
 }

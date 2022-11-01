@@ -1,6 +1,7 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 using ShopTown.ModelComponent;
+using UnityEngine;
 
 namespace ShopTown.PresenterComponent
 {
@@ -55,7 +56,12 @@ public class GameCellPresenter
     public void InitializeUpgrade(UpgradeRowModel upgrade)
     {
         var counter = 0;
-        for (var i = 0; i < CellModel.IsUpgradeActivated.Length; i++)
+        if (CellModel.IsUpgradeActivated == null)
+        {
+            CellModel.IsUpgradeActivated = new List<bool>();
+        }
+
+        for (var i = 0; i < CellModel.IsUpgradeActivated.Count; i++)
         {
             CellModel.IsUpgradeActivated[i] = upgrade.IsLevelActivated[i];
             if (!CellModel.IsUpgradeActivated[i])
@@ -64,7 +70,7 @@ public class GameCellPresenter
             }
         }
 
-        CellModel.UpgradeLevel = upgrade.IsLevelActivated.Length - counter;
+        CellModel.UpgradeLevel = upgrade.IsLevelActivated.Count - counter;
         _cellView.SetActiveImprovements(CellModel);
     }
 

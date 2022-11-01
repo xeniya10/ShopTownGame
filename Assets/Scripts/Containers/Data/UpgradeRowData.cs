@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace ShopTown.Data
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "UpgradeData")]
 public class UpgradeRowData : ScriptableObject
 {
-    public string[] FirstLevelNames =
+    public List<string> FirstLevelNames = new List<string>()
     {
         "Bouquets",
         "Delivery",
@@ -37,7 +38,7 @@ public class UpgradeRowData : ScriptableObject
         "Brand Watches"
     };
 
-    public string[] SecondLevelNames =
+    public List<string> SecondLevelNames = new List<string>()
     {
         "Ornamental Plants",
         "Quality Control",
@@ -68,7 +69,7 @@ public class UpgradeRowData : ScriptableObject
         "Rolex"
     };
 
-    public string[] ThirdLevelNames =
+    public List<string> ThirdLevelNames = new List<string>()
     {
         "Florist Services",
         "Exotic Fruits",
@@ -99,7 +100,7 @@ public class UpgradeRowData : ScriptableObject
         "Repair Service"
     };
 
-    public MoneyModel[] BaseCost =
+    public List<MoneyModel> BaseCost = new List<MoneyModel>()
     {
         new MoneyModel(250000, Currency.Dollar),
         new MoneyModel(400000, Currency.Dollar),

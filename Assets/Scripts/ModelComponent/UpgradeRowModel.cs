@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ShopTown.Data;
 
 namespace ShopTown.ModelComponent
@@ -24,7 +25,7 @@ public class UpgradeRowModel
 
     // State
     public UpgradeState State;
-    public bool[] IsLevelActivated;
+    public List<bool> IsLevelActivated;
 
     // Data Containers
     private readonly BusinessData _business;

@@ -1,16 +1,11 @@
 using System;
+using System.Collections.Generic;
 using ShopTown.Data;
 using UnityEngine;
 
 namespace ShopTown.ModelComponent
 {
-public enum CellState
-{
-    Lock,
-    Unlock,
-    Active,
-    InProgress
-}
+public enum CellState { Lock, Unlock, Active, InProgress }
 
 public class GameCellModel
 {
@@ -32,7 +27,7 @@ public class GameCellModel
     public CellState State = CellState.Lock;
     public bool IsActivatedManager;
     public int UpgradeLevel;
-    public bool[] IsUpgradeActivated;
+    public List<bool> IsUpgradeActivated;
 
     // Monetary Parameters
     private float ProfitMultiplier { get { return UpgradeLevel + 1; } }
@@ -62,10 +57,10 @@ public class GameCellModel
     {
         var costData = _cellData.Cost;
 
-        if (unlockCountNumber > costData.Length - 1)
+        if (unlockCountNumber > costData.Count - 1)
         {
-            var lastElement = _cellData.Cost[costData.Length - 1];
-            Cost = new MoneyModel(lastElement.Number * (unlockCountNumber - costData.Length + 2), lastElement.Value);
+            var lastElement = _cellData.Cost[costData.Count - 1];
+            Cost = new MoneyModel(lastElement.Number * (unlockCountNumber - costData.Count + 2), lastElement.Value);
             return;
         }
 

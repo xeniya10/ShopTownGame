@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using ShopTown.Data;
 using UnityEngine;
 using VContainer.Unity;
@@ -16,6 +17,8 @@ public class DataController : IInitializable
     private readonly ManagerRowData _managerRowData;
     private readonly UpgradeRowData _upgradeRowData;
 
+    private const string _key = "GameData";
+
     public DataController(GameDataModel gameData, BusinessData businessData, GameCellData gameCellData,
         ManagerRowData managerRowData, UpgradeRowData upgradeRowData)
     {
@@ -28,9 +31,12 @@ public class DataController : IInitializable
 
     public void Initialize()
     {
+        GameData = Load();
+
         if (GameData == null)
         {
             CreateDefaultGameData();
+            Save();
         }
     }
 
@@ -38,10 +44,10 @@ public class DataController : IInitializable
     {
         var settings = new GameSettingModel
         {
-            Music = true,
-            Sound = true,
-            Notifications = true,
-            Ads = true
+            MusicOn = true,
+            SoundOn = true,
+            NotificationsOn = true,
+            AdsOn = true
         };
 
         var boardModel = new GameBoardModel
@@ -52,7 +58,7 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = new MoneyModel(2, Currency.Dollar),
+            CurrentMoneyBalance = new MoneyModel(1000, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
             // TotalMoneyBalance = 0,
             // TotalGoldBalance = 0,
@@ -77,7 +83,12 @@ public class DataController : IInitializable
             {
                 var cell = new GameCellModel(_gameCellData);
                 cell.UpgradeLevel = 0;
-                cell.IsUpgradeActivated = new[] {false, false, false};
+                cell.IsUpgradeActivated = new List<bool>();
+                for (var k = 0; k < GameData.MaxUpgradeLevel; k++)
+                {
+                    cell.IsUpgradeActivated.Add(false);
+                }
+
                 cell.SetCost(0);
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
@@ -108,9 +119,26 @@ public class DataController : IInitializable
             upgrade.Level = i + 1;
             upgrade.UpgradeLevel = 1;
             upgrade.State = UpgradeState.Hide;
-            upgrade.IsLevelActivated = new[] {false, false, false};
+            upgrade.IsLevelActivated = new List<bool>();
+            for (var j = 0; j < GameData.MaxUpgradeLevel; j++)
+            {
+                upgrade.IsLevelActivated.Add(false);
+            }
+
             GameData.Upgrades.Add(upgrade);
         }
+    }
+
+    public void Save()
+    {
+        PlayerPrefs.DeleteKey(_key);
+        var value = JsonConvert.SerializeObject(GameData, Formatting.Indented);
+        PlayerPrefs.SetString(_key, value);
+    }
+
+    private GameDataModel Load()
+    {
+        return JsonConvert.DeserializeObject<GameDataModel>(PlayerPrefs.GetString(_key));
     }
 }
 }

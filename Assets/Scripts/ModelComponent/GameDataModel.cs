@@ -24,39 +24,22 @@ public class GameDataModel
     public GameSettingModel Settings;
     public GameBoardModel GameBoardModel; // to save row and column numbers
 
+    // Lists
     public List<GameCellModel> Businesses;
     public List<ManagerRowModel> Managers;
     public List<UpgradeRowModel> Upgrades;
 
     public Action BalanceChangeEvent;
 
-    public void SetBalance(MoneyModel number)
-    {
-        if (number.Value == Currency.Dollar)
-        {
-            CurrentMoneyBalance = new MoneyModel(number.Number, number.Value);
-        }
-
-        else
-        {
-            CurrentGoldBalance = new MoneyModel(number.Number, number.Value);
-        }
-
-        BalanceChangeEvent.Invoke();
-    }
-
     public void AddToBalance(MoneyModel number)
     {
         if (number.Value == Currency.Dollar)
         {
             CurrentMoneyBalance.Number += number.Number;
+            return;
         }
 
-        else
-        {
-            CurrentGoldBalance.Number += number.Number;
-        }
-
+        CurrentGoldBalance.Number += number.Number;
         BalanceChangeEvent.Invoke();
     }
 
@@ -65,13 +48,10 @@ public class GameDataModel
         if (number.Value == Currency.Dollar)
         {
             CurrentMoneyBalance.Number -= number.Number;
+            return;
         }
 
-        else
-        {
-            CurrentGoldBalance.Number -= number.Number;
-        }
-
+        CurrentGoldBalance.Number -= number.Number;
         BalanceChangeEvent.Invoke();
     }
 

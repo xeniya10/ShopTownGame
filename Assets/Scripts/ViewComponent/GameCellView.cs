@@ -1,11 +1,12 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
-using Random = UnityEngine.Random;
+using System.Collections.Generic;
 using DG.Tweening;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameCellView : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private GameObject _progressBar;
     [SerializeField] private GameObject _lockObject;
     [SerializeField] private GameObject _manager;
-    [SerializeField] private GameObject[] _upgrades = new GameObject[3];
+    [SerializeField] private List<GameObject> _upgrades = new List<GameObject>();
 
     [Header("Buttons")]
     public Button CellButton;
@@ -28,7 +29,7 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private Image _unlockImage;
     [SerializeField] private Image _lockImage;
     [SerializeField] private Image _managerImage;
-    [SerializeField] private Image[] _upgradeImages = new Image[3];
+    [SerializeField] private List<Image> _upgradeImages = new List<Image>();
     public Image _selectorImage;
 
     [Header("Text Fields")]
@@ -109,9 +110,10 @@ public class GameCellView : MonoBehaviour
         SetBusinessSprite(model.Level);
         SetBackgroundSprite(model.BackgroundNumber);
         SetImprovementSprites(model.Level);
+
         SetPosition(model.Position);
         SetCost(model.Cost);
-        ChangeState(model);
+        SetState(model);
         SetActiveImprovements(model);
     }
 
@@ -119,7 +121,7 @@ public class GameCellView : MonoBehaviour
     {
         SetActivateManager(model.IsActivatedManager);
 
-        for (var i = 0; i < _upgrades.Length; i++)
+        for (var i = 0; i < _upgrades.Count; i++)
         {
             _upgrades[i].SetActive(model.IsUpgradeActivated[i]);
         }
@@ -169,7 +171,7 @@ public class GameCellView : MonoBehaviour
         sequence.Play();
     }
 
-    private void ChangeState(GameCellModel model)
+    private void SetState(GameCellModel model)
     {
         switch (model.State)
         {

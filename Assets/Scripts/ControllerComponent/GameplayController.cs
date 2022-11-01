@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace ShopTown.ControllerComponent
@@ -24,7 +23,7 @@ public class GameplayController : IInitializable
 
     private int _activationCounter;
 
-    public GameplayController(GameCellPresenter gameCell, ManagerRowPresenter managerRow, UpgradeRowPresenter upgradeRow,
+    private GameplayController(GameCellPresenter gameCell, ManagerRowPresenter managerRow, UpgradeRowPresenter upgradeRow,
         DataController data, GameScreenView gameScreenView, GameScreenPresenter gameScreenPresenter)
     {
         _gameCell = gameCell;
@@ -85,11 +84,10 @@ public class GameplayController : IInitializable
         if (_data.GameData.CanBuy(cell.CellModel.Cost))
         {
             cell.CellModel.Level = _data.GameData.MinLevel;
-
             cell.Activate(() =>
             {
                 InitializeImprovements(cell);
-                CheckImprovements(cell);
+                CheckImprovements(cell.CellModel.Level);
             });
 
             ShowNewLevelProfiler(_data.GameData.MinLevel);
@@ -137,7 +135,7 @@ public class GameplayController : IInitializable
             });
         }
 
-        if (oneCell.IsNeighborOf(otherCell) && oneCell.HasSameLevelAs(otherCell) && oneCell.CellModel.Level < _data.GameData.MaxLevel)
+        if (oneCell.IsNeighborOf(otherCell) && oneCell.HasSameLevelAs(otherCell))
         {
             Merge(oneCell, otherCell);
         }
@@ -148,18 +146,20 @@ public class GameplayController : IInitializable
 
     private void Merge(GameCellPresenter oneCell, GameCellPresenter otherCell)
     {
-        _activationCounter++;
-        otherCell.Unlock(_activationCounter);
-        oneCell.LevelUp();
-        InitializeImprovements(oneCell);
-        ShowNewLevelProfiler(oneCell.CellModel.Level);
-        CheckImprovements(oneCell);
-        CheckImprovements(otherCell);
+        if (oneCell.CellModel.Level < _data.GameData.MaxLevel)
+        {
+            _activationCounter++;
+            oneCell.LevelUp();
+            otherCell.Unlock(_activationCounter);
+            ShowNewLevelProfiler(oneCell.CellModel.Level);
+            InitializeImprovements(oneCell);
+            CheckImprovements(oneCell.CellModel.Level);
+            CheckImprovements(oneCell.CellModel.Level - 1);
+        }
     }
 
-    private void CheckImprovements(GameCellPresenter cell)
+    private void CheckImprovements(int level)
     {
-        var level = cell.CellModel.Level;
         CheckManager(level);
         CheckUpgrade(level);
     }
@@ -170,7 +170,6 @@ public class GameplayController : IInitializable
         if (gameCell == null || gameCell.CellModel.IsActivatedManager)
         {
             FindManager(level)?.SetState(ManagerState.Lock);
-            Debug.Log("I'm here");
             return;
         }
 
@@ -181,11 +180,9 @@ public class GameplayController : IInitializable
     {
         var gameCell = FindCell(level);
         var maxUpgradeLevel = _data.GameData.MaxUpgradeLevel;
-
         if (gameCell == null || gameCell.CellModel.IsUpgradeActivated[maxUpgradeLevel - 1])
         {
             FindUpgrade(level)?.SetState(UpgradeState.Lock);
-            Debug.Log("I'm here too");
             return;
         }
 
@@ -231,6 +228,30 @@ public class GameplayController : IInitializable
         {
             _activationCounter++;
             neighbors.ForEach(cell => cell.Unlock(_activationCounter));
+        }
+    }
+
+    private void SaveCells()
+    {
+        for (var i = 0; 0 < _cells.Count; i++)
+        {
+            _data.GameData.Businesses[i] = _cells[i].CellModel;
+        }
+    }
+
+    private void SaveManagers()
+    {
+        for (var i = 0; 0 < _managers.Count; i++)
+        {
+            _data.GameData.Managers[i] = _managers[i].ManagerRowModel;
+        }
+    }
+
+    private void SaveUpgrades()
+    {
+        for (var i = 0; 0 < _upgrades.Count; i++)
+        {
+            _data.GameData.Upgrades[i] = _upgrades[i].UpgradeRowModel;
         }
     }
 

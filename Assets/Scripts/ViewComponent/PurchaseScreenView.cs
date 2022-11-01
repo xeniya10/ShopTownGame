@@ -7,6 +7,8 @@ namespace ShopTown.ViewComponent
 {
 public class PurchaseScreenView : MonoBehaviour
 {
+    public Transform DollarPacks;
+    public Transform GoldPacks;
     [SerializeField] private Button _hideButton;
     [SerializeField] private float _moveTime;
     private Vector2 _startPosition;
@@ -16,7 +18,7 @@ public class PurchaseScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    public void ClickOkButton(Action callBack)
+    public void SubscribeToOkButton(Action callBack)
     {
         _hideButton.onClick.AddListener(() => callBack?.Invoke());
     }

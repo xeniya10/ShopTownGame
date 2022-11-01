@@ -70,11 +70,9 @@ public class NewBusinessScreenView : MonoBehaviour
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _gameCellData.ProcessTime[level - 1]
-            .ToFormattedString();
+        _time.text = _gameCellData.ProcessTime[level - 1].ToFormattedString();
 
-        _profit.text = _gameCellData.BaseProfit[level - 1]
-            .ToFormattedString();
+        _profit.text = _gameCellData.BaseProfit[level - 1].ToFormattedString();
     }
 
     private void SetManagerName(int level)
@@ -94,7 +92,7 @@ public class NewBusinessScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    public void ClickOkButton(Action callBack)
+    public void SubscribeToOkButton(Action callBack)
     {
         _okButton.onClick.AddListener(() => callBack?.Invoke());
     }

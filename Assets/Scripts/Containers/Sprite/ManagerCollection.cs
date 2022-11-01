@@ -5,6 +5,6 @@ namespace ShopTown.SpriteContainer
 {
 public class ManagerCollection : ScriptableObject
 {
-    public List<Sprite> AvatarSprites = new();
+    public List<Sprite> AvatarSprites = new List<Sprite>();
 }
 }

@@ -31,6 +31,7 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField] private GameCellData _gameCellData;
     [SerializeField] private ManagerRowData _managerRowData;
     [SerializeField] private UpgradeRowData _upgradeRowData;
+    [SerializeField] private PacksData _packsData;
 
     [Header("Audio")]
     [SerializeField] private AudioSourceView _audioSource;
@@ -85,11 +86,13 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_splashPrefab);
         builder.RegisterInstance(_managerRowPrefab);
         builder.RegisterInstance(_upgradeRowPrefab);
+        builder.RegisterInstance(_packCellPrefab);
 
         builder.RegisterInstance(_businessData);
         builder.RegisterInstance(_gameCellData);
         builder.RegisterInstance(_managerRowData);
         builder.RegisterInstance(_upgradeRowData);
+        builder.RegisterInstance(_packsData);
 
         builder.RegisterInstance(_audioSource);
     }

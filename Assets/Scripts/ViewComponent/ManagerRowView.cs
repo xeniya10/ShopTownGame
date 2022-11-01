@@ -61,8 +61,7 @@ public class ManagerRowView : MonoBehaviour
 
     public ManagerRowView Create(Transform parent)
     {
-        var row = Instantiate(this, parent);
-        return row;
+        return Instantiate(this, parent);
     }
 
     public void Initialize(ManagerRowModel model)

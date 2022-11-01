@@ -1,8 +1,9 @@
+using System;
+using DG.Tweening;
+using ShopTown.ModelComponent;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
-using System;
 
 namespace ShopTown.ViewComponent
 {
@@ -38,103 +39,105 @@ public class MenuScreenView : MonoBehaviour
     private string _on = "On";
     private string _off = "Off";
 
-    public void SetMusicState(bool isMusicOn)
-    {
-        if (isMusicOn)
-        {
-            _musicButtonText.text = _music + _on;
-        }
-
-        else
-        {
-            _musicButtonText.text = _music + _off;
-        }
-    }
-
-    public void SetSoundState(bool isSoundOn)
-    {
-        if (isSoundOn)
-        {
-            _soundButtonText.text = _sound + _on;
-        }
-
-        else
-        {
-            _soundButtonText.text = _sound + _off;
-        }
-    }
-
-    public void SetNotificationState(bool isNotificationOn)
-    {
-        if (isNotificationOn)
-        {
-            _notificationButtonText.text = _notification + _on;
-        }
-
-        else
-        {
-            _notificationButtonText.text = _notification + _off;
-        }
-    }
-
     private void SetPosition(Vector2 position)
     {
         transform.localPosition = position;
     }
 
-    public void ClickHideButton(Action callBack)
+    public void SubscribeToHideButton(Action callBack)
     {
         _hideButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickMusicButton(Action callBack)
+    public void SubscribeToMusicButton(Action callBack)
     {
         _musicSwitchButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickSoundButton(Action callBack)
+    public void SubscribeToSoundButton(Action callBack)
     {
         _soundSwitchButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickNotificationButton(Action callBack)
+    public void SubscribeToNotificationButton(Action callBack)
     {
         _notificationSwitchButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickRemoveAdsButton(Action callBack)
+    public void SubscribeToRemoveAdsButton(Action callBack)
     {
         _removeAdsButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickLikeButton(Action callBack)
+    public void SubscribeToLikeButton(Action callBack)
     {
         _likeButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickInstagramButton(Action callBack)
+    public void SubscribeToInstagramButton(Action callBack)
     {
         _instagramButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickFacebookButton(Action callBack)
+    public void SubscribeToFacebookButton(Action callBack)
     {
         _facebookButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickTelegramButton(Action callBack)
+    public void SubscribeToTelegramButton(Action callBack)
     {
         _telegramButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void ClickTwitterButton(Action callBack)
+    public void SubscribeToTwitterButton(Action callBack)
     {
         _twitterButton.onClick.AddListener(() => callBack?.Invoke());
     }
 
-    public void Show()
+    private void SetButtonText(TextMeshProUGUI buttonText, string name, bool isOn)
+    {
+        if (isOn)
+        {
+            buttonText.text = name + _on;
+            return;
+        }
+
+        buttonText.text = name + _off;
+    }
+
+    public void ChangeButtonText(Settings parameter, bool state)
+    {
+        switch (parameter)
+        {
+            case Settings.Music:
+                SetButtonText(_musicButtonText, _music, state);
+                break;
+
+            case Settings.Sound:
+                SetButtonText(_soundButtonText, _sound, state);
+                break;
+
+            case Settings.Notifications:
+                SetButtonText(_notificationButtonText, _notification, state);
+                break;
+
+            case Settings.Ads:
+                // ChangeAdsState();
+                break;
+        }
+    }
+
+    private void Initialize(GameSettingModel settings)
+    {
+        SetButtonText(_musicButtonText, _music, settings.MusicOn);
+        SetButtonText(_soundButtonText, _sound, settings.SoundOn);
+        SetButtonText(_notificationButtonText, _notification, settings.NotificationsOn);
+    }
+
+    public void Show(GameSettingModel settings)
     {
         _startPosition = transform.localPosition;
+        Initialize(settings);
         gameObject.SetActive(true);
         transform.MoveFromScreenBorder(0f, 1.5f, _moveTime, null);
     }

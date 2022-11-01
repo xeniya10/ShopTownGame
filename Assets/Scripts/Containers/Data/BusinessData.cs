@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShopTown.Data
 {
 public class BusinessData : ScriptableObject
 {
-    public string[] LevelNames =
+    public List<string> LevelNames = new List<string>()
     {
         "Flower shop",
         "Fruit shop",
