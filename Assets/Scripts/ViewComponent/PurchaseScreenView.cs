@@ -7,10 +7,15 @@ namespace ShopTown.ViewComponent
 {
 public class PurchaseScreenView : MonoBehaviour
 {
+    [SerializeField] private Button _hideButton;
+
+    [Header("Transforms")]
     public Transform DollarPacks;
     public Transform GoldPacks;
-    [SerializeField] private Button _hideButton;
+
+    [Header("Animation Duration")]
     [SerializeField] private float _moveTime;
+
     private Vector2 _startPosition;
 
     private void SetPosition(Vector2 position)

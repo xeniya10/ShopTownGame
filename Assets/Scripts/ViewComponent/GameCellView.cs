@@ -84,8 +84,13 @@ public class GameCellView : MonoBehaviour
         _manager.SetActive(isActivated);
     }
 
-    public void SetCost(MoneyModel cost)
+    private void SetCost(MoneyModel cost)
     {
+        if (cost == null)
+        {
+            return;
+        }
+
         _priceText.text = cost.ToFormattedString();
     }
 
@@ -113,43 +118,59 @@ public class GameCellView : MonoBehaviour
 
         SetPosition(model.Position);
         SetCost(model.Cost);
-        SetState(model);
         SetActiveImprovements(model);
     }
 
     public void SetActiveImprovements(GameCellModel model)
     {
-        SetActivateManager(model.IsActivatedManager);
+        SetActivateManager(model.IsManagerActivated);
 
-        for (var i = 0; i < _upgrades.Count; i++)
+        for (var i = 0; i < model.ActivatedUpgradeLevel; i++)
         {
-            _upgrades[i].SetActive(model.IsUpgradeActivated[i]);
+            _upgrades[i].SetActive(true);
         }
     }
 
-    private void HideImprovements()
+    public void StartAnimation(GameCellModel model, Action onCompleteAnimation)
     {
-        SetActivateManager(false);
-        foreach (var upgrade in _upgrades)
+        Initialize(model);
+        switch (model.State)
         {
-            upgrade.SetActive(false);
+            case CellState.Lock:
+                LockAnimation();
+                break;
+
+            case CellState.Unlock:
+                UnlockAnimation();
+                break;
+
+            case CellState.Active:
+                ActivateAnimation(onCompleteAnimation);
+                break;
+
+            case CellState.InProgress:
+                InProgressAnimation(model.TotalTime, model.CurrentTime, onCompleteAnimation);
+                break;
         }
     }
 
-    public void HideBusiness(Action callBack)
+    public void StartLevelUpAnimation(GameCellModel model, Action onCompleteAnimation)
     {
-        _businessImage.Fade(0, _fadeTime, null, () => callBack?.Invoke());
+        StopInProgressAnimation();
+        HideImprovements();
+        _businessImage.Fade(0, _fadeTime, null, () => StartAnimation(model, onCompleteAnimation));
     }
 
-    public void SetLockState()
+    private void LockAnimation()
     {
         _progressBar.SetActive(false);
         _lockObject.SetActive(true);
         _lockImage.Fade(1, _fadeTime, null, null);
     }
 
-    public void SetUnlockState()
+    private void UnlockAnimation()
     {
+        StopInProgressAnimation();
         var sequence = DOTween.Sequence();
 
         _businessImage.Fade(0, _fadeTime, sequence, null);
@@ -161,7 +182,7 @@ public class GameCellView : MonoBehaviour
         sequence.Play();
     }
 
-    public void SetActiveState(Action callBack)
+    private void ActivateAnimation(Action callBack)
     {
         var sequence = DOTween.Sequence();
 
@@ -171,29 +192,11 @@ public class GameCellView : MonoBehaviour
         sequence.Play();
     }
 
-    private void SetState(GameCellModel model)
-    {
-        switch (model.State)
-        {
-            case CellState.Lock:
-                SetLockState();
-                break;
-
-            case CellState.Unlock:
-                SetUnlockState();
-                break;
-
-            case CellState.Active:
-                SetActiveState(null);
-                break;
-        }
-    }
-
-    public void SetInProgressState(double totalTime, Action callBack)
+    private void InProgressAnimation(TimeSpan totalTime, TimeSpan currentTime, Action callBack)
     {
         _inProgressAnimation = DOTween.Sequence();
         _progressBar.SetActive(true);
-        _progressImage.Fill(_progressTimeText, (float)totalTime, _inProgressAnimation, () =>
+        _progressImage.Fill(_progressTimeText, (float)currentTime.TotalSeconds, (float)totalTime.TotalSeconds, _inProgressAnimation, () =>
         {
             _progressImage.fillAmount = 1;
             _progressBar.SetActive(false);
@@ -201,9 +204,18 @@ public class GameCellView : MonoBehaviour
         });
     }
 
-    public void StopInProgressAnimation()
+    private void StopInProgressAnimation()
     {
         _inProgressAnimation.Kill();
         _progressBar.SetActive(false);
+    }
+
+    private void HideImprovements()
+    {
+        SetActivateManager(false);
+        foreach (var upgrade in _upgrades)
+        {
+            upgrade.SetActive(false);
+        }
     }
 }

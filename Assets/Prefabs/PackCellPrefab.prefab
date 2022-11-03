@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 1581156580}
   - component: {fileID: 3314334085788624291}
   - component: {fileID: 8316831076640140123}
+  - component: {fileID: 8814775791703550312}
   m_Layer: 0
   m_Name: PackCellPrefab
   m_TagString: Untagged
@@ -996,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1b5d7386175de419ceb2201bdb8576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PurchaseButton: {fileID: 3314334085788624291}
+  _purchaseButton: {fileID: 0}
   _packSizeObjects:
   - {fileID: 2071463737}
   - {fileID: 455176075}
@@ -1010,6 +1011,30 @@ MonoBehaviour:
   _currencyImage: {fileID: 866675128}
   _profitText: {fileID: 991954869}
   _priceText: {fileID: 215362538}
+--- !u!114 &8814775791703550312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3130471265782817030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 
+  buttonType: 0
+  consumePurchase: 1
+  onPurchaseComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onPurchaseFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  titleText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  priceText: {fileID: 0}
 --- !u!1 &5567795049411570514
 GameObject:
   m_ObjectHideFlags: 0

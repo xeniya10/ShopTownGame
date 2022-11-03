@@ -5,12 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace ShopTown.ViewComponent
+{
 public class WelcomeScreenView : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Button _okButton;
     [SerializeField] private TextMeshProUGUI _moneyText;
-    [SerializeField] private TextMeshProUGUI _goldText;
 
     [Header("Animation Durations")]
     [SerializeField] private float _moveTime;
@@ -18,13 +19,7 @@ public class WelcomeScreenView : MonoBehaviour
 
     private void SetMoneyNumber(MoneyModel number)
     {
-        if (number.Value == Currency.Dollar)
-        {
-            _moneyText.text = number.ToFormattedString();
-            return;
-        }
-
-        _goldText.text = number.ToFormattedString();
+        _moneyText.text = number.ToFormattedString();
     }
 
     private void SetPosition(Vector2 position)
@@ -60,4 +55,5 @@ public class WelcomeScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+}
 }

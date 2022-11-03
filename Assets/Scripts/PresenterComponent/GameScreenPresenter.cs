@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
@@ -46,10 +47,8 @@ public class GameScreenPresenter : IInitializable
     private void InitializeTopBar()
     {
         var data = _dataController.GameData;
-
         SetMoneyBalance();
         data.BalanceChangeEvent += SetMoneyBalance;
-
         _gameScreenView.SubscribeToAddButton(_purchaseScreenView.Show);
         _gameScreenView.SubscribeToMenuButton(() => _menuScreenView.Show(data.Settings));
     }
@@ -83,10 +82,10 @@ public class GameScreenPresenter : IInitializable
         });
 
         // _menuScreenView.SubscribeToLikeButton();
-        // _menuScreenView.SubscribeToInstagramButton();
-        // _menuScreenView.SubscribeToFacebookButton();
-        // _menuScreenView.SubscribeToTelegramButton();
-        // _menuScreenView.SubscribeToTwitterButton();
+        _menuScreenView.SubscribeToInstagramButton(() => Application.OpenURL("https://www.instagram.com/"));
+        _menuScreenView.SubscribeToFacebookButton(() => Application.OpenURL("https://www.facebook.com/"));
+        _menuScreenView.SubscribeToTelegramButton(() => Application.OpenURL("https://telegram.org/"));
+        _menuScreenView.SubscribeToTwitterButton(() => Application.OpenURL("https://twitter.com/"));
     }
 
     private void InitializePurchaseScreen()
@@ -98,7 +97,6 @@ public class GameScreenPresenter : IInitializable
             var dollarPack = _packCellView.Create(_purchaseScreenView.DollarPacks);
             dollarPack.Initialize(dollarPacks[i].Profit, dollarPacks[i].Price, dollarPacks[i].Size);
             _dollarPacks.Add(dollarPack);
-            // _dollarPacks[i].SubscribeToPurchaseButton();
 
             var goldPacks = _packsData.GoldPacks;
             var goldPack = _packCellView.Create(_purchaseScreenView.GoldPacks);

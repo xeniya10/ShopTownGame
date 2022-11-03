@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
 
@@ -27,9 +26,67 @@ public class GameCellPresenter
             model.BackgroundNumber = spriteNumber;
         }
 
-        view.Initialize(model);
+        view.StartAnimation(model, null);
         var presenter = new GameCellPresenter(view, model);
         return presenter;
+    }
+
+    public void Lock()
+    {
+        CellModel.Lock();
+        _cellView.StartAnimation(CellModel, null);
+    }
+
+    public void Unlock()
+    {
+        CellModel.Unlock();
+        _cellView.StartAnimation(CellModel, null);
+    }
+
+    public void Activate(Action callBack)
+    {
+        CellModel.Activate();
+        _cellView.StartAnimation(CellModel, callBack);
+    }
+
+    public void GetInProgress(Action callBack)
+    {
+        CellModel.State = CellState.InProgress;
+        _cellView.StartAnimation(CellModel, () =>
+        {
+            callBack?.Invoke();
+            if (CellModel.IsManagerActivated)
+            {
+                GetInProgress(callBack);
+            }
+        });
+    }
+
+    public void LevelUp()
+    {
+        CellModel.LevelUp();
+        _cellView.StartLevelUpAnimation(CellModel, null);
+    }
+
+    public void InitializeManager(ManagerRowModel manager)
+    {
+        CellModel.IsManagerActivated = manager.IsActivated;
+        _cellView.SetActiveImprovements(CellModel);
+    }
+
+    public void InitializeUpgrade(UpgradeRowModel upgrade)
+    {
+        if (upgrade.AreAllLevelsActivated)
+        {
+            CellModel.ActivatedUpgradeLevel = upgrade.UpgradeLevel;
+        }
+        else
+        {
+            CellModel.ActivatedUpgradeLevel = upgrade.UpgradeLevel - 1;
+        }
+
+        CellModel.AreAllUpgradeLevelsActivated = upgrade.AreAllLevelsActivated;
+        _cellView.SetActiveImprovements(CellModel);
     }
 
     public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
@@ -45,87 +102,6 @@ public class GameCellPresenter
     public void SetActiveSelector(bool isActive)
     {
         _cellView._selectorImage.gameObject.SetActive(isActive);
-    }
-
-    public void InitializeManager(ManagerRowModel manager)
-    {
-        CellModel.IsActivatedManager = manager.IsActivated;
-        _cellView.SetActiveImprovements(CellModel);
-    }
-
-    public void InitializeUpgrade(UpgradeRowModel upgrade)
-    {
-        var counter = 0;
-        if (CellModel.IsUpgradeActivated == null)
-        {
-            CellModel.IsUpgradeActivated = new List<bool>();
-        }
-
-        for (var i = 0; i < CellModel.IsUpgradeActivated.Count; i++)
-        {
-            CellModel.IsUpgradeActivated[i] = upgrade.IsLevelActivated[i];
-            if (!CellModel.IsUpgradeActivated[i])
-            {
-                counter++;
-            }
-        }
-
-        CellModel.UpgradeLevel = upgrade.IsLevelActivated.Count - counter;
-        _cellView.SetActiveImprovements(CellModel);
-    }
-
-    public void LevelUp()
-    {
-        CellModel.Level += 1;
-        if (CellModel.State == CellState.InProgress)
-        {
-            _cellView.StopInProgressAnimation();
-        }
-
-        _cellView.HideBusiness(() =>
-        {
-            _cellView.Initialize(CellModel);
-            Activate(null);
-        });
-    }
-
-    public void Lock()
-    {
-        CellModel.State = CellState.Lock;
-        CellModel.Reset();
-        _cellView.SetLockState();
-    }
-
-    // Cost changes depending on number of activated cells.
-    public void Unlock(int activationNumber)
-    {
-        CellModel.Reset();
-        CellModel.State = CellState.Unlock;
-        CellModel.SetCost(activationNumber);
-        _cellView.SetCost(CellModel.Cost);
-        _cellView.SetUnlockState();
-        _cellView.StopInProgressAnimation();
-    }
-
-    public void Activate(Action callBack)
-    {
-        CellModel.State = CellState.Active;
-        CellModel.ActivatingDate = DateTime.Now;
-        _cellView.SetActiveState(callBack);
-        _cellView.Initialize(CellModel);
-    }
-
-    public void GetInProgress(Action callBack)
-    {
-        CellModel.State = CellState.InProgress;
-        _cellView.SetInProgressState(CellModel.TotalTime.TotalSeconds, () =>
-        {
-            callBack?.Invoke();
-            if (CellModel.IsActivatedManager)
-            {
-                GetInProgress(callBack);
-            }
-        });
     }
 
     public bool IsNeighborOf(GameCellPresenter cell)
@@ -145,10 +121,7 @@ public class GameCellPresenter
 
     public bool HasSameLevelAs(GameCellPresenter otherCell)
     {
-        var oneCellLevel = CellModel.Level;
-        var otherCellLevel = otherCell.CellModel.Level;
-
-        if (oneCellLevel == otherCellLevel)
+        if (CellModel.Level == otherCell.CellModel.Level)
         {
             return true;
         }

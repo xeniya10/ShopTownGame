@@ -6381,4 +6381,4 @@ MonoBehaviour:
   _descriptionText: {fileID: 3902685440533807263}
   _priceText: {fileID: 2097327408136867882}
   _upgradeSprites: {fileID: 11400000, guid: eb7d3a28f5faf274195b9f7aed7af367, type: 2}
-  _fadeTime: 0.2
+  _fadeTime: 0.4

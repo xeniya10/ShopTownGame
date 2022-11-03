@@ -6290,7 +6290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &783631141347946597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6390,4 +6390,4 @@ MonoBehaviour:
   _descriptionText: {fileID: 3902685440533807263}
   _priceText: {fileID: 5241479598379349384}
   _managerCollection: {fileID: 11400000, guid: f72b93b7b381b094983bdc2ced0c7c48, type: 2}
-  _fadeTime: 0.2
+  _fadeTime: 0.4

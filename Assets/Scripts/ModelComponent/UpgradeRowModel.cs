@@ -1,31 +1,23 @@
-using System.Collections.Generic;
 using ShopTown.Data;
 
 namespace ShopTown.ModelComponent
 {
-public enum UpgradeState
-{
-    Hide,
-    Lock,
-    Unlock
-}
+public enum UpgradeState { Hide, Lock, Unlock }
 
 public class UpgradeRowModel
 {
     // Description
     public int Level;
     public int UpgradeLevel;
-    private string BusinessName { get { return _business.LevelNames[Level - 1]; } }
-    public string Description { get { return $"Increase {BusinessName} profit x{UpgradeLevel + 1}"; } }
-    public string Name { get { return GetName(); } }
+    public string Description;
+    public string Name;
 
     // Cost
-    private MoneyModel BaseCost { get { return _rowData.BaseCost[Level - 1]; } }
-    public MoneyModel Cost { get { return new MoneyModel(BaseCost.Number * UpgradeLevel, BaseCost.Value); } }
+    public MoneyModel Cost;
 
     // State
     public UpgradeState State;
-    public List<bool> IsLevelActivated;
+    public bool AreAllLevelsActivated;
 
     // Data Containers
     private readonly BusinessData _business;
@@ -37,19 +29,45 @@ public class UpgradeRowModel
         _rowData = rowData;
     }
 
-    private string GetName()
+    public void Initialize(int level, int upgradeLevel, bool areAllLevelsActivated,
+        UpgradeState state)
+    {
+        Level = level;
+        UpgradeLevel = upgradeLevel;
+        AreAllLevelsActivated = areAllLevelsActivated;
+        State = state;
+        SetDescription();
+        SetName();
+        SetCost();
+    }
+
+    private void SetDescription()
+    {
+        var businessName = _business.LevelNames[Level - 1];
+        Description = $"Increase {businessName} profit x{UpgradeLevel + 1}";
+    }
+
+    private void SetName()
     {
         if (UpgradeLevel == 2)
         {
-            return _rowData.SecondLevelNames[Level - 1];
+            Name = _rowData.SecondLevelNames[Level - 1];
+            return;
         }
 
         if (UpgradeLevel == 3)
         {
-            return _rowData.ThirdLevelNames[Level - 1];
+            Name = _rowData.ThirdLevelNames[Level - 1];
+            return;
         }
 
-        return _rowData.FirstLevelNames[Level - 1];
+        Name = _rowData.FirstLevelNames[Level - 1];
+    }
+
+    private void SetCost()
+    {
+        var baseCost = _rowData.BaseCost[Level - 1];
+        Cost = new MoneyModel(baseCost.Number * UpgradeLevel, baseCost.Value);
     }
 }
 }

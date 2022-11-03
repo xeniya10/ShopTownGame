@@ -70,8 +70,7 @@ public class NewBusinessScreenView : MonoBehaviour
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _gameCellData.ProcessTime[level - 1].ToFormattedString();
-
+        _time.text = _gameCellData.ProcessTime[level - 1].ToNameFormatString();
         _profit.text = _gameCellData.BaseProfit[level - 1].ToFormattedString();
     }
 

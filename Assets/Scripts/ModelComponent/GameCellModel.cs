@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ShopTown.Data;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ public class GameCellModel
 {
     // Description
     public int Level;
-    public int BackgroundNumber = int.MinValue;
+    public int BackgroundNumber;
 
     // Space Parameters
     public float Size;
@@ -19,21 +18,19 @@ public class GameCellModel
     public Vector2 Position;
 
     // Time Parameters
-    public TimeSpan CurrentTime;
-    public TimeSpan TotalTime { get { return _cellData.ProcessTime[Level - 1]; } }
-    public DateTime ActivatingDate;
+    public TimeSpan CurrentTime { get; private set; }
+    public TimeSpan TotalTime { get; private set; }
 
     // State Parameters
-    public CellState State = CellState.Lock;
-    public bool IsActivatedManager;
-    public int UpgradeLevel;
-    public List<bool> IsUpgradeActivated;
+    public CellState State;
+    public bool IsManagerActivated;
+    public int ActivatedUpgradeLevel;
+    public bool AreAllUpgradeLevelsActivated;
 
     // Monetary Parameters
-    private float ProfitMultiplier { get { return UpgradeLevel + 1; } }
-    private MoneyModel BaseProfit { get { return _cellData.BaseProfit[Level - 1]; } }
-    public MoneyModel Profit { get { return new MoneyModel(BaseProfit.Number * ProfitMultiplier, BaseProfit.Value); } }
-    public MoneyModel Cost;
+    public int ActivationNumber;
+    public MoneyModel Cost { get; private set; }
+    public MoneyModel Profit { get; private set; }
 
     // Data Containers
     private readonly GameCellData _cellData;
@@ -43,9 +40,48 @@ public class GameCellModel
         _cellData = cellData;
     }
 
+    public void Initialize(int level, TimeSpan currentTime, bool isManagerActivated,
+        int activatedUpgradeLevel, bool areAllUpgradeLevelsActivated)
+    {
+        Level = level;
+        CurrentTime = currentTime;
+        IsManagerActivated = isManagerActivated;
+        ActivatedUpgradeLevel = activatedUpgradeLevel;
+        AreAllUpgradeLevelsActivated = areAllUpgradeLevelsActivated;
+        SetTime();
+        SetProfit();
+        SetCost();
+    }
+
     public void Reset()
     {
-        Level = 0;
+        Initialize(0, TimeSpan.Zero, false, 0, false);
+    }
+
+    public void Lock()
+    {
+        State = CellState.Lock;
+        Reset();
+    }
+
+    public void Unlock()
+    {
+        State = CellState.Unlock;
+        Reset();
+        SetCost();
+    }
+
+    public void Activate()
+    {
+        State = CellState.Active;
+        SetTime();
+        SetProfit();
+    }
+
+    public void LevelUp()
+    {
+        Level += 1;
+        Activate();
     }
 
     public void SetGridIndex(int rowIndex, int columnIndex)
@@ -53,18 +89,42 @@ public class GameCellModel
         GridIndex = new Vector2(columnIndex, rowIndex);
     }
 
-    public void SetCost(int unlockCountNumber)
+    private void SetTime()
     {
-        var costData = _cellData.Cost;
-
-        if (unlockCountNumber > costData.Count - 1)
+        if (Level < 1)
         {
-            var lastElement = _cellData.Cost[costData.Count - 1];
-            Cost = new MoneyModel(lastElement.Number * (unlockCountNumber - costData.Count + 2), lastElement.Value);
+            TotalTime = TimeSpan.Zero;
             return;
         }
 
-        Cost = costData[unlockCountNumber];
+        TotalTime = _cellData.ProcessTime[Level - 1];
+    }
+
+    private void SetCost()
+    {
+        var costData = _cellData.Cost;
+
+        if (ActivationNumber > costData.Count - 1)
+        {
+            var lastElement = _cellData.Cost[costData.Count - 1];
+            Cost = new MoneyModel(lastElement.Number * (ActivationNumber - costData.Count + 2), lastElement.Value);
+            return;
+        }
+
+        Cost = costData[ActivationNumber];
+    }
+
+    private void SetProfit()
+    {
+        if (Level < 1)
+        {
+            Profit = null;
+            return;
+        }
+
+        var profitMultiplier = ActivatedUpgradeLevel + 1;
+        var baseProfit = _cellData.BaseProfit[Level - 1];
+        Profit = new MoneyModel(baseProfit.Number * profitMultiplier, baseProfit.Value);
     }
 }
 }

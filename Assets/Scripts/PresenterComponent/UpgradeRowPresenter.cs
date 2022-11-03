@@ -54,11 +54,10 @@ public class UpgradeRowPresenter
 
     private void LevelUp()
     {
-        UpgradeRowModel.IsLevelActivated[UpgradeRowModel.UpgradeLevel - 1] = true;
-
         if (UpgradeRowModel.UpgradeLevel == 3)
         {
             SetState(UpgradeState.Lock);
+            UpgradeRowModel.AreAllLevelsActivated = true;
             return;
         }
 

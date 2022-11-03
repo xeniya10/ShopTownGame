@@ -38,9 +38,11 @@ public class DataController : IInitializable
             CreateDefaultGameData();
             Save();
         }
+
+        GameData.BalanceChangeEvent += Save;
     }
 
-    public void CreateDefaultGameData()
+    private void CreateDefaultGameData()
     {
         var settings = new GameSettingModel
         {
@@ -58,14 +60,14 @@ public class DataController : IInitializable
 
         GameData = new GameDataModel
         {
-            CurrentMoneyBalance = new MoneyModel(1000, Currency.Dollar),
+            CurrentMoneyBalance = new MoneyModel(1000000, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
             // TotalMoneyBalance = 0,
-            // TotalGoldBalance = 0,
             MinLevel = 1,
             MaxLevel = 27,
             MaxOpenedLevel = 0,
             MaxUpgradeLevel = 3,
+            ActivationNumber = 0,
             TimeStamp = DateTime.Now,
 
             Settings = settings,
@@ -82,14 +84,9 @@ public class DataController : IInitializable
             for (var j = 0; j < boardModel.Columns; j++)
             {
                 var cell = new GameCellModel(_gameCellData);
-                cell.UpgradeLevel = 0;
-                cell.IsUpgradeActivated = new List<bool>();
-                for (var k = 0; k < GameData.MaxUpgradeLevel; k++)
-                {
-                    cell.IsUpgradeActivated.Add(false);
-                }
-
-                cell.SetCost(0);
+                cell.Lock();
+                cell.BackgroundNumber = int.MinValue;
+                cell.ActivationNumber = GameData.ActivationNumber;
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
                 cell.Position = GameData.GameBoardModel.CalculateCellPosition(j, i, cell.Size);
@@ -98,7 +95,7 @@ public class DataController : IInitializable
                 if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
                 {
                     cell.Level = GameData.MinLevel;
-                    cell.State = CellState.Unlock;
+                    cell.Unlock();
                 }
             }
         }
@@ -107,38 +104,37 @@ public class DataController : IInitializable
         for (var i = 0; i < GameData.MaxLevel; i++)
         {
             var manager = new ManagerRowModel(_businessData, _managerRowData);
-            manager.Level = i + 1;
-            manager.State = ManagerState.Hide;
-            manager.IsActivated = false;
+            manager.Initialize(i + 1, false, ManagerState.Hide);
             GameData.Managers.Add(manager);
         }
 
         for (var i = 0; i < GameData.MaxLevel; i++)
         {
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
-            upgrade.Level = i + 1;
-            upgrade.UpgradeLevel = 1;
-            upgrade.State = UpgradeState.Hide;
-            upgrade.IsLevelActivated = new List<bool>();
-            for (var j = 0; j < GameData.MaxUpgradeLevel; j++)
-            {
-                upgrade.IsLevelActivated.Add(false);
-            }
-
+            upgrade.Initialize(i + 1, 1, false, UpgradeState.Hide);
             GameData.Upgrades.Add(upgrade);
         }
     }
 
     public void Save()
     {
-        PlayerPrefs.DeleteKey(_key);
-        var value = JsonConvert.SerializeObject(GameData, Formatting.Indented);
+        var value = JsonConvert.SerializeObject(GameData, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+
         PlayerPrefs.SetString(_key, value);
     }
 
     private GameDataModel Load()
     {
-        return JsonConvert.DeserializeObject<GameDataModel>(PlayerPrefs.GetString(_key));
+        if (PlayerPrefs.HasKey(_key)!)
+        {
+            return null;
+        }
+
+        var value = PlayerPrefs.GetString(_key);
+        return JsonConvert.DeserializeObject<GameDataModel>(value);
     }
 }
 }

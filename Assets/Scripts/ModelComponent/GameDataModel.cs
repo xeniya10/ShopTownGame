@@ -9,13 +9,13 @@ public class GameDataModel
     public MoneyModel CurrentMoneyBalance;
     public MoneyModel TotalMoneyBalance;
     public MoneyModel CurrentGoldBalance;
-    public MoneyModel TotalGoldBalance;
 
     // Level Parameters
     public int MinLevel;
     public int MaxLevel;
     public int MaxOpenedLevel;
     public int MaxUpgradeLevel;
+    public int ActivationNumber;
 
     // Time
     public DateTime TimeStamp;
@@ -36,11 +36,12 @@ public class GameDataModel
         if (number.Value == Currency.Dollar)
         {
             CurrentMoneyBalance.Number += number.Number;
+            BalanceChangeEvent?.Invoke();
             return;
         }
 
         CurrentGoldBalance.Number += number.Number;
-        BalanceChangeEvent.Invoke();
+        BalanceChangeEvent?.Invoke();
     }
 
     private void SubtractFromBalance(MoneyModel number)
@@ -52,7 +53,6 @@ public class GameDataModel
         }
 
         CurrentGoldBalance.Number -= number.Number;
-        BalanceChangeEvent.Invoke();
     }
 
     public bool CanBuy(MoneyModel number)
@@ -63,6 +63,7 @@ public class GameDataModel
         }
 
         SubtractFromBalance(number);
+        BalanceChangeEvent?.Invoke();
         return true;
     }
 }

@@ -64,11 +64,11 @@ public class GameCellData : ScriptableObject
         new TimeSpan(10, 0, 0),
         new TimeSpan(14, 0, 0),
         new TimeSpan(18, 0, 0),
-        new TimeSpan(24, 0, 0),
-        new TimeSpan(30, 0, 0),
-        new TimeSpan(36, 0, 0),
-        new TimeSpan(42, 0, 0),
-        new TimeSpan(48, 0, 0)
+        new TimeSpan(1, 0, 0, 0),
+        new TimeSpan(1, 6, 0, 0),
+        new TimeSpan(1, 12, 0, 0),
+        new TimeSpan(1, 18, 0, 0),
+        new TimeSpan(2, 0, 0, 0)
     };
 
     public List<MoneyModel> Cost = new List<MoneyModel>()

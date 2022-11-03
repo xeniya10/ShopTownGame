@@ -2,23 +2,17 @@ using ShopTown.Data;
 
 namespace ShopTown.ModelComponent
 {
-public enum ManagerState
-{
-    Hide,
-    Lock,
-    Unlock
-}
+public enum ManagerState { Hide, Lock, Unlock }
 
 public class ManagerRowModel
 {
     // Description
     public int Level;
-    public string Name { get { return _rowData.ManagerNames[Level - 1]; } }
-    private string BusinessName { get { return _business.LevelNames[Level - 1]; } }
-    public string Description { get { return $"Hire manager to run your {BusinessName}"; } }
+    public string Name;
+    public string Description;
 
     // Cost
-    public MoneyModel Cost { get { return _rowData.BaseCost[Level - 1]; } }
+    public MoneyModel Cost;
 
     // State
     public ManagerState State;
@@ -32,6 +26,32 @@ public class ManagerRowModel
     {
         _business = business;
         _rowData = rowData;
+    }
+
+    public void Initialize(int level, bool isActivated, ManagerState state)
+    {
+        Level = level;
+        IsActivated = isActivated;
+        State = state;
+        SetDescription();
+        SetName();
+        SetCost();
+    }
+
+    private void SetDescription()
+    {
+        var businessName = _business.LevelNames[Level - 1];
+        Description = $"Hire manager to run your {businessName}";
+    }
+
+    private void SetName()
+    {
+        Name = _rowData.ManagerNames[Level - 1];
+    }
+
+    private void SetCost()
+    {
+        Cost = _rowData.BaseCost[Level - 1];
     }
 }
 }

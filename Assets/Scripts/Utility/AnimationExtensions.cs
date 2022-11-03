@@ -1,8 +1,8 @@
-using DG.Tweening;
-using UnityEngine.UI;
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class AnimationExtensions
 {
@@ -34,12 +34,17 @@ public static class AnimationExtensions
         }
     }
 
-    public static void Fill(this Image image, TextMeshProUGUI text, float duration,
-        Sequence sequence, Action callBack)
+    public static void Fill(this Image image, TextMeshProUGUI text, float startTime,
+        float endTime, Sequence sequence, Action callBack)
     {
+        image.fillAmount = 1 - startTime / endTime;
+        var duration = endTime - startTime;
         float currentTime = 0;
 
-        sequence.Append(image.DOFillAmount(0, duration).OnUpdate(() => text.SetText(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)).ToFormattedString())).OnComplete(() => callBack?.Invoke()));
+        sequence.Append(image.DOFillAmount(0, duration)
+            .OnUpdate(() =>
+                text.SetText(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)).ToNumberFormatString()))
+            .OnComplete(() => callBack?.Invoke()));
     }
 
     public static void Scale(this Transform objectTransform, Vector2 scale, float time,

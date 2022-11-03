@@ -9,40 +9,71 @@ public class UtilityTester
     [Test]
     public void SecondFormatTest()
     {
-        var twoSecondsResult = new TimeSpan(0, 0, 2).ToFormattedString();
-        var twoSecondsExpectedResult = "2.0";
+        var twoSecondsNumberResult = new TimeSpan(0, 0, 2).ToNumberFormatString();
+        var twoSecondsNumberExpectedResult = "2.0";
 
-        var tenSecondsResult = new TimeSpan(0, 0, 10).ToFormattedString();
-        var tenSecondsExpectedResult = "10.0";
+        var tenSecondsNumberResult = new TimeSpan(0, 0, 10).ToNumberFormatString();
+        var tenSecondsNumberExpectedResult = "10.0";
 
-        Assert.AreEqual(twoSecondsExpectedResult, twoSecondsResult);
-        Assert.AreEqual(tenSecondsExpectedResult, tenSecondsResult);
+        Assert.AreEqual(twoSecondsNumberExpectedResult, twoSecondsNumberResult);
+        Assert.AreEqual(tenSecondsNumberExpectedResult, tenSecondsNumberResult);
+
+        var twoSecondsNameResult = new TimeSpan(0, 0, 2).ToNameFormatString();
+        var twoSecondsNameExpectedResult = "2 s";
+
+        var tenSecondsNameResult = new TimeSpan(0, 0, 10).ToNameFormatString();
+        var tenSecondsNameExpectedResult = "10 s";
+
+        Assert.AreEqual(twoSecondsNameExpectedResult, twoSecondsNameResult);
+        Assert.AreEqual(tenSecondsNameExpectedResult, tenSecondsNameResult);
     }
 
     [Test]
     public void MinuteFormatTest()
     {
-        var twoMinutesResult = new TimeSpan(0, 2, 2).ToFormattedString();
-        var twoMinutesExpectedResult = "2:02";
+        var twoMinutesNumberResult = new TimeSpan(0, 2, 2).ToNumberFormatString();
+        var twoMinutesNumberExpectedResult = "2:02.0";
 
-        var tenMinutesResult = new TimeSpan(0, 10, 10).ToFormattedString();
-        var tenMinutesExpectedResult = "10:10";
+        var tenMinutesNumberResult = new TimeSpan(0, 10, 10).ToNumberFormatString();
+        var tenMinutesNumberExpectedResult = "10:10.0";
 
-        Assert.AreEqual(twoMinutesExpectedResult, twoMinutesResult);
-        Assert.AreEqual(tenMinutesExpectedResult, tenMinutesResult);
+        Assert.AreEqual(twoMinutesNumberExpectedResult, twoMinutesNumberResult);
+        Assert.AreEqual(tenMinutesNumberExpectedResult, tenMinutesNumberResult);
+
+        var twoMinutesNameResult = new TimeSpan(0, 2, 0).ToNameFormatString();
+        var twoMinutesNameExpectedResult = "2 m";
+
+        var tenMinutesNameResult = new TimeSpan(0, 10, 0).ToNameFormatString();
+        var tenMinutesNameExpectedResult = "10 m";
+
+        Assert.AreEqual(twoMinutesNameExpectedResult, twoMinutesNameResult);
+        Assert.AreEqual(tenMinutesNameExpectedResult, tenMinutesNameResult);
     }
 
     [Test]
     public void HourFormatTest()
     {
-        var twoHoursResult = new TimeSpan(2, 2, 2).ToFormattedString();
-        var twoHoursExpectedResult = "2:02:02";
+        var twoHoursNumberResult = new TimeSpan(2, 2, 2).ToNumberFormatString();
+        var twoHoursNumberExpectedResult = "2:02";
 
-        var tenHoursResult = new TimeSpan(10, 10, 10).ToFormattedString();
-        var tenHoursExpectedResult = "10:10:10";
+        var tenHoursNumberResult = new TimeSpan(10, 10, 10).ToNumberFormatString();
+        var tenHoursNumberExpectedResult = "10:10";
 
-        Assert.AreEqual(twoHoursExpectedResult, twoHoursResult);
-        Assert.AreEqual(tenHoursExpectedResult, tenHoursResult);
+        Assert.AreEqual(twoHoursNumberExpectedResult, twoHoursNumberResult);
+        Assert.AreEqual(tenHoursNumberExpectedResult, tenHoursNumberResult);
+
+        var twoHoursNameResult = new TimeSpan(2, 0, 0).ToNameFormatString();
+        var twoHoursNameExpectedResult = "2 h";
+
+        var oneDayNameResult = new TimeSpan(24, 0, 0).ToNameFormatString();
+        var oneDayNameExpectedResult = "1 d";
+
+        var oneWithHalfDayNameResult = new TimeSpan(36, 0, 0).ToNameFormatString();
+        var oneWithHalfDayNameExpectedResult = "1 d 12 h";
+
+        Assert.AreEqual(twoHoursNameExpectedResult, twoHoursNameResult);
+        Assert.AreEqual(oneDayNameExpectedResult, oneDayNameResult);
+        Assert.AreEqual(oneWithHalfDayNameExpectedResult, oneWithHalfDayNameResult);
     }
 
     // Testing money formater
