@@ -29,16 +29,20 @@ public class UpgradeRowModel
         _rowData = rowData;
     }
 
-    public void Initialize(int level, int upgradeLevel, bool areAllLevelsActivated,
-        UpgradeState state)
+    public void Initialize(int level, int upgradeLevel, bool areAllLevelsActivated, UpgradeState state)
     {
         Level = level;
         UpgradeLevel = upgradeLevel;
         AreAllLevelsActivated = areAllLevelsActivated;
-        State = state;
+        SetState(state);
         SetDescription();
         SetName();
         SetCost();
+    }
+
+    public void SetState(UpgradeState state)
+    {
+        State = state;
     }
 
     private void SetDescription()

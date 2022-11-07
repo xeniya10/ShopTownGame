@@ -28,7 +28,7 @@ public class ManagerRowPresenter
 
     public void SetState(ManagerState state)
     {
-        ManagerRowModel.State = state;
+        ManagerRowModel.SetState(state);
 
         switch (state)
         {

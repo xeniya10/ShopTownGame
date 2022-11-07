@@ -7,7 +7,7 @@ public class GameDataModel
 {
     // Monetary Parameters
     public MoneyModel CurrentMoneyBalance;
-    public MoneyModel TotalMoneyBalance;
+    // public MoneyModel TotalMoneyBalance;
     public MoneyModel CurrentGoldBalance;
 
     // Level Parameters
@@ -29,6 +29,7 @@ public class GameDataModel
     public List<ManagerRowModel> Managers;
     public List<UpgradeRowModel> Upgrades;
 
+    [NonSerialized]
     public Action BalanceChangeEvent;
 
     public void AddToBalance(MoneyModel number)

@@ -28,7 +28,7 @@ public class UpgradeRowPresenter
 
     public void SetState(UpgradeState state)
     {
-        UpgradeRowModel.State = state;
+        UpgradeRowModel.SetState(state);
 
         switch (state)
         {

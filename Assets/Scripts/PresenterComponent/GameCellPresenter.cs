@@ -27,45 +27,60 @@ public class GameCellPresenter
         }
 
         view.StartAnimation(model, null);
+        view.SetActiveImprovements(model);
         var presenter = new GameCellPresenter(view, model);
         return presenter;
     }
 
-    public void Lock()
+    public void SetState(CellState state, Action callBack)
     {
-        CellModel.Lock();
-        _cellView.StartAnimation(CellModel, null);
-    }
+        CellModel.SetState(state);
+        if (state == CellState.InProgress)
+        {
+            GetInProgress(callBack);
+            return;
+        }
 
-    public void Unlock()
-    {
-        CellModel.Unlock();
-        _cellView.StartAnimation(CellModel, null);
-    }
-
-    public void Activate(Action callBack)
-    {
-        CellModel.Activate();
         _cellView.StartAnimation(CellModel, callBack);
     }
 
-    public void GetInProgress(Action callBack)
+    // public void Lock()
+    // {
+    //     CellModel.SetState(CellState.Lock);
+    //     _cellView.StartAnimation(CellModel, null);
+    // }
+    //
+    // public void Unlock()
+    // {
+    //     CellModel.SetState(CellState.Active);
+    //     _cellView.StartAnimation(CellModel, null);
+    // }
+    //
+    // public void Activate(Action callBack)
+    // {
+    //     CellModel.SetState(CellState.Active);
+    //     _cellView.StartAnimation(CellModel, callBack);
+    // }
+    //
+    private void GetInProgress(Action callBack)
     {
-        CellModel.State = CellState.InProgress;
         _cellView.StartAnimation(CellModel, () =>
         {
             callBack?.Invoke();
             if (CellModel.IsManagerActivated)
             {
                 GetInProgress(callBack);
+                return;
             }
+
+            CellModel.SetState(CellState.Active);
         });
     }
 
     public void LevelUp()
     {
-        CellModel.LevelUp();
-        _cellView.StartLevelUpAnimation(CellModel, null);
+        CellModel.Level += 1;
+        SetState(CellState.Active, null);
     }
 
     public void InitializeManager(ManagerRowModel manager)
@@ -108,8 +123,10 @@ public class GameCellPresenter
     {
         var thisPosition = CellModel.GridIndex;
         var unlockedPosition = cell.CellModel.GridIndex;
-        var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
-        var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
+        // var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
+        // var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
+        var xDiff = Math.Abs((int)(unlockedPosition[0] - thisPosition[0]));
+        var yDiff = Math.Abs((int)(unlockedPosition[1] - thisPosition[1]));
 
         if (xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1)
         {

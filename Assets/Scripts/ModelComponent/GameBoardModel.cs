@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace ShopTown.ModelComponent
 {
 public class GameBoardModel
@@ -17,12 +15,13 @@ public class GameBoardModel
         return cellSize;
     }
 
-    public Vector2 CalculateCellPosition(float xFactor, float yFactor, float cellSize)
+    public float[] CalculateCellPosition(float xFactor, float yFactor, float cellSize)
     {
         var x = _widthReference / 2 - _padding - cellSize * (xFactor + 0.5f);
         var y = _widthReference / 2 - cellSize * yFactor;
 
-        var cellPosition = new Vector2(x, y);
+        // var cellPosition = new Vector2(x, y);
+        var cellPosition = new float[] {x, y};
         return cellPosition;
     }
 }

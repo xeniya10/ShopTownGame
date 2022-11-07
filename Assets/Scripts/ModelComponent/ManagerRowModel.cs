@@ -22,6 +22,7 @@ public class ManagerRowModel
     private readonly BusinessData _business;
     private readonly ManagerRowData _rowData;
 
+    // [Inject]
     public ManagerRowModel(BusinessData business, ManagerRowData rowData)
     {
         _business = business;
@@ -32,10 +33,15 @@ public class ManagerRowModel
     {
         Level = level;
         IsActivated = isActivated;
-        State = state;
+        SetState(state);
         SetDescription();
         SetName();
         SetCost();
+    }
+
+    public void SetState(ManagerState state)
+    {
+        State = state;
     }
 
     private void SetDescription()

@@ -36,7 +36,6 @@ public class DataController : IInitializable
         if (GameData == null)
         {
             CreateDefaultGameData();
-            Save();
         }
 
         GameData.BalanceChangeEvent += Save;
@@ -83,10 +82,11 @@ public class DataController : IInitializable
         {
             for (var j = 0; j < boardModel.Columns; j++)
             {
-                var cell = new GameCellModel(_gameCellData);
-                cell.Lock();
-                cell.BackgroundNumber = int.MinValue;
+                var cell = new GameCellModel();
+                cell.Inject(_gameCellData);
                 cell.ActivationNumber = GameData.ActivationNumber;
+                cell.BackgroundNumber = int.MinValue;
+                cell.SetState(CellState.Lock);
                 cell.SetGridIndex(i, j);
                 cell.Size = GameData.GameBoardModel.CalculateCellSize();
                 cell.Position = GameData.GameBoardModel.CalculateCellPosition(j, i, cell.Size);
@@ -95,7 +95,7 @@ public class DataController : IInitializable
                 if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
                 {
                     cell.Level = GameData.MinLevel;
-                    cell.Unlock();
+                    cell.SetState(CellState.Unlock);
                 }
             }
         }
@@ -118,23 +118,14 @@ public class DataController : IInitializable
 
     public void Save()
     {
-        var value = JsonConvert.SerializeObject(GameData, Formatting.Indented, new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
-
-        PlayerPrefs.SetString(_key, value);
+        PlayerPrefs.DeleteKey(_key);
+        var gameData = JsonConvert.SerializeObject(GameData, Formatting.Indented);
+        PlayerPrefs.SetString(_key, gameData);
     }
 
     private GameDataModel Load()
     {
-        if (PlayerPrefs.HasKey(_key)!)
-        {
-            return null;
-        }
-
-        var value = PlayerPrefs.GetString(_key);
-        return JsonConvert.DeserializeObject<GameDataModel>(value);
+        return JsonConvert.DeserializeObject<GameDataModel>(PlayerPrefs.GetString(_key));
     }
 }
 }

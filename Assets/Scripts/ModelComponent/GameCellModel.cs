@@ -1,6 +1,6 @@
 using System;
 using ShopTown.Data;
-using UnityEngine;
+using VContainer;
 
 namespace ShopTown.ModelComponent
 {
@@ -14,12 +14,14 @@ public class GameCellModel
 
     // Space Parameters
     public float Size;
-    public Vector2 GridIndex;
-    public Vector2 Position;
+    // public Vector2 GridIndex;
+    // public Vector2 Position;    
+    public int[] GridIndex;
+    public float[] Position;
 
     // Time Parameters
-    public TimeSpan CurrentTime { get; private set; }
-    public TimeSpan TotalTime { get; private set; }
+    public TimeSpan CurrentTime;
+    public TimeSpan TotalTime;
 
     // State Parameters
     public CellState State;
@@ -29,64 +31,61 @@ public class GameCellModel
 
     // Monetary Parameters
     public int ActivationNumber;
-    public MoneyModel Cost { get; private set; }
-    public MoneyModel Profit { get; private set; }
+    public MoneyModel Cost;
+    public MoneyModel Profit;
 
     // Data Containers
-    private readonly GameCellData _cellData;
+    private GameCellData _cellData;
 
-    public GameCellModel(GameCellData cellData)
+    [Inject]
+    public void Inject(GameCellData cellData)
     {
         _cellData = cellData;
     }
 
-    public void Initialize(int level, TimeSpan currentTime, bool isManagerActivated,
-        int activatedUpgradeLevel, bool areAllUpgradeLevelsActivated)
+    public void SetState(CellState state)
     {
-        Level = level;
-        CurrentTime = currentTime;
-        IsManagerActivated = isManagerActivated;
-        ActivatedUpgradeLevel = activatedUpgradeLevel;
-        AreAllUpgradeLevelsActivated = areAllUpgradeLevelsActivated;
+        State = state;
+        switch (State)
+        {
+            case CellState.Lock:
+                Reset();
+                break;
+
+            case CellState.Unlock:
+                Reset();
+                break;
+
+            case CellState.Active:
+                SetParameters();
+                break;
+
+            case CellState.InProgress:
+                break;
+        }
+    }
+
+    private void Reset()
+    {
+        Level = 0;
+        CurrentTime = TimeSpan.Zero;
+        IsManagerActivated = false;
+        ActivatedUpgradeLevel = 0;
+        AreAllUpgradeLevelsActivated = false;
+        SetParameters();
+    }
+
+    private void SetParameters()
+    {
         SetTime();
         SetProfit();
         SetCost();
-    }
-
-    public void Reset()
-    {
-        Initialize(0, TimeSpan.Zero, false, 0, false);
-    }
-
-    public void Lock()
-    {
-        State = CellState.Lock;
-        Reset();
-    }
-
-    public void Unlock()
-    {
-        State = CellState.Unlock;
-        Reset();
-        SetCost();
-    }
-
-    public void Activate()
-    {
-        State = CellState.Active;
-        SetTime();
-        SetProfit();
-    }
-
-    public void LevelUp()
-    {
-        Level += 1;
-        Activate();
     }
 
     public void SetGridIndex(int rowIndex, int columnIndex)
     {
-        GridIndex = new Vector2(columnIndex, rowIndex);
+        // GridIndex = new Vector2(columnIndex, rowIndex);
+        GridIndex = new[] {columnIndex, rowIndex};
     }
 
     private void SetTime()

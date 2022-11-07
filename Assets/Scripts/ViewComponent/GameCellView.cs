@@ -94,9 +94,14 @@ public class GameCellView : MonoBehaviour
         _priceText.text = cost.ToFormattedString();
     }
 
-    private void SetPosition(Vector2 position)
+    // private void SetPosition(Vector2 position)
+    // {
+    //     transform.localPosition = position;
+    // }
+
+    private void SetPosition(float[] position)
     {
-        transform.localPosition = position;
+        transform.localPosition = new Vector2(position[0], position[1]);
     }
 
     public void SetSize(float size)
@@ -194,14 +199,17 @@ public class GameCellView : MonoBehaviour
 
     private void InProgressAnimation(TimeSpan totalTime, TimeSpan currentTime, Action callBack)
     {
+        _lockObject.SetActive(false);
+        _unlockImage.gameObject.SetActive(false);
         _inProgressAnimation = DOTween.Sequence();
         _progressBar.SetActive(true);
-        _progressImage.Fill(_progressTimeText, (float)currentTime.TotalSeconds, (float)totalTime.TotalSeconds, _inProgressAnimation, () =>
-        {
-            _progressImage.fillAmount = 1;
-            _progressBar.SetActive(false);
-            callBack?.Invoke();
-        });
+        _progressImage.Fill(_progressTimeText, (float)currentTime.TotalSeconds, (float)totalTime.TotalSeconds,
+            _inProgressAnimation, () =>
+            {
+                _progressImage.fillAmount = 1;
+                _progressBar.SetActive(false);
+                callBack?.Invoke();
+            });
     }
 
     private void StopInProgressAnimation()
