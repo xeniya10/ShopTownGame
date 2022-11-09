@@ -136,7 +136,7 @@ public class GameCellView : MonoBehaviour
         }
     }
 
-    public void StartAnimation(GameCellModel model, Action onCompleteAnimation)
+    public void StartAnimation(GameCellModel model, Action onCompleteAnimation = null)
     {
         Initialize(model);
         switch (model.State)
@@ -189,6 +189,7 @@ public class GameCellView : MonoBehaviour
 
     private void ActivateAnimation(Action callBack)
     {
+        _lockObject.SetActive(false);
         var sequence = DOTween.Sequence();
 
         _unlockImage.Fade(0, _fadeTime, sequence, () => _unlockImage.gameObject.SetActive(false));

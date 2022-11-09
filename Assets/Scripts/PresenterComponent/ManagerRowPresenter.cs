@@ -1,61 +1,62 @@
 using System;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
-using UnityEngine;
+using VContainer;
 
 namespace ShopTown.PresenterComponent
 {
-public class ManagerRowPresenter
+public class ManagerRowPresenter : ICreatable<ManagerRowPresenter, ManagerRowModel>
 {
-    public ManagerRowModel ManagerRowModel;
-    private readonly ManagerRowView _managerRowView;
+    [Inject]
+    private readonly GameScreenView _gameScreen;
+    private readonly ManagerRowView _view;
+    public readonly ManagerRowModel Model;
 
-    private ManagerRowPresenter(ManagerRowView managerRowView, ManagerRowModel managerRowModel)
+    public ManagerRowPresenter(ManagerRowModel model, ManagerRowView view)
     {
-        _managerRowView = managerRowView;
-        ManagerRowModel = managerRowModel;
+        Model = model;
+        _view = view;
     }
 
-    public ManagerRowPresenter Create(Transform parent, ManagerRowModel model)
+    public ManagerRowPresenter Create(ManagerRowModel model)
     {
-        var view = _managerRowView.Create(parent);
+        var view = _view.Create(_gameScreen.ManagerBoard);
         view.Initialize(model);
-        SetState(model.State);
-
-        var rowPresenter = new ManagerRowPresenter(view, model);
-        return rowPresenter;
+        var presenter = new ManagerRowPresenter(model, view);
+        presenter.SetState(model.State);
+        return presenter;
     }
 
     public void SetState(ManagerState state)
     {
-        ManagerRowModel.SetState(state);
+        Model.SetState(state);
 
         switch (state)
         {
             case ManagerState.Hide:
-                _managerRowView.Hide();
+                _view.Hide();
                 break;
 
             case ManagerState.Lock:
-                _managerRowView.Lock();
+                _view.Lock();
                 break;
 
             case ManagerState.Unlock:
-                _managerRowView.Unlock();
+                _view.Unlock();
                 break;
         }
     }
 
     public void Activate()
     {
-        _managerRowView.Salute.Play();
+        _view.Salute.Play();
         SetState(ManagerState.Lock);
-        ManagerRowModel.IsActivated = true;
+        Model.IsActivated = true;
     }
 
     public void SubscribeToHireButton(Action<ManagerRowPresenter> callBack)
     {
-        _managerRowView.HireButton.onClick.AddListener(() => callBack?.Invoke(this));
+        _view.HireButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 }
 }

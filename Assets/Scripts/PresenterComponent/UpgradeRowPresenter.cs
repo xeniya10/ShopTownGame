@@ -1,73 +1,74 @@
 using System;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
-using UnityEngine;
+using VContainer;
 
 namespace ShopTown.PresenterComponent
 {
-public class UpgradeRowPresenter
+public class UpgradeRowPresenter : ICreatable<UpgradeRowPresenter, UpgradeRowModel>
 {
-    public UpgradeRowModel UpgradeRowModel;
-    private readonly UpgradeRowView _upgradeRowView;
+    [Inject]
+    private readonly GameScreenView _gameScreen;
+    private readonly UpgradeRowView _view;
+    public readonly UpgradeRowModel Model;
 
-    private UpgradeRowPresenter(UpgradeRowView upgradeRowView, UpgradeRowModel upgradeRowModel)
+    private UpgradeRowPresenter(UpgradeRowModel model, UpgradeRowView view)
     {
-        _upgradeRowView = upgradeRowView;
-        UpgradeRowModel = upgradeRowModel;
+        Model = model;
+        _view = view;
     }
 
-    public UpgradeRowPresenter Create(Transform parent, UpgradeRowModel model)
+    public UpgradeRowPresenter Create(UpgradeRowModel model)
     {
-        var rowView = _upgradeRowView.Create(parent);
-        rowView.Initialize(model);
-        SetState(model.State);
-
-        var rowPresenter = new UpgradeRowPresenter(rowView, model);
-        return rowPresenter;
+        var view = _view.Create(_gameScreen.UpgradeBoard);
+        view.Initialize(model);
+        var presenter = new UpgradeRowPresenter(model, view);
+        presenter.SetState(model.State);
+        return presenter;
     }
 
     public void SetState(UpgradeState state)
     {
-        UpgradeRowModel.SetState(state);
+        Model.SetState(state);
 
         switch (state)
         {
             case UpgradeState.Hide:
-                _upgradeRowView.Hide();
+                _view.Hide();
                 break;
 
             case UpgradeState.Lock:
-                _upgradeRowView.Lock();
+                _view.Lock();
                 break;
 
             case UpgradeState.Unlock:
-                _upgradeRowView.Unlock();
+                _view.Unlock();
                 break;
         }
     }
 
     public void Activate()
     {
-        _upgradeRowView.Salute.Play();
+        _view.Salute.Play();
         LevelUp();
     }
 
     private void LevelUp()
     {
-        if (UpgradeRowModel.UpgradeLevel == 3)
+        if (Model.UpgradeLevel == 3)
         {
             SetState(UpgradeState.Lock);
-            UpgradeRowModel.AreAllLevelsActivated = true;
+            Model.AreAllLevelsActivated = true;
             return;
         }
 
-        UpgradeRowModel.UpgradeLevel += 1;
-        _upgradeRowView.Initialize(UpgradeRowModel);
+        Model.UpgradeLevel += 1;
+        _view.Initialize(Model);
     }
 
     public void SubscribeToBuyButton(Action<UpgradeRowPresenter> callBack)
     {
-        _upgradeRowView.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
+        _view.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 }
 }

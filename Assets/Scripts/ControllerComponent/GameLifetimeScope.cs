@@ -68,9 +68,9 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<SplashScreenPresenter>(Lifetime.Scoped);
         builder.Register<GameScreenPresenter>(Lifetime.Scoped);
 
-        builder.Register<GameCellPresenter>(Lifetime.Scoped);
-        builder.Register<ManagerRowPresenter>(Lifetime.Scoped);
-        builder.Register<UpgradeRowPresenter>(Lifetime.Scoped);
+        builder.Register<GameCellPresenter>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<ManagerRowPresenter>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<UpgradeRowPresenter>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
     }
 
     private void RegisterView(IContainerBuilder builder)

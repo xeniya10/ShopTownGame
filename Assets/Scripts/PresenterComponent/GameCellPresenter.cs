@@ -1,24 +1,27 @@
 using System;
 using ShopTown.ModelComponent;
-using UnityEngine;
+using ShopTown.ViewComponent;
+using VContainer;
 
 namespace ShopTown.PresenterComponent
 {
-public class GameCellPresenter
+public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
 {
-    private readonly GameCellView _cellView;
-    public readonly GameCellModel CellModel;
+    [Inject]
+    private readonly GameScreenView _gameScreen;
+    private readonly GameCellView _view;
+    public readonly GameCellModel Model;
 
-    private GameCellPresenter(GameCellView cellView, GameCellModel cellModel)
+    private GameCellPresenter(GameCellView view, GameCellModel model)
     {
-        _cellView = cellView;
-        CellModel = cellModel;
+        _view = view;
+        Model = model;
     }
 
-    public GameCellPresenter Create(Transform parent, GameCellModel model)
+    public GameCellPresenter Create(GameCellModel model)
     {
-        _cellView.SetSize(model.Size);
-        var view = _cellView.Create(parent);
+        _view.SetSize(model.Size);
+        var view = _view.Create(_gameScreen.GameBoard);
 
         if (model.BackgroundNumber < 0)
         {
@@ -26,107 +29,85 @@ public class GameCellPresenter
             model.BackgroundNumber = spriteNumber;
         }
 
-        view.StartAnimation(model, null);
+        view.StartAnimation(model);
         view.SetActiveImprovements(model);
         var presenter = new GameCellPresenter(view, model);
         return presenter;
     }
 
-    public void SetState(CellState state, Action callBack)
+    public void SetState(CellState state, Action callBack = null)
     {
-        CellModel.SetState(state);
+        Model.SetState(state);
         if (state == CellState.InProgress)
         {
             GetInProgress(callBack);
             return;
         }
 
-        _cellView.StartAnimation(CellModel, callBack);
+        _view.StartAnimation(Model, callBack);
     }
 
-    // public void Lock()
-    // {
-    //     CellModel.SetState(CellState.Lock);
-    //     _cellView.StartAnimation(CellModel, null);
-    // }
-    //
-    // public void Unlock()
-    // {
-    //     CellModel.SetState(CellState.Active);
-    //     _cellView.StartAnimation(CellModel, null);
-    // }
-    //
-    // public void Activate(Action callBack)
-    // {
-    //     CellModel.SetState(CellState.Active);
-    //     _cellView.StartAnimation(CellModel, callBack);
-    // }
-    //
     private void GetInProgress(Action callBack)
     {
-        _cellView.StartAnimation(CellModel, () =>
+        _view.StartAnimation(Model, () =>
         {
             callBack?.Invoke();
-            if (CellModel.IsManagerActivated)
+            if (Model.IsManagerActivated)
             {
                 GetInProgress(callBack);
                 return;
             }
 
-            CellModel.SetState(CellState.Active);
+            Model.SetState(CellState.Active);
         });
     }
 
     public void LevelUp()
     {
-        CellModel.Level += 1;
-        SetState(CellState.Active, null);
+        Model.Level += 1;
+        SetState(CellState.Active);
     }
 
     public void InitializeManager(ManagerRowModel manager)
     {
-        CellModel.IsManagerActivated = manager.IsActivated;
-        _cellView.SetActiveImprovements(CellModel);
+        Model.IsManagerActivated = manager.IsActivated;
+        _view.SetActiveImprovements(Model);
     }
 
     public void InitializeUpgrade(UpgradeRowModel upgrade)
     {
         if (upgrade.AreAllLevelsActivated)
         {
-            CellModel.ActivatedUpgradeLevel = upgrade.UpgradeLevel;
+            Model.ActivatedUpgradeLevel = upgrade.UpgradeLevel;
         }
         else
         {
-            CellModel.ActivatedUpgradeLevel = upgrade.UpgradeLevel - 1;
+            Model.ActivatedUpgradeLevel = upgrade.UpgradeLevel - 1;
         }
 
-        CellModel.AreAllUpgradeLevelsActivated = upgrade.AreAllLevelsActivated;
-        _cellView.SetActiveImprovements(CellModel);
+        Model.AreAllUpgradeLevelsActivated = upgrade.AreAllLevelsActivated;
+        _view.SetActiveImprovements(Model);
     }
 
     public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
     {
-        _cellView.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
+        _view.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 
     public void SubscribeToClick(Action<GameCellPresenter> callBack)
     {
-        _cellView.CellButton.onClick.AddListener(() => callBack?.Invoke(this));
+        _view.CellButton.onClick.AddListener(() => callBack?.Invoke(this));
     }
 
     public void SetActiveSelector(bool isActive)
     {
-        _cellView._selectorImage.gameObject.SetActive(isActive);
+        _view._selectorImage.gameObject.SetActive(isActive);
     }
 
     public bool IsNeighborOf(GameCellPresenter cell)
     {
-        var thisPosition = CellModel.GridIndex;
-        var unlockedPosition = cell.CellModel.GridIndex;
-        // var xDiff = Math.Abs((int)(unlockedPosition.x - thisPosition.x));
-        // var yDiff = Math.Abs((int)(unlockedPosition.y - thisPosition.y));
-        var xDiff = Math.Abs((int)(unlockedPosition[0] - thisPosition[0]));
-        var yDiff = Math.Abs((int)(unlockedPosition[1] - thisPosition[1]));
+        var xDiff = Math.Abs(cell.Model.GridIndex[0] - Model.GridIndex[0]);
+        var yDiff = Math.Abs(cell.Model.GridIndex[1] - Model.GridIndex[1]);
 
         if (xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1)
         {
@@ -138,7 +119,7 @@ public class GameCellPresenter
 
     public bool HasSameLevelAs(GameCellPresenter otherCell)
     {
-        if (CellModel.Level == otherCell.CellModel.Level)
+        if (Model.Level == otherCell.Model.Level)
         {
             return true;
         }

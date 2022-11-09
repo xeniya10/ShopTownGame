@@ -79,10 +79,7 @@ public class ManagerRowView : MonoBehaviour
 
     public void Lock()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        gameObject.SetActive(true);
 
         _lockImage.DOFade(0, _fadeTime)
             .OnComplete(() =>
@@ -94,11 +91,7 @@ public class ManagerRowView : MonoBehaviour
 
     public void Unlock()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
-
+        gameObject.SetActive(true);
         _lockImage.DOFade(0, _fadeTime).OnComplete(() => _lockImage.gameObject.SetActive(false));
     }
 }

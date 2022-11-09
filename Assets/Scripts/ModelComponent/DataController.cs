@@ -31,7 +31,9 @@ public class DataController : IInitializable
 
     public void Initialize()
     {
-        GameData = Load();
+        // GameData = Load();
+        PlayerPrefs.DeleteKey(_key);
+        CreateDefaultGameData();
 
         if (GameData == null)
         {
@@ -106,6 +108,10 @@ public class DataController : IInitializable
             var manager = new ManagerRowModel(_businessData, _managerRowData);
             manager.Initialize(i + 1, false, ManagerState.Hide);
             GameData.Managers.Add(manager);
+            if (i == 0)
+            {
+                manager.SetState(ManagerState.Lock);
+            }
         }
 
         for (var i = 0; i < GameData.MaxLevel; i++)
@@ -113,6 +119,10 @@ public class DataController : IInitializable
             var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
             upgrade.Initialize(i + 1, 1, false, UpgradeState.Hide);
             GameData.Upgrades.Add(upgrade);
+            if (i == 0)
+            {
+                upgrade.SetState(UpgradeState.Lock);
+            }
         }
     }
 
