@@ -1,40 +1,24 @@
 using System.Collections.Generic;
-using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
-using ShopTown.ViewComponent;
+using VContainer;
 using VContainer.Unity;
 
 namespace ShopTown.ControllerComponent
 {
 public class GameplayController : IInitializable
 {
-    private readonly GameCellPresenter _gameCell;
-    private readonly ICreatable<ManagerRowPresenter, ManagerRowModel> _manager;
-    private readonly UpgradeRowPresenter _upgradeRow;
+    [Inject] private readonly ICreatable<GameCellPresenter, GameCellModel> _gameCell;
+    [Inject] private readonly ICreatable<ManagerRowPresenter, ManagerRowModel> _manager;
+    [Inject] private readonly ICreatable<UpgradeRowPresenter, UpgradeRowModel> _upgrade;
 
-    private readonly GameScreenPresenter _gameScreenPresenter;
-    private readonly GameScreenView _gameScreenView;
-    private readonly DataController _data;
-    private readonly GameCellData _cellData;
+    [Inject] private readonly GameScreenPresenter _gameScreenPresenter;
+    [Inject] private readonly DataController _data;
 
-    private readonly List<GameCellPresenter> _cells = new List<GameCellPresenter>();
-    private readonly List<ManagerRowPresenter> _managers = new List<ManagerRowPresenter>();
-    private readonly List<UpgradeRowPresenter> _upgrades = new List<UpgradeRowPresenter>();
-    private readonly List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
-
-    private GameplayController(GameCellPresenter gameCell, UpgradeRowPresenter upgradeRow, DataController data,
-        GameScreenView gameScreenView, GameScreenPresenter gameScreenPresenter, GameCellData cellData,
-        ICreatable<ManagerRowPresenter, ManagerRowModel> manager)
-    {
-        _manager = manager;
-        _gameCell = gameCell;
-        _upgradeRow = upgradeRow;
-        _data = data;
-        _gameScreenView = gameScreenView;
-        _gameScreenPresenter = gameScreenPresenter;
-        _cellData = cellData;
-    }
+    private List<GameCellPresenter> _cells = new List<GameCellPresenter>();
+    private List<ManagerRowPresenter> _managers = new List<ManagerRowPresenter>();
+    private List<UpgradeRowPresenter> _upgrades = new List<UpgradeRowPresenter>();
+    private List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
 
     public void Initialize()
     {
@@ -48,10 +32,10 @@ public class GameplayController : IInitializable
 
     private void CreateBoard()
     {
-        foreach (var model in _data.GameData.Businesses)
+        foreach (var model in _data.GameBoard)
         {
-            model.Inject(_cellData);
             var cell = _gameCell.Create(model);
+            cell.SetCost(_data.GameData.ActivationNumber);
             cell.SubscribeToBuyButton(TryBuy);
             cell.SubscribeToClick(Select);
             _cells.Add(cell);
@@ -60,9 +44,10 @@ public class GameplayController : IInitializable
 
     private void CreateManagers()
     {
-        foreach (var model in _data.GameData.Managers)
+        foreach (var model in _data.Managers)
         {
             var row = _manager.Create(model);
+            row.ModelChangeEvent += () => _data.Save(ModelComponent.Data.Manager);
             row.SubscribeToHireButton(TryBuy);
             _managers.Add(row);
         }
@@ -70,9 +55,9 @@ public class GameplayController : IInitializable
 
     private void CreateUpgrades()
     {
-        foreach (var model in _data.GameData.Upgrades)
+        foreach (var model in _data.Upgrades)
         {
-            var row = _upgradeRow.Create(model);
+            var row = _upgrade.Create(model);
             row.SubscribeToBuyButton(TryBuy);
             _upgrades.Add(row);
         }
@@ -91,7 +76,7 @@ public class GameplayController : IInitializable
 
             ShowNewLevelProfiler(_data.GameData.MinLevel);
             UnlockNeighbors(cell);
-            SaveModels();
+            Save(ModelComponent.Data.GameBoard);
         }
     }
 
@@ -101,7 +86,7 @@ public class GameplayController : IInitializable
         {
             manager.Activate();
             FindAllCells(manager.Model.Level).ForEach(InitializeManager);
-            SaveModels();
+            Save(ModelComponent.Data.Manager);
         }
     }
 
@@ -111,8 +96,7 @@ public class GameplayController : IInitializable
         {
             upgrade.Activate();
             FindAllCells(upgrade.Model.Level).ForEach(cell => cell.InitializeUpgrade(upgrade.Model));
-
-            SaveModels();
+            Save(ModelComponent.Data.Upgrade);
         }
     }
 
@@ -143,6 +127,7 @@ public class GameplayController : IInitializable
             Merge(oneCell, otherCell);
         }
 
+        Save(ModelComponent.Data.GameBoard);
         _selectedCells.ForEach(cell => cell.SetActiveSelector(false));
         _selectedCells.Clear();
     }
@@ -153,12 +138,11 @@ public class GameplayController : IInitializable
         {
             CountActivation();
             oneCell.LevelUp();
-            otherCell.SetState(CellState.Unlock, null);
+            otherCell.SetState(CellState.Unlock);
             ShowNewLevelProfiler(oneCell.Model.Level);
             InitializeImprovements(oneCell);
             CheckImprovements(oneCell.Model.Level);
             CheckImprovements(oneCell.Model.Level - 1);
-            SaveModels();
         }
     }
 
@@ -166,6 +150,8 @@ public class GameplayController : IInitializable
     {
         CheckUpgrade(level);
         CheckManager(level);
+        Save(ModelComponent.Data.Manager);
+        Save(ModelComponent.Data.Upgrade);
     }
 
     private void CheckManager(int level)
@@ -173,11 +159,11 @@ public class GameplayController : IInitializable
         var gameCell = FindCell(level);
         if (gameCell == null || gameCell.Model.IsManagerActivated)
         {
-            FindManager(level)?.SetState(ManagerState.Lock);
+            FindManager(level)?.SetState(ImprovementState.Lock);
             return;
         }
 
-        FindManager(level)?.SetState(ManagerState.Unlock);
+        FindManager(level)?.SetState(ImprovementState.Unlock);
     }
 
     private void CheckUpgrade(int level)
@@ -187,11 +173,11 @@ public class GameplayController : IInitializable
         var maxUpgradeLevel = _data.GameData.MaxUpgradeLevel;
         if (gameCell == null || model.ActivatedUpgradeLevel == maxUpgradeLevel && model.AreAllUpgradeLevelsActivated)
         {
-            FindUpgrade(level)?.SetState(UpgradeState.Lock);
+            FindUpgrade(level)?.SetState(ImprovementState.Lock);
             return;
         }
 
-        FindUpgrade(level)?.SetState(UpgradeState.Unlock);
+        FindUpgrade(level)?.SetState(ImprovementState.Unlock);
     }
 
     private void InitializeImprovements(GameCellPresenter cell)
@@ -233,43 +219,31 @@ public class GameplayController : IInitializable
         if (neighbors.Count > 0)
         {
             CountActivation();
-            neighbors.ForEach(cell => cell.SetState(CellState.Unlock, null));
+            neighbors.ForEach(cell => cell.SetState(CellState.Unlock));
         }
     }
 
-    private void SaveModels()
+    private void Save(ModelComponent.Data data)
     {
-        SaveCells();
-        SaveManagers();
-        SaveUpgrades();
-        _data.Save();
-    }
-
-    private void SaveCells()
-    {
-        _data.GameData.Businesses.Clear();
-        for (var i = 0; i < _cells.Count; i++)
+        switch (data)
         {
-            _data.GameData.Businesses.Add(_cells[i].Model);
-        }
-    }
+            case ModelComponent.Data.GameBoard:
+                _data.GameBoard.Clear();
+                _cells.ForEach(cell => _data.GameBoard.Add(cell.Model));
+                break;
 
-    private void SaveManagers()
-    {
-        _data.GameData.Managers.Clear();
-        for (var i = 0; i < _managers.Count; i++)
-        {
-            _data.GameData.Managers.Add(_managers[i].Model);
-        }
-    }
+            case ModelComponent.Data.Manager:
+                _data.Managers.Clear();
+                _managers.ForEach(manager => _data.Managers.Add(manager.Model));
+                break;
 
-    private void SaveUpgrades()
-    {
-        _data.GameData.Upgrades.Clear();
-        for (var i = 0; i < _upgrades.Count; i++)
-        {
-            _data.GameData.Upgrades.Add(_upgrades[i].Model);
+            case ModelComponent.Data.Upgrade:
+                _data.Upgrades.Clear();
+                _upgrades.ForEach(upgrade => _data.Upgrades.Add(upgrade.Model));
+                break;
         }
+
+        _data.Save(data);
     }
 
     private GameCellPresenter FindCell(int level)
@@ -295,7 +269,7 @@ public class GameplayController : IInitializable
     private void CountActivation()
     {
         _data.GameData.ActivationNumber++;
-        _cells.ForEach(cell => cell.Model.ActivationNumber = _data.GameData.ActivationNumber);
+        _cells.ForEach(cell => cell.SetCost(_data.GameData.ActivationNumber));
     }
 }
 }

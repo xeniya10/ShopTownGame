@@ -1,64 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShopTown.Data;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace ShopTown.ModelComponent
 {
+public enum Data { Game, Settings, GameBoard, Manager, Upgrade }
+
 public class DataController : IInitializable
 {
     public GameDataModel GameData;
+    public GameSettingModel Settings;
 
-    // Data Containers
-    private readonly BusinessData _businessData;
-    private readonly GameCellData _gameCellData;
-    private readonly ManagerRowData _managerRowData;
-    private readonly UpgradeRowData _upgradeRowData;
+    public List<GameCellModel> GameBoard;
+    public List<ManagerRowModel> Managers;
+    public List<UpgradeRowModel> Upgrades;
 
-    private const string _key = "GameData";
-
-    public DataController(GameDataModel gameData, BusinessData businessData, GameCellData gameCellData,
-        ManagerRowData managerRowData, UpgradeRowData upgradeRowData)
-    {
-        GameData = gameData;
-        _businessData = businessData;
-        _gameCellData = gameCellData;
-        _managerRowData = managerRowData;
-        _upgradeRowData = upgradeRowData;
-    }
+    [Inject] private readonly GameBoardModel _gameBoardModel;
 
     public void Initialize()
     {
-        // GameData = Load();
-        PlayerPrefs.DeleteKey(_key);
-        CreateDefaultGameData();
+        LoadData();
 
         if (GameData == null)
         {
-            CreateDefaultGameData();
+            CreateDefaultDataConfig();
         }
 
-        GameData.BalanceChangeEvent += Save;
+        GameData.BalanceChangeEvent += () => Save(Data.Game);
+    }
+
+    private void LoadData()
+    {
+        GameData = Load<GameDataModel>(Data.Game);
+        Settings = Load<GameSettingModel>(Data.Settings);
+        GameBoard = Load<List<GameCellModel>>(Data.GameBoard);
+        Managers = Load<List<ManagerRowModel>>(Data.Manager);
+        Upgrades = Load<List<UpgradeRowModel>>(Data.Upgrade);
+    }
+
+    private T Load<T>(Data dataType)
+    {
+        var key = dataType.ToString();
+        return JsonConvert.DeserializeObject<T>(PlayerPrefs.GetString(key));
+    }
+
+    public void Save(Data dataType)
+    {
+        var key = dataType.ToString();
+        var json = JsonConvert.SerializeObject(GetObject(dataType), Formatting.Indented);
+        PlayerPrefs.SetString(key, json);
+    }
+
+    private object GetObject(Data dataType)
+    {
+        switch (dataType)
+        {
+            case Data.Game: return GameData;
+
+            case Data.Settings: return Settings;
+
+            case Data.GameBoard: return GameBoard;
+
+            case Data.Manager: return Managers;
+
+            case Data.Upgrade: return Upgrades;
+        }
+
+        return null;
+    }
+
+    private void CreateDefaultDataConfig()
+    {
+        CreateDefaultGameData();
+        CreateDefaultSettings();
+        CreateDefaultGameBoard();
+        CreateDefaultManagers();
+        CreateDefaultUpgrades();
     }
 
     private void CreateDefaultGameData()
     {
-        var settings = new GameSettingModel
-        {
-            MusicOn = true,
-            SoundOn = true,
-            NotificationsOn = true,
-            AdsOn = true
-        };
-
-        var boardModel = new GameBoardModel
-        {
-            Rows = 4,
-            Columns = 3
-        };
-
         GameData = new GameDataModel
         {
             CurrentMoneyBalance = new MoneyModel(1000000, Currency.Dollar),
@@ -69,32 +93,42 @@ public class DataController : IInitializable
             MaxOpenedLevel = 0,
             MaxUpgradeLevel = 3,
             ActivationNumber = 0,
-            TimeStamp = DateTime.Now,
-
-            Settings = settings,
-            GameBoardModel = boardModel,
-
-            Businesses = new List<GameCellModel>(),
-            Managers = new List<ManagerRowModel>(),
-            Upgrades = new List<UpgradeRowModel>()
+            TimeStamp = DateTime.Now
         };
 
-        // Creation default game cell models
-        for (var i = 0; i < boardModel.Rows; i++)
+        Save(Data.Game);
+    }
+
+    private void CreateDefaultSettings()
+    {
+        Settings = new GameSettingModel
         {
-            for (var j = 0; j < boardModel.Columns; j++)
+            MusicOn = true,
+            SoundOn = true,
+            NotificationsOn = true,
+            AdsOn = true
+        };
+
+        Save(Data.Settings);
+    }
+
+    private void CreateDefaultGameBoard()
+    {
+        GameBoard = new List<GameCellModel>();
+        for (var i = 0; i < _gameBoardModel.Rows; i++)
+        {
+            for (var j = 0; j < _gameBoardModel.Columns; j++)
             {
                 var cell = new GameCellModel();
-                cell.Inject(_gameCellData);
-                cell.ActivationNumber = GameData.ActivationNumber;
+                cell.Initialize(0, TimeSpan.Zero);
                 cell.BackgroundNumber = int.MinValue;
                 cell.SetState(CellState.Lock);
                 cell.SetGridIndex(i, j);
-                cell.Size = GameData.GameBoardModel.CalculateCellSize();
-                cell.Position = GameData.GameBoardModel.CalculateCellPosition(j, i, cell.Size);
-                GameData.Businesses.Add(cell);
+                cell.Size = _gameBoardModel.CalculateCellSize();
+                cell.Position = _gameBoardModel.CalculateCellPosition(j, i, cell.Size);
+                GameBoard.Add(cell);
 
-                if (i == boardModel.Rows - 2 && j == boardModel.Columns - 2)
+                if (i == _gameBoardModel.Rows - 2 && j == _gameBoardModel.Columns - 2)
                 {
                     cell.Level = GameData.MinLevel;
                     cell.SetState(CellState.Unlock);
@@ -102,40 +136,41 @@ public class DataController : IInitializable
             }
         }
 
-        // Creation default manager and upgrade models
+        Save(Data.GameBoard);
+    }
+
+    private void CreateDefaultManagers()
+    {
+        Managers = new List<ManagerRowModel>();
         for (var i = 0; i < GameData.MaxLevel; i++)
         {
-            var manager = new ManagerRowModel(_businessData, _managerRowData);
-            manager.Initialize(i + 1, false, ManagerState.Hide);
-            GameData.Managers.Add(manager);
+            var manager = new ManagerRowModel();
+            manager.Initialize(i + 1);
+            Managers.Add(manager);
             if (i == 0)
             {
-                manager.SetState(ManagerState.Lock);
+                manager.SetState(ImprovementState.Lock);
             }
         }
 
+        Save(Data.Manager);
+    }
+
+    private void CreateDefaultUpgrades()
+    {
+        Upgrades = new List<UpgradeRowModel>();
         for (var i = 0; i < GameData.MaxLevel; i++)
         {
-            var upgrade = new UpgradeRowModel(_businessData, _upgradeRowData);
-            upgrade.Initialize(i + 1, 1, false, UpgradeState.Hide);
-            GameData.Upgrades.Add(upgrade);
+            var upgrade = new UpgradeRowModel();
+            upgrade.Initialize(i + 1);
+            Upgrades.Add(upgrade);
             if (i == 0)
             {
-                upgrade.SetState(UpgradeState.Lock);
+                upgrade.SetState(ImprovementState.Lock);
             }
         }
-    }
 
-    public void Save()
-    {
-        PlayerPrefs.DeleteKey(_key);
-        var gameData = JsonConvert.SerializeObject(GameData, Formatting.Indented);
-        PlayerPrefs.SetString(_key, gameData);
-    }
-
-    private GameDataModel Load()
-    {
-        return JsonConvert.DeserializeObject<GameDataModel>(PlayerPrefs.GetString(_key));
+        Save(Data.Upgrade);
     }
 }
 }

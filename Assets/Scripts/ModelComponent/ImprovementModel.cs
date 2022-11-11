@@ -1,10 +1,8 @@
-using ShopTown.Data;
-
 namespace ShopTown.ModelComponent
 {
 public enum ImprovementState { Hide, Lock, Unlock }
 
-public class ImprovementModel
+public abstract class ImprovementModel
 {
     // Description
     public int Level;
@@ -17,14 +15,6 @@ public class ImprovementModel
     // State
     public ImprovementState State;
 
-    // Data Containers
-    private readonly BusinessData _business;
-
-    public ImprovementModel(BusinessData business)
-    {
-        _business = business;
-    }
-    
     public void SetState(ImprovementState state)
     {
         State = state;

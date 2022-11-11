@@ -23,7 +23,7 @@ public class SplashScreenView : MonoBehaviour
     private Sequence _appearSequence;
     private Sequence _disappearSequence;
 
-    public void ClickStartButton(Action callBack)
+    public void SubscribeToStartButton(Action callBack)
     {
         _startButton.onClick.AddListener(() => callBack?.Invoke());
     }

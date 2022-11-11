@@ -55,9 +55,10 @@ public class GameLifetimeScope : LifetimeScope
         builder.Register<GameDataModel>(Lifetime.Scoped);
         builder.Register<GameSettingModel>(Lifetime.Scoped);
 
-        builder.Register<SplashScreenModel>(Lifetime.Scoped);
+        builder.Register<SplashBoardModel>(Lifetime.Scoped);
         builder.Register<GameBoardModel>(Lifetime.Scoped);
 
+        builder.Register<ImprovementModel>(Lifetime.Scoped);
         builder.Register<GameCellModel>(Lifetime.Scoped);
         builder.Register<ManagerRowModel>(Lifetime.Scoped);
         builder.Register<UpgradeRowModel>(Lifetime.Scoped);

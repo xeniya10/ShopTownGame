@@ -21,9 +21,9 @@ public class GameScreenPresenter : IInitializable
     private List<PackCellView> _dollarPacks = new List<PackCellView>();
     private List<PackCellView> _goldPacks = new List<PackCellView>();
 
-    public GameScreenPresenter(GameScreenView gameScreenView, MenuScreenView menuScreenView, PurchaseScreenView purchaseScreenView,
-        PackCellView packCellView, WelcomeScreenView welcomeScreenView, NewBusinessScreenView newBusinessScreenView,
-        PacksData packsData, DataController dataController)
+    public GameScreenPresenter(GameScreenView gameScreenView, MenuScreenView menuScreenView,
+        PurchaseScreenView purchaseScreenView, PackCellView packCellView, WelcomeScreenView welcomeScreenView,
+        NewBusinessScreenView newBusinessScreenView, PacksData packsData, DataController dataController)
     {
         _gameScreenView = gameScreenView;
         _menuScreenView = menuScreenView;
@@ -46,16 +46,15 @@ public class GameScreenPresenter : IInitializable
 
     private void InitializeTopBar()
     {
-        var data = _dataController.GameData;
         SetMoneyBalance();
-        data.BalanceChangeEvent += SetMoneyBalance;
+        _dataController.GameData.BalanceChangeEvent += SetMoneyBalance;
         _gameScreenView.SubscribeToAddButton(_purchaseScreenView.Show);
-        _gameScreenView.SubscribeToMenuButton(() => _menuScreenView.Show(data.Settings));
+        _gameScreenView.SubscribeToMenuButton(() => _menuScreenView.Show(_dataController.Settings));
     }
 
     private void InitializeMenuScreen()
     {
-        var setting = _dataController.GameData.Settings;
+        var setting = _dataController.Settings;
         _menuScreenView.SubscribeToHideButton(_menuScreenView.Hide);
         _menuScreenView.SubscribeToMusicButton(() =>
         {

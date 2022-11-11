@@ -1,42 +1,42 @@
 using System.Collections.Generic;
 using ShopTown.ModelComponent;
-using VContainer.Unity;
 using ShopTown.ViewComponent;
+using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
 public class SplashScreenPresenter : IInitializable
 {
-    private readonly SplashCellView _viewPrefab;
-    private readonly SplashScreenModel _model;
-    private readonly SplashScreenView _splashScreenView;
+    private readonly SplashCellView _view;
+    private readonly SplashBoardModel _model;
+    private readonly SplashScreenView _splashScreen;
 
     private readonly List<SplashCellView> _cells = new List<SplashCellView>();
 
-    public SplashScreenPresenter(SplashCellView viewPrefab, SplashScreenModel model, SplashScreenView splashScreenView)
+    public SplashScreenPresenter(SplashCellView view, SplashBoardModel model, SplashScreenView splashScreen)
     {
-        _viewPrefab = viewPrefab;
+        _view = view;
         _model = model;
-        _splashScreenView = splashScreenView;
+        _splashScreen = splashScreen;
     }
 
     public void Initialize()
     {
-        _splashScreenView.InitializeSequences();
+        _splashScreen.InitializeSequences();
         ShowSplash();
-        _splashScreenView.ClickStartButton(HideSplash);
+        _splashScreen.SubscribeToStartButton(HideSplash);
     }
 
     private void ShowSplash()
     {
         CreateBoard();
-        _splashScreenView.AppearTextFields();
-        _splashScreenView.PlayAppearSequence();
+        _splashScreen.AppearTextFields();
+        _splashScreen.PlayAppearSequence();
     }
 
     private void CreateBoard()
     {
-        _viewPrefab.SetSize(_model.CellSize);
+        _view.SetSize(_model.CalculateCellSize());
 
         for (var i = 0; i < _model.Rows; i++)
         {
@@ -45,27 +45,27 @@ public class SplashScreenPresenter : IInitializable
                 var start = _model.CalculateStartPosition(j, i);
                 var target = _model.CalculateTargetPosition(j, i);
 
-                var cell = _viewPrefab.Create(_splashScreenView.CellField);
+                var cell = _view.Create(_splashScreen.CellField);
                 _cells.Add(cell);
                 var cellIndex = _cells.IndexOf(cell);
                 cell.Initialize(cellIndex, start, target);
-                _splashScreenView.AppearCell(cell);
+                _splashScreen.AppearCell(cell);
             }
         }
     }
 
     private void HideSplash()
     {
-        _splashScreenView.DisappearTextFields();
+        _splashScreen.DisappearTextFields();
         HideBoard();
-        _splashScreenView.PlayDisappearSequence();
+        _splashScreen.PlayDisappearSequence();
     }
 
     private void HideBoard()
     {
         foreach (var cell in _cells)
         {
-            _splashScreenView.DisappearCells(cell);
+            _splashScreen.DisappearCells(cell);
         }
     }
 }

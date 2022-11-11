@@ -1,6 +1,4 @@
 using System;
-using ShopTown.Data;
-using VContainer;
 
 namespace ShopTown.ModelComponent
 {
@@ -14,13 +12,11 @@ public class GameCellModel
 
     // Space Parameters
     public float Size;
-    // public Vector2 GridIndex;
-    // public Vector2 Position;    
     public int[] GridIndex;
     public float[] Position;
 
-    // Time Parameters
-    public TimeSpan CurrentTime;
+    // In Progress Time Parameters
+    public TimeSpan StartTime;
     public TimeSpan TotalTime;
 
     // State Parameters
@@ -30,17 +26,17 @@ public class GameCellModel
     public bool AreAllUpgradeLevelsActivated;
 
     // Monetary Parameters
-    public int ActivationNumber;
     public MoneyModel Cost;
     public MoneyModel Profit;
 
-    // Data Containers
-    private GameCellData _cellData;
-
-    [Inject]
-    public void Inject(GameCellData cellData)
+    public void Initialize(int level, TimeSpan startTime, bool isManagerActivated = false, int upgradeLevel = 0,
+        bool areAllUpgradeLevelsActivated = false)
     {
-        _cellData = cellData;
+        Level = level;
+        StartTime = startTime;
+        IsManagerActivated = isManagerActivated;
+        ActivatedUpgradeLevel = upgradeLevel;
+        AreAllUpgradeLevelsActivated = areAllUpgradeLevelsActivated;
     }
 
     public void SetState(CellState state)
@@ -49,81 +45,18 @@ public class GameCellModel
         switch (State)
         {
             case CellState.Lock:
-                Reset();
+                Initialize(0, TimeSpan.Zero);
                 break;
 
             case CellState.Unlock:
-                Reset();
-                break;
-
-            case CellState.Active:
-                SetParameters();
-                break;
-
-            case CellState.InProgress:
+                Initialize(0, TimeSpan.Zero);
                 break;
         }
-    }
-
-    private void Reset()
-    {
-        Level = 0;
-        CurrentTime = TimeSpan.Zero;
-        IsManagerActivated = false;
-        ActivatedUpgradeLevel = 0;
-        AreAllUpgradeLevelsActivated = false;
-        SetParameters();
-    }
-
-    private void SetParameters()
-    {
-        SetTime();
-        SetProfit();
-        SetCost();
     }
 
     public void SetGridIndex(int rowIndex, int columnIndex)
     {
-        // GridIndex = new Vector2(columnIndex, rowIndex);
         GridIndex = new[] {columnIndex, rowIndex};
-    }
-
-    private void SetTime()
-    {
-        if (Level < 1)
-        {
-            TotalTime = TimeSpan.Zero;
-            return;
-        }
-
-        TotalTime = _cellData.ProcessTime[Level - 1];
-    }
-
-    private void SetCost()
-    {
-        var costData = _cellData.Cost;
-
-        if (ActivationNumber > costData.Count - 1)
-        {
-            var lastElement = _cellData.Cost[costData.Count - 1];
-            Cost = new MoneyModel(lastElement.Number * (ActivationNumber - costData.Count + 2), lastElement.Value);
-            return;
-        }
-
-        Cost = costData[ActivationNumber];
-    }
-
-    private void SetProfit()
-    {
-        if (Level < 1)
-        {
-            Profit = null;
-            return;
-        }
-
-        var profitMultiplier = ActivatedUpgradeLevel + 1;
-        var baseProfit = _cellData.BaseProfit[Level - 1];
-        Profit = new MoneyModel(baseProfit.Number * profitMultiplier, baseProfit.Value);
     }
 }
 }

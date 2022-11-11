@@ -94,11 +94,6 @@ public class GameCellView : MonoBehaviour
         _priceText.text = cost.ToFormattedString();
     }
 
-    // private void SetPosition(Vector2 position)
-    // {
-    //     transform.localPosition = position;
-    // }
-
     private void SetPosition(float[] position)
     {
         transform.localPosition = new Vector2(position[0], position[1]);
@@ -118,8 +113,13 @@ public class GameCellView : MonoBehaviour
     public void Initialize(GameCellModel model)
     {
         SetBusinessSprite(model.Level);
-        SetBackgroundSprite(model.BackgroundNumber);
         SetImprovementSprites(model.Level);
+        if (model.BackgroundNumber < 0)
+        {
+            model.BackgroundNumber = RandomBackgroundNumber();
+        }
+
+        SetBackgroundSprite(model.BackgroundNumber);
 
         SetPosition(model.Position);
         SetCost(model.Cost);
@@ -154,7 +154,7 @@ public class GameCellView : MonoBehaviour
                 break;
 
             case CellState.InProgress:
-                InProgressAnimation(model.TotalTime, model.CurrentTime, onCompleteAnimation);
+                InProgressAnimation(model.TotalTime, model.StartTime, onCompleteAnimation);
                 break;
         }
     }
@@ -198,13 +198,13 @@ public class GameCellView : MonoBehaviour
         sequence.Play();
     }
 
-    private void InProgressAnimation(TimeSpan totalTime, TimeSpan currentTime, Action callBack)
+    private void InProgressAnimation(TimeSpan totalTime, TimeSpan startTime, Action callBack)
     {
         _lockObject.SetActive(false);
         _unlockImage.gameObject.SetActive(false);
         _inProgressAnimation = DOTween.Sequence();
         _progressBar.SetActive(true);
-        _progressImage.Fill(_progressTimeText, (float)currentTime.TotalSeconds, (float)totalTime.TotalSeconds,
+        _progressImage.Fill(_progressTimeText, (float)startTime.TotalSeconds, (float)totalTime.TotalSeconds,
             _inProgressAnimation, () =>
             {
                 _progressImage.fillAmount = 1;
