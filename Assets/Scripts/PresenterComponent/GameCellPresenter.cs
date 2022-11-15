@@ -18,6 +18,9 @@ public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
     private readonly GameCellView _view;
     public readonly GameCellModel Model;
 
+    public Action ModelChangeEvent;
+    public Action<MoneyModel> InProgressAnimationEndEvent;
+
     private GameCellPresenter(GameCellView view, GameCellModel model, GameCellData cellData)
     {
         _view = view;
@@ -40,23 +43,39 @@ public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
     {
         Model.SetState(state);
         SetParameters();
+        ModelChangeEvent?.Invoke();
         if (state == CellState.InProgress)
         {
-            GetInProgress(callBack);
+            GetInProgress();
             return;
         }
 
         _view.StartAnimation(Model, callBack);
     }
 
-    private void GetInProgress(Action callBack)
+    private void GetInProgress()
     {
+        if (Model.IsManagerActivated)
+        {
+            var timeAfterStart = (float)DateTime.Now.Subtract(Model.StartTime).TotalSeconds;
+            var progressTime = (float)Model.TotalTime.TotalSeconds;
+
+            if (timeAfterStart > progressTime)
+            {
+                Model.StartTime = DateTime.Now.Subtract(TimeSpan.FromSeconds(timeAfterStart % progressTime));
+            }
+        }
+        else
+        {
+            Model.StartTime = DateTime.Now;
+        }
+
         _view.StartAnimation(Model, () =>
         {
-            callBack?.Invoke();
+            InProgressAnimationEndEvent?.Invoke(Model.Profit);
             if (Model.IsManagerActivated)
             {
-                GetInProgress(callBack);
+                GetInProgress();
                 return;
             }
 
@@ -68,6 +87,7 @@ public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
     {
         Model.Level += 1;
         SetState(CellState.Active);
+        _view.StartLevelUpAnimation(Model);
     }
 
     public void InitializeManager(ManagerRowModel manager)
@@ -111,18 +131,16 @@ public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
 
     public void SetCost(int activationNumber)
     {
-        var costData = _cellData.Cost;
-
-        if (activationNumber > costData.Count - 1)
+        if (activationNumber > _cellData.Cost.Count - 1)
         {
-            var lastElement = _cellData.Cost[costData.Count - 1];
-            Model.Cost = new MoneyModel(lastElement.Number * (activationNumber - costData.Count + 2),
+            var lastElement = _cellData.Cost[_cellData.Cost.Count - 1];
+            Model.Cost = new MoneyModel(lastElement.Number * (activationNumber - _cellData.Cost.Count + 2),
                 lastElement.Value);
 
             return;
         }
 
-        Model.Cost = costData[activationNumber];
+        Model.Cost = _cellData.Cost[activationNumber];
     }
 
     private void SetProfit()

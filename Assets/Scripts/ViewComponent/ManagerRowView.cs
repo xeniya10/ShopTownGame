@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
+internal interface ImproventRowView
+{
+    string name { get { return "aga"; } }
+}
+
 public class ManagerRowView : MonoBehaviour
 {
     public Button HireButton;

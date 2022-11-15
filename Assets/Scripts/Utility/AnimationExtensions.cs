@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public static class AnimationExtensions
 {
-    public static void Fade(this Image image, float alpha, float time,
-        Sequence sequence, Action callBack)
+    public static void Fade(this Graphic image, float alpha, float time, Sequence sequence = null,
+        Action callBack = null)
     {
         if (sequence != null)
         {
@@ -20,35 +20,20 @@ public static class AnimationExtensions
         }
     }
 
-    public static void Fade(this TextMeshProUGUI text, float alpha, float time,
+    public static void Fill(this Image image, TextMeshProUGUI text, TimeSpan startTime, TimeSpan durationOfAnimation,
         Sequence sequence, Action callBack)
     {
-        if (sequence != null)
-        {
-            sequence.Append(text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke()));
-        }
+        var currentTime = (float)startTime.TotalSeconds;
+        var duration = (float)durationOfAnimation.TotalSeconds;
 
-        else
-        {
-            text.DOFade(alpha, time).OnComplete(() => callBack?.Invoke());
-        }
-    }
-
-    public static void Fill(this Image image, TextMeshProUGUI text, float startTime,
-        float endTime, Sequence sequence, Action callBack)
-    {
-        image.fillAmount = 1 - startTime / endTime;
-        var duration = endTime - startTime;
-        float currentTime = 0;
-
-        sequence.Append(image.DOFillAmount(0, duration)
+        sequence.Append(image.DOFillAmount(0, duration - currentTime)
             .OnUpdate(() =>
                 text.SetText(TimeSpan.FromSeconds(duration - (currentTime += Time.deltaTime)).ToNumberFormatString()))
             .OnComplete(() => callBack?.Invoke()));
     }
 
-    public static void Scale(this Transform objectTransform, Vector2 scale, float time,
-        Sequence sequence, Action callBack)
+    public static void Scale(this Transform objectTransform, Vector2 scale, float time, Sequence sequence = null,
+        Action callBack = null)
     {
         if (sequence != null)
         {
@@ -61,22 +46,8 @@ public static class AnimationExtensions
         }
     }
 
-    public static void Move(this Transform objectTransform, Vector2 targetPosition, float time,
-        Sequence sequence)
-    {
-        if (sequence != null)
-        {
-            sequence.Append(objectTransform.DOLocalMove(targetPosition, time));
-        }
-
-        else
-        {
-            objectTransform.DOLocalMove(targetPosition, time);
-        }
-    }
-
-    public static void MoveFromScreenBorder(this Transform objectTransform, float xFactor, float yFactor,
-        float time, Sequence sequence)
+    public static void MoveFromScreenBorder(this Transform objectTransform, float xFactor, float yFactor, float time,
+        Sequence sequence = null)
     {
         var targetPosition = objectTransform.localPosition;
 
@@ -85,20 +56,11 @@ public static class AnimationExtensions
         var startPosition = new Vector2(startX, startY);
 
         objectTransform.localPosition = startPosition;
-
-        if (sequence != null)
-        {
-            sequence.Append(objectTransform.DOLocalMove(targetPosition, time));
-        }
-
-        else
-        {
-            objectTransform.DOLocalMove(targetPosition, time);
-        }
+        objectTransform.Move(targetPosition, time, sequence);
     }
 
-    public static void MoveToScreenBorder(this Transform objectTransform, float xFactor, float yFactor,
-        float time, Sequence sequence)
+    public static void MoveToScreenBorder(this Transform objectTransform, float xFactor, float yFactor, float time,
+        Sequence sequence = null)
     {
         var startPosition = objectTransform.localPosition;
 
@@ -106,6 +68,12 @@ public static class AnimationExtensions
         var targetY = startPosition.y + yFactor * Screen.height;
         var targetPosition = new Vector2(targetX, targetY);
 
+        objectTransform.Move(targetPosition, time, sequence);
+    }
+
+    public static void Move(this Transform objectTransform, Vector2 targetPosition, float time,
+        Sequence sequence = null)
+    {
         if (sequence != null)
         {
             sequence.Append(objectTransform.DOLocalMove(targetPosition, time));

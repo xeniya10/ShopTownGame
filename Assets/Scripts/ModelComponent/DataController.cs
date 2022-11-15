@@ -22,7 +22,7 @@ public class DataController : IInitializable
 
     public void Initialize()
     {
-        LoadData();
+        // LoadData();
 
         if (GameData == null)
         {
@@ -30,6 +30,8 @@ public class DataController : IInitializable
         }
 
         GameData.BalanceChangeEvent += () => Save(Data.Game);
+        GameData.ActivationNumberChangeEvent += () => Save(Data.Game);
+        GameData.MaxOpenedLevelChangeEvent += () => Save(Data.Game);
     }
 
     private void LoadData()
@@ -87,15 +89,13 @@ public class DataController : IInitializable
         {
             CurrentMoneyBalance = new MoneyModel(1000000, Currency.Dollar),
             CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
-            // TotalMoneyBalance = 0,
             MinLevel = 1,
             MaxLevel = 27,
-            MaxOpenedLevel = 0,
-            MaxUpgradeLevel = 3,
-            ActivationNumber = 0,
-            TimeStamp = DateTime.Now
+            MaxUpgradeLevel = 3
         };
 
+        GameData.SetMaxOpenedLevel(0);
+        GameData.SetActivationNumber(0);
         Save(Data.Game);
     }
 
@@ -120,7 +120,7 @@ public class DataController : IInitializable
             for (var j = 0; j < _gameBoardModel.Columns; j++)
             {
                 var cell = new GameCellModel();
-                cell.Initialize(0, TimeSpan.Zero);
+                cell.Initialize(0, DateTime.MaxValue);
                 cell.BackgroundNumber = int.MinValue;
                 cell.SetState(CellState.Lock);
                 cell.SetGridIndex(i, j);

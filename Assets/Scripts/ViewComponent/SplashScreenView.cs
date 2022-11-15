@@ -57,15 +57,15 @@ public class SplashScreenView : MonoBehaviour
 
     public void DisappearTextFields()
     {
-        _startButtonText.Fade(0, _fadeTime, _disappearSequence, null);
-        _gameNameText.Fade(0, _fadeTime, _disappearSequence, null);
+        _startButtonText.Fade(0, _fadeTime, _disappearSequence);
+        _gameNameText.Fade(0, _fadeTime, _disappearSequence);
         _splashScreenImage.Fade(0, _fadeTime, _disappearSequence, () => gameObject.SetActive(false));
     }
 
     public void DisappearCells(SplashCellView cell)
     {
         var scale = new Vector2(0, 0);
-        cell.transform.Scale(scale, _scaleTime, _disappearSequence, null);
+        cell.transform.Scale(scale, _scaleTime, _disappearSequence);
     }
 }
 }

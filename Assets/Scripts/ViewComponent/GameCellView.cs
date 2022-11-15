@@ -46,11 +46,6 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private float _fadeTime;
     private Sequence _inProgressAnimation;
 
-    public int RandomBackgroundNumber()
-    {
-        return Random.Range(0, _backgroundCollection.Sprites.Count);
-    }
-
     private void SetBackgroundSprite(int i)
     {
         _backgroundImage.sprite = _backgroundCollection.Sprites[i];
@@ -116,7 +111,7 @@ public class GameCellView : MonoBehaviour
         SetImprovementSprites(model.Level);
         if (model.BackgroundNumber < 0)
         {
-            model.BackgroundNumber = RandomBackgroundNumber();
+            model.BackgroundNumber = Random.Range(0, _backgroundCollection.Sprites.Count);
         }
 
         SetBackgroundSprite(model.BackgroundNumber);
@@ -154,23 +149,23 @@ public class GameCellView : MonoBehaviour
                 break;
 
             case CellState.InProgress:
-                InProgressAnimation(model.TotalTime, model.StartTime, onCompleteAnimation);
+                InProgressAnimation(model, onCompleteAnimation);
                 break;
         }
     }
 
-    public void StartLevelUpAnimation(GameCellModel model, Action onCompleteAnimation)
+    public void StartLevelUpAnimation(GameCellModel model)
     {
         StopInProgressAnimation();
         HideImprovements();
-        _businessImage.Fade(0, _fadeTime, null, () => StartAnimation(model, onCompleteAnimation));
+        _businessImage.Fade(0, _fadeTime, null, () => StartAnimation(model));
     }
 
     private void LockAnimation()
     {
         _progressBar.SetActive(false);
         _lockObject.SetActive(true);
-        _lockImage.Fade(1, _fadeTime, null, null);
+        _lockImage.Fade(1, _fadeTime);
     }
 
     private void UnlockAnimation()
@@ -178,9 +173,9 @@ public class GameCellView : MonoBehaviour
         StopInProgressAnimation();
         var sequence = DOTween.Sequence();
 
-        _businessImage.Fade(0, _fadeTime, sequence, null);
+        _businessImage.Fade(0, _fadeTime, sequence);
         _lockImage.Fade(0, _fadeTime, sequence, () => _lockObject.SetActive(false));
-        _unlockImage.Fade(1, _fadeTime, sequence, null);
+        _unlockImage.Fade(1, _fadeTime, sequence);
 
         HideImprovements();
         _unlockImage.gameObject.SetActive(true);
@@ -198,19 +193,29 @@ public class GameCellView : MonoBehaviour
         sequence.Play();
     }
 
-    private void InProgressAnimation(TimeSpan totalTime, TimeSpan startTime, Action callBack)
+    private void InProgressAnimation(GameCellModel model, Action callBack)
     {
         _lockObject.SetActive(false);
         _unlockImage.gameObject.SetActive(false);
-        _inProgressAnimation = DOTween.Sequence();
+        _businessImage.Fade(1, _fadeTime);
         _progressBar.SetActive(true);
-        _progressImage.Fill(_progressTimeText, (float)startTime.TotalSeconds, (float)totalTime.TotalSeconds,
-            _inProgressAnimation, () =>
-            {
-                _progressImage.fillAmount = 1;
-                _progressBar.SetActive(false);
-                callBack?.Invoke();
-            });
+
+        var startTime = TimeSpan.Zero;
+        _progressImage.fillAmount = 1;
+
+        if (DateTime.Now.CompareTo(model.StartTime) > 0)
+        {
+            var fr = (float)(DateTime.Now.Subtract(model.StartTime).TotalSeconds / model.TotalTime.TotalSeconds);
+            startTime = DateTime.Now.Subtract(model.StartTime);
+            _progressImage.fillAmount = 1 - fr;
+        }
+
+        _inProgressAnimation = DOTween.Sequence();
+        _progressImage.Fill(_progressTimeText, startTime, model.TotalTime, _inProgressAnimation, () =>
+        {
+            _progressBar.SetActive(false);
+            callBack?.Invoke();
+        });
     }
 
     private void StopInProgressAnimation()

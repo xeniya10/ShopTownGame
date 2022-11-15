@@ -14,6 +14,8 @@ public class UpgradeRowPresenter : ICreatable<UpgradeRowPresenter, UpgradeRowMod
     private readonly UpgradeRowView _view;
     public readonly UpgradeRowModel Model;
 
+    public Action ModelChangeEvent;
+
     private UpgradeRowPresenter(UpgradeRowModel model, UpgradeRowView view)
     {
         Model = model;
@@ -48,6 +50,8 @@ public class UpgradeRowPresenter : ICreatable<UpgradeRowPresenter, UpgradeRowMod
                 _view.Unlock();
                 break;
         }
+
+        ModelChangeEvent?.Invoke();
     }
 
     public void Activate()

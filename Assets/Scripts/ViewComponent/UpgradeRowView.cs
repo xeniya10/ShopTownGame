@@ -100,7 +100,7 @@ public class UpgradeRowView : MonoBehaviour
             .OnComplete(() =>
             {
                 _lockImage.gameObject.SetActive(true);
-                _lockImage.Fade(0.35f, _fadeTime, null, null);
+                _lockImage.Fade(0.35f, _fadeTime);
             });
     }
 

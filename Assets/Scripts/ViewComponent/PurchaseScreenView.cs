@@ -32,7 +32,7 @@ public class PurchaseScreenView : MonoBehaviour
     {
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
-        transform.MoveFromScreenBorder(0f, 1.5f, _moveTime, null);
+        transform.MoveFromScreenBorder(0f, 1.5f, _moveTime);
     }
 
     public void Hide()

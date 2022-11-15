@@ -7,21 +7,21 @@ public class GameDataModel
 {
     // Monetary Parameters
     public MoneyModel CurrentMoneyBalance;
-    // public MoneyModel TotalMoneyBalance;
     public MoneyModel CurrentGoldBalance;
 
     // Level Parameters
     public int MinLevel;
     public int MaxLevel;
-    public int MaxOpenedLevel;
+    public int MaxOpenedLevel { get; private set; }
     public int MaxUpgradeLevel;
-    public int ActivationNumber;
-
-    // Time of saving
-    public DateTime TimeStamp;
+    public int ActivationNumber { get; private set; }
 
     [NonSerialized]
     public Action BalanceChangeEvent;
+    [NonSerialized]
+    public Action MaxOpenedLevelChangeEvent;
+    [NonSerialized]
+    public Action ActivationNumberChangeEvent;
 
     public void AddToBalance(MoneyModel number)
     {
@@ -57,6 +57,18 @@ public class GameDataModel
         SubtractFromBalance(number);
         BalanceChangeEvent?.Invoke();
         return true;
+    }
+
+    public void SetActivationNumber(int number)
+    {
+        ActivationNumber = number;
+        ActivationNumberChangeEvent?.Invoke();
+    }
+
+    public void SetMaxOpenedLevel(int maxLevel)
+    {
+        MaxOpenedLevel = maxLevel;
+        MaxOpenedLevelChangeEvent?.Invoke();
     }
 }
 

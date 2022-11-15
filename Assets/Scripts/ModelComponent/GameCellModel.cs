@@ -16,7 +16,7 @@ public class GameCellModel
     public float[] Position;
 
     // In Progress Time Parameters
-    public TimeSpan StartTime;
+    public DateTime StartTime;
     public TimeSpan TotalTime;
 
     // State Parameters
@@ -29,7 +29,7 @@ public class GameCellModel
     public MoneyModel Cost;
     public MoneyModel Profit;
 
-    public void Initialize(int level, TimeSpan startTime, bool isManagerActivated = false, int upgradeLevel = 0,
+    public void Initialize(int level, DateTime startTime, bool isManagerActivated = false, int upgradeLevel = 0,
         bool areAllUpgradeLevelsActivated = false)
     {
         Level = level;
@@ -45,11 +45,11 @@ public class GameCellModel
         switch (State)
         {
             case CellState.Lock:
-                Initialize(0, TimeSpan.Zero);
+                Initialize(0, DateTime.MaxValue);
                 break;
 
             case CellState.Unlock:
-                Initialize(0, TimeSpan.Zero);
+                Initialize(0, DateTime.MaxValue);
                 break;
         }
     }
