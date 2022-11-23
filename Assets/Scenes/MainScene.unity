@@ -300,11 +300,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f993d246309ca8f418391453ae8e23ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _backgroundMusic: {fileID: 53022158}
-  _clickSound: {fileID: 1329240010}
-  _newBusinessSound: {fileID: 637956053}
-  _newCoinSound: {fileID: 557901946}
-  _swapSound: {fileID: 371788314}
+  BackgroundMusic: {fileID: 53022158}
+  ClickSound: {fileID: 1329240010}
+  NewBusinessSound: {fileID: 637956053}
+  NewCoinSound: {fileID: 557901946}
+  SwapSound: {fileID: 371788314}
 --- !u!1 &70101622
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +618,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1592,8 +1592,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellField: {fileID: 2011165741}
+  StartButton: {fileID: 400642798}
   _splashScreenImage: {fileID: 170084486}
-  _startButton: {fileID: 400642798}
   _startButtonText: {fileID: 1676166943}
   _gameNameText: {fileID: 1805637673}
   _scaleTime: 0.2
@@ -4279,7 +4279,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5611,7 +5611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9258d814294d334a91afedaee296323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _okButton: {fileID: 1860187174}
+  OkButton: {fileID: 1860187174}
   _businessImage: {fileID: 1942328845}
   _managerImage: {fileID: 91374642}
   _firstUpgradeImage: {fileID: 905171296}
@@ -5626,13 +5626,11 @@ MonoBehaviour:
   _thirdUpgradeName: {fileID: 1397766836}
   _leftConfetti: {fileID: 1939670642}
   _rightConfetti: {fileID: 890354394}
-  _businessCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
-  _upgradeCollection: {fileID: 11400000, guid: eb7d3a28f5faf274195b9f7aed7af367, type: 2}
-  _managerCollection: {fileID: 11400000, guid: f72b93b7b381b094983bdc2ced0c7c48, type: 2}
+  _gameCellCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _improvementSprites: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
-  _upgradeData: {fileID: 11400000, guid: 3764e5a6670b2234aa0a85604688fb52, type: 2}
-  _managerData: {fileID: 11400000, guid: b44bfa7679c29934f93f9276b8964849, type: 2}
+  _improvementData: {fileID: 11400000, guid: 37e0ba50b9936b543969c464d3a99fa3, type: 2}
   _moveTime: 0.4
 --- !u!1 &611250540
 GameObject:
@@ -6013,7 +6011,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6443,7 +6441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b018c102020c2c4eaf8e73d08510f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hideButton: {fileID: 2109018252}
+  HideButton: {fileID: 2109018252}
   DollarPacks: {fileID: 1198756981}
   GoldPacks: {fileID: 1521184041}
   _moveTime: 0.4
@@ -7115,14 +7113,14 @@ MonoBehaviour:
   _welcomeScreen: {fileID: 1389575098}
   _gameCellPrefab: {fileID: 4485389564363225501, guid: 8edb637b39add3047ba9153b17dd7d5b, type: 3}
   _splashPrefab: {fileID: 8459788037550440058, guid: ee5e39b933b05e1418f318bfa7dc2ddc, type: 3}
-  _managerRowPrefab: {fileID: 8624217191307333732, guid: 4fe89f5d8919f3b4b82e1a3b978ce67c, type: 3}
-  _upgradeRowPrefab: {fileID: 2073721103709550428, guid: 8ed05dba173e98c4a85fd976b487186c, type: 3}
+  _improvementPrefab: {fileID: 73740364150639437, guid: 4fe89f5d8919f3b4b82e1a3b978ce67c, type: 3}
   _packCellPrefab: {fileID: 8316831076640140123, guid: 289888c5264dddc44944b5cd5fcd8022, type: 3}
+  _defaultData: {fileID: 11400000, guid: 05efcd7b1c390fa43bfcec2ed0112cd5, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
-  _managerRowData: {fileID: 11400000, guid: b44bfa7679c29934f93f9276b8964849, type: 2}
-  _upgradeRowData: {fileID: 11400000, guid: 3764e5a6670b2234aa0a85604688fb52, type: 2}
+  _improvementData: {fileID: 11400000, guid: 37e0ba50b9936b543969c464d3a99fa3, type: 2}
   _packsData: {fileID: 11400000, guid: 9334f12724dc49545b10625de06ddc1d, type: 2}
+  _improvementSprites: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _audioSource: {fileID: 63194435}
 --- !u!1 &780398080
 GameObject:
@@ -15154,7 +15152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a644037e029f31b43aa0a9c1d89b9765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _okButton: {fileID: 1764661750}
+  OkButton: {fileID: 1764661750}
   _moneyText: {fileID: 750041962}
   _moveTime: 0.4
 --- !u!1 &1397766834
@@ -16912,10 +16910,10 @@ MonoBehaviour:
   GameBoard: {fileID: 382272008}
   ManagerBoard: {fileID: 847139516}
   UpgradeBoard: {fileID: 1126552068}
-  _moneyAddButton: {fileID: 2059609172}
-  _goldAddButton: {fileID: 569141272}
-  _menuButton: {fileID: 437471466}
-  _moneyText: {fileID: 954487490}
+  DollarAddButton: {fileID: 2059609172}
+  GoldAddButton: {fileID: 569141272}
+  MenuButton: {fileID: 437471466}
+  _dollarText: {fileID: 954487490}
   _goldText: {fileID: 460613110}
 --- !u!114 &1782129104
 MonoBehaviour:
@@ -23268,16 +23266,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245e43509116dc46a369a6331c0a661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hideButton: {fileID: 1622335916}
-  _musicSwitchButton: {fileID: 285191822}
-  _soundSwitchButton: {fileID: 492571676}
-  _notificationSwitchButton: {fileID: 2065626567}
-  _removeAdsButton: {fileID: 1719230213}
-  _likeButton: {fileID: 714503334}
-  _instagramButton: {fileID: 2135939120}
-  _facebookButton: {fileID: 278542387}
-  _telegramButton: {fileID: 1265244205}
-  _twitterButton: {fileID: 2134642606}
+  HideButton: {fileID: 1622335916}
+  MusicButton: {fileID: 285191822}
+  SoundButton: {fileID: 492571676}
+  NotificationButton: {fileID: 2065626567}
+  RemoveAdsButton: {fileID: 1719230213}
+  LikeButton: {fileID: 714503334}
+  InstagramButton: {fileID: 2135939120}
+  FacebookButton: {fileID: 278542387}
+  TelegramButton: {fileID: 1265244205}
+  TwitterButton: {fileID: 2134642606}
   _musicButtonText: {fileID: 73976334}
   _soundButtonText: {fileID: 647349551}
   _notificationButtonText: {fileID: 507450160}

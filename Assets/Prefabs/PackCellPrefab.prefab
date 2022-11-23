@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1b5d7386175de419ceb2201bdb8576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _purchaseButton: {fileID: 0}
+  _purchaseButton: {fileID: 3314334085788624291}
   _packSizeObjects:
   - {fileID: 2071463737}
   - {fileID: 455176075}

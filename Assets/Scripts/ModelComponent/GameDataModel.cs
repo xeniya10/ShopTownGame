@@ -3,44 +3,40 @@ using System.Collections.Generic;
 
 namespace ShopTown.ModelComponent
 {
+[Serializable]
 public class GameDataModel
 {
     // Monetary Parameters
-    public MoneyModel CurrentMoneyBalance;
+    public MoneyModel CurrentDollarBalance;
     public MoneyModel CurrentGoldBalance;
 
     // Level Parameters
     public int MinLevel;
     public int MaxLevel;
-    public int MaxOpenedLevel { get; private set; }
+    public int MaxOpenedLevel;
     public int MaxUpgradeLevel;
-    public int ActivationNumber { get; private set; }
+    public int ActivationNumber;
 
-    [NonSerialized]
-    public Action BalanceChangeEvent;
-    [NonSerialized]
-    public Action MaxOpenedLevelChangeEvent;
-    [NonSerialized]
-    public Action ActivationNumberChangeEvent;
+    [NonSerialized] public Action ChangeEvent;
 
     public void AddToBalance(MoneyModel number)
     {
         if (number.Value == Currency.Dollar)
         {
-            CurrentMoneyBalance.Number += number.Number;
-            BalanceChangeEvent?.Invoke();
+            CurrentDollarBalance.Number += number.Number;
+            ChangeEvent?.Invoke();
             return;
         }
 
         CurrentGoldBalance.Number += number.Number;
-        BalanceChangeEvent?.Invoke();
+        ChangeEvent?.Invoke();
     }
 
     private void SubtractFromBalance(MoneyModel number)
     {
         if (number.Value == Currency.Dollar)
         {
-            CurrentMoneyBalance.Number -= number.Number;
+            CurrentDollarBalance.Number -= number.Number;
             return;
         }
 
@@ -49,31 +45,32 @@ public class GameDataModel
 
     public bool CanBuy(MoneyModel number)
     {
-        if (number.Number > CurrentMoneyBalance.Number)
+        if (number.Number > CurrentDollarBalance.Number)
         {
             return false;
         }
 
         SubtractFromBalance(number);
-        BalanceChangeEvent?.Invoke();
+        ChangeEvent?.Invoke();
         return true;
     }
 
     public void SetActivationNumber(int number)
     {
         ActivationNumber = number;
-        ActivationNumberChangeEvent?.Invoke();
+        ChangeEvent?.Invoke();
     }
 
     public void SetMaxOpenedLevel(int maxLevel)
     {
         MaxOpenedLevel = maxLevel;
-        MaxOpenedLevelChangeEvent?.Invoke();
+        ChangeEvent?.Invoke();
     }
 }
 
 public enum Settings { Music, Sound, Notifications, Ads };
 
+[Serializable]
 public class GameSettingModel
 {
     public bool MusicOn;
@@ -81,67 +78,41 @@ public class GameSettingModel
     public bool NotificationsOn;
     public bool AdsOn;
 
+    [NonSerialized] public Action ChangeEvent;
+
     public void ChangeState(Settings parameter)
     {
         switch (parameter)
         {
             case Settings.Music:
-                ChangeMusicState();
+                ChangeState(ref MusicOn);
                 break;
 
             case Settings.Sound:
-                ChangeSoundState();
+                ChangeState(ref SoundOn);
                 break;
 
             case Settings.Notifications:
-                ChangeNotificationsState();
+                ChangeState(ref NotificationsOn);
                 break;
 
             case Settings.Ads:
-                ChangeAdsState();
+                ChangeState(ref AdsOn);
                 break;
         }
+
+        ChangeEvent?.Invoke();
     }
 
-    private void ChangeMusicState()
+    private void ChangeState(ref bool setting)
     {
-        if (MusicOn)
+        if (setting)
         {
-            MusicOn = false;
+            setting = false;
             return;
         }
 
-        MusicOn = true;
-    }
-
-    private void ChangeSoundState()
-    {
-        if (SoundOn)
-        {
-            SoundOn = false;
-            return;
-        }
-
-        SoundOn = true;
-    }
-
-    private void ChangeNotificationsState()
-    {
-        if (NotificationsOn)
-        {
-            NotificationsOn = false;
-            return;
-        }
-
-        NotificationsOn = true;
-    }
-
-    private void ChangeAdsState()
-    {
-        if (AdsOn)
-        {
-            AdsOn = false;
-        }
+        setting = true;
     }
 }
 

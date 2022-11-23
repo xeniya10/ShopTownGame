@@ -92,7 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellRectTransform: {fileID: 7763017702156308329}
   _cellImage: {fileID: 7871535858252253721}
-  _cellCollection: {fileID: 11400000, guid: 4361bf23c9c330541a14f970d71467db, type: 2}
+  _splashCellCollection: {fileID: 11400000, guid: 4361bf23c9c330541a14f970d71467db, type: 2}
   StartPosition: {x: 0, y: 0}
   TargetPosition: {x: 0, y: 0}
 --- !u!114 &8467469878352501433

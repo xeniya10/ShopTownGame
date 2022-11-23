@@ -129,10 +129,8 @@ MonoBehaviour:
   _selectorImage: {fileID: 7407008955260418198}
   _progressTimeText: {fileID: 4765561674394547569}
   _priceText: {fileID: 523893662949467066}
-  _backgroundCollection: {fileID: 11400000, guid: d6e0626aba29450408c2b3a246467645, type: 2}
-  _businessCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
-  _managerCollection: {fileID: 11400000, guid: f72b93b7b381b094983bdc2ced0c7c48, type: 2}
-  _upgradeCollection: {fileID: 11400000, guid: eb7d3a28f5faf274195b9f7aed7af367, type: 2}
+  _gameCellCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _improvementCollection: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _fadeTime: 0.4
 --- !u!1 &297791839497315789
 GameObject:

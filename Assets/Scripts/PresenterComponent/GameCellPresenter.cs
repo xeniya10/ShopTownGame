@@ -1,43 +1,47 @@
 using System;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
-using ShopTown.ViewComponent;
-using VContainer;
 
 namespace ShopTown.PresenterComponent
 {
-public interface ICreatable<P, M>
-{
-    P Create(M m);
-}
+// T1 - presenter
+// public interface ICreatable<T1, T2>
+// {
+//     T1 Create(Transform parent, T2 model);
+// }
 
-public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
+public class GameCellPresenter
 {
-    [Inject] private readonly GameScreenView _gameScreen;
-    [Inject] private readonly GameCellData _cellData;
+    private readonly GameCellData _cellData;
     private readonly GameCellView _view;
     public readonly GameCellModel Model;
 
     public Action ModelChangeEvent;
     public Action<MoneyModel> InProgressAnimationEndEvent;
 
-    private GameCellPresenter(GameCellView view, GameCellModel model, GameCellData cellData)
+    public GameCellPresenter(GameCellView view, GameCellModel model, GameCellData cellData)
     {
         _view = view;
         Model = model;
         _cellData = cellData;
     }
 
-    public GameCellPresenter Create(GameCellModel model)
+    public void Initialize()
     {
-        _view.SetSize(model.Size);
-        var view = _view.Create(_gameScreen.GameBoard);
-        view.StartAnimation(model);
-        view.SetActiveImprovements(model);
-        var presenter = new GameCellPresenter(view, model, _cellData);
-        presenter.SetParameters();
-        return presenter;
+        _view.StartAnimation(Model);
+        _view.InitializeImprovements(Model);
+        SetParameters();
     }
+    //
+    // public GameCellPresenter Create(Transform parent, GameCellModel model)
+    // {
+    //     var view = _view.Create(parent, model.Size);
+    //     view.StartAnimation(model);
+    //     view.InitializeImprovements(model);
+    //     var presenter = new GameCellPresenter(view, ref model, _cellData);
+    //     presenter.SetParameters();
+    //     return presenter;
+    // }
 
     public void SetState(CellState state, Action callBack = null)
     {
@@ -90,26 +94,29 @@ public class GameCellPresenter : ICreatable<GameCellPresenter, GameCellModel>
         _view.StartLevelUpAnimation(Model);
     }
 
-    public void InitializeManager(ManagerRowModel manager)
+    public void InitializeManager(ImprovementModel manager)
     {
         Model.IsManagerActivated = manager.IsActivated;
-        _view.SetActiveImprovements(Model);
+        if (Model.IsManagerActivated)
+        {
+            SetState(CellState.InProgress);
+        }
+
+        _view.InitializeImprovements(Model);
     }
 
-    public void InitializeUpgrade(UpgradeRowModel upgrade)
+    public void InitializeUpgrade(ImprovementModel upgrade)
     {
-        if (upgrade.AreAllLevelsActivated)
+        Model.ActivatedUpgradeLevel = upgrade.ImprovementLevel - 1;
+        if (upgrade.IsActivated)
         {
-            Model.ActivatedUpgradeLevel = upgrade.UpgradeLevel;
-        }
-        else
-        {
-            Model.ActivatedUpgradeLevel = upgrade.UpgradeLevel - 1;
+            Model.ActivatedUpgradeLevel = upgrade.ImprovementLevel;
         }
 
-        Model.AreAllUpgradeLevelsActivated = upgrade.AreAllLevelsActivated;
+        Model.AreAllUpgradeLevelsActivated = upgrade.IsActivated;
         SetParameters();
-        _view.SetActiveImprovements(Model);
+
+        _view.InitializeImprovements(Model);
     }
 
     private void SetParameters()

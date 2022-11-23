@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
+using UnityEngine.UI;
 using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
@@ -24,14 +27,19 @@ public class SplashScreenPresenter : IInitializable
     {
         _splashScreen.InitializeSequences();
         ShowSplash();
-        _splashScreen.SubscribeToStartButton(HideSplash);
+        SubscribeToButton(_splashScreen.StartButton, HideSplash);
+    }
+
+    private void SubscribeToButton(Button button, Action callBack)
+    {
+        button.onClick.AddListener(() => callBack?.Invoke());
     }
 
     private void ShowSplash()
     {
         CreateBoard();
         _splashScreen.AppearTextFields();
-        _splashScreen.PlayAppearSequence();
+        _splashScreen.AppearSequence.Play();
     }
 
     private void CreateBoard()
@@ -58,7 +66,7 @@ public class SplashScreenPresenter : IInitializable
     {
         _splashScreen.DisappearTextFields();
         HideBoard();
-        _splashScreen.PlayDisappearSequence();
+        _splashScreen.DisappearSequence.Play();
     }
 
     private void HideBoard()

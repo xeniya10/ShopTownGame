@@ -1,42 +1,27 @@
-using System.Collections.Generic;
+using System;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
 using UnityEngine;
-using VContainer.Unity;
+using UnityEngine.UI;
+using VContainer;
 
 namespace ShopTown.PresenterComponent
 {
-public class GameScreenPresenter : IInitializable
+public class GameScreenPresenter
 {
-    private readonly DataController _dataController;
-    private readonly GameScreenView _gameScreenView;
-    private readonly MenuScreenView _menuScreenView;
-    private readonly NewBusinessScreenView _newBusinessScreenView;
-    private readonly PurchaseScreenView _purchaseScreenView;
-    private readonly PackCellView _packCellView;
-    private readonly WelcomeScreenView _welcomeScreenView;
-    private readonly PacksData _packsData;
+    private DataController _data;
+    [Inject] private readonly GameScreenView _gameScreenView;
+    [Inject] private readonly MenuScreenView _menuScreenView;
+    [Inject] private readonly NewBusinessScreenView _newBusinessScreenView;
+    [Inject] private readonly PurchaseScreenView _purchaseScreenView;
+    [Inject] private readonly PackCellView _packCellView;
+    [Inject] private readonly WelcomeScreenView _welcomeScreenView;
+    [Inject] private readonly PacksData _packsData;
 
-    private List<PackCellView> _dollarPacks = new List<PackCellView>();
-    private List<PackCellView> _goldPacks = new List<PackCellView>();
-
-    public GameScreenPresenter(GameScreenView gameScreenView, MenuScreenView menuScreenView,
-        PurchaseScreenView purchaseScreenView, PackCellView packCellView, WelcomeScreenView welcomeScreenView,
-        NewBusinessScreenView newBusinessScreenView, PacksData packsData, DataController dataController)
+    public void Initialize(ref DataController data)
     {
-        _gameScreenView = gameScreenView;
-        _menuScreenView = menuScreenView;
-        _purchaseScreenView = purchaseScreenView;
-        _packCellView = packCellView;
-        _welcomeScreenView = welcomeScreenView;
-        _newBusinessScreenView = newBusinessScreenView;
-        _packsData = packsData;
-        _dataController = dataController;
-    }
-
-    public void Initialize()
-    {
+        _data = data;
         InitializeTopBar();
         InitializeMenuScreen();
         InitializePurchaseScreen();
@@ -47,80 +32,73 @@ public class GameScreenPresenter : IInitializable
     private void InitializeTopBar()
     {
         SetMoneyBalance();
-        _dataController.GameData.BalanceChangeEvent += SetMoneyBalance;
-        _gameScreenView.SubscribeToAddButton(_purchaseScreenView.Show);
-        _gameScreenView.SubscribeToMenuButton(() => _menuScreenView.Show(_dataController.Settings));
+        _data.GameData.ChangeEvent += SetMoneyBalance;
+        SubscribeToButton(_gameScreenView.DollarAddButton, _purchaseScreenView.Show);
+        SubscribeToButton(_gameScreenView.GoldAddButton, _purchaseScreenView.Show);
+        SubscribeToButton(_gameScreenView.MenuButton, () => _menuScreenView.Show(_data.Settings));
     }
 
     private void InitializeMenuScreen()
     {
-        var setting = _dataController.Settings;
-        _menuScreenView.SubscribeToHideButton(_menuScreenView.Hide);
-        _menuScreenView.SubscribeToMusicButton(() =>
-        {
-            setting.ChangeState(Settings.Music);
-            _menuScreenView.ChangeButtonText(Settings.Music, setting.MusicOn);
-        });
+        SubscribeToButton(_menuScreenView.HideButton, _menuScreenView.Hide);
 
-        _menuScreenView.SubscribeToSoundButton(() =>
-        {
-            setting.ChangeState(Settings.Sound);
-            _menuScreenView.ChangeButtonText(Settings.Sound, setting.SoundOn);
-        });
+        SetSetting(_menuScreenView.MusicButton, Settings.Music, _data.Settings.MusicOn);
+        SetSetting(_menuScreenView.SoundButton, Settings.Sound, _data.Settings.SoundOn);
+        SetSetting(_menuScreenView.NotificationButton, Settings.Notifications, _data.Settings.NotificationsOn);
+        SetSetting(_menuScreenView.RemoveAdsButton, Settings.Ads, _data.Settings.AdsOn);
 
-        _menuScreenView.SubscribeToNotificationButton(() =>
-        {
-            setting.ChangeState(Settings.Notifications);
-            _menuScreenView.ChangeButtonText(Settings.Notifications, setting.NotificationsOn);
-        });
+        // SubscribeToButton(_menuScreenView.LikeButton, () => Application.OpenURL());
+        SubscribeToButton(_menuScreenView.InstagramButton, () => Application.OpenURL("https://www.instagram.com/"));
+        SubscribeToButton(_menuScreenView.FacebookButton, () => Application.OpenURL("https://www.facebook.com/"));
+        SubscribeToButton(_menuScreenView.TelegramButton, () => Application.OpenURL("https://telegram.org/"));
+        SubscribeToButton(_menuScreenView.TwitterButton, () => Application.OpenURL("https://twitter.com/"));
+    }
 
-        _menuScreenView.SubscribeToRemoveAdsButton(() =>
+    private void SetSetting(Button button, Settings setting, bool param)
+    {
+        SubscribeToButton(button, () =>
         {
-            setting.ChangeState(Settings.Ads);
-            _menuScreenView.ChangeButtonText(Settings.Ads, setting.AdsOn);
+            _data.Settings.ChangeState(setting);
+            _menuScreenView.ChangeButtonText(setting, param);
         });
+    }
 
-        // _menuScreenView.SubscribeToLikeButton();
-        _menuScreenView.SubscribeToInstagramButton(() => Application.OpenURL("https://www.instagram.com/"));
-        _menuScreenView.SubscribeToFacebookButton(() => Application.OpenURL("https://www.facebook.com/"));
-        _menuScreenView.SubscribeToTelegramButton(() => Application.OpenURL("https://telegram.org/"));
-        _menuScreenView.SubscribeToTwitterButton(() => Application.OpenURL("https://twitter.com/"));
+    private void SubscribeToButton(Button button, Action callBack)
+    {
+        button.onClick.AddListener(() => callBack?.Invoke());
     }
 
     private void InitializePurchaseScreen()
     {
-        _purchaseScreenView.SubscribeToOkButton(_purchaseScreenView.Hide);
+        SubscribeToButton(_purchaseScreenView.HideButton, _purchaseScreenView.Hide);
+
         for (var i = 0; i < _packsData.DollarPacks.Count; i++)
         {
             var dollarPacks = _packsData.DollarPacks;
             var dollarPack = _packCellView.Create(_purchaseScreenView.DollarPacks);
             dollarPack.Initialize(dollarPacks[i].Profit, dollarPacks[i].Price, dollarPacks[i].Size);
-            _dollarPacks.Add(dollarPack);
 
             var goldPacks = _packsData.GoldPacks;
             var goldPack = _packCellView.Create(_purchaseScreenView.GoldPacks);
             goldPack.Initialize(goldPacks[i].Profit, goldPacks[i].Price, goldPacks[i].Size);
-            _goldPacks.Add(goldPack);
         }
     }
 
     private void InitializeWelcomeScreen()
     {
-        var data = _dataController.GameData;
-        _welcomeScreenView.Initialize(data.CurrentMoneyBalance, data.CurrentGoldBalance);
-        _welcomeScreenView.SubscribeToOkButton(_welcomeScreenView.Hide);
+        _welcomeScreenView.Initialize(_data.GameData.CurrentDollarBalance, _data.GameData.CurrentGoldBalance);
+        SubscribeToButton(_welcomeScreenView.OkButton, _welcomeScreenView.Hide);
     }
 
     private void InitializeNewBusinessScreen()
     {
-        _newBusinessScreenView.SubscribeToOkButton(_newBusinessScreenView.Hide);
+        SubscribeToButton(_newBusinessScreenView.OkButton, _newBusinessScreenView.Hide);
     }
 
     private void SetMoneyBalance()
     {
-        var data = _dataController.GameData;
-        _gameScreenView.SetMoneyNumber(data.CurrentMoneyBalance);
-        _gameScreenView.SetMoneyNumber(data.CurrentGoldBalance);
+        _gameScreenView.SetMoneyNumber(_data.GameData.CurrentDollarBalance);
+        _gameScreenView.SetMoneyNumber(_data.GameData.CurrentGoldBalance);
     }
 
     public void ShowNewBusinessScreen(int level)
