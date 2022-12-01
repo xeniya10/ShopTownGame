@@ -6,22 +6,22 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class MenuScreenView : MonoBehaviour
+public class MenuScreenView : MonoBehaviour, IMenuScreenView
 {
-    public Button HideButton;
+    [SerializeField] private Button _hideButton;
 
     [Header("Setting Components")]
-    public Button MusicButton;
-    public Button SoundButton;
-    public Button NotificationButton;
-    public Button RemoveAdsButton;
+    [SerializeField] private Button _musicButton;
+    [SerializeField] private Button _soundButton;
+    [SerializeField] private Button _notificationButton;
+    [SerializeField] private Button _removeAdsButton;
 
     [Header("SocialNet Components")]
-    public Button LikeButton;
-    public Button InstagramButton;
-    public Button FacebookButton;
-    public Button TelegramButton;
-    public Button TwitterButton;
+    [SerializeField] private Button _likeButton;
+    [SerializeField] private Button _instagramButton;
+    [SerializeField] private Button _facebookButton;
+    [SerializeField] private Button _telegramButton;
+    [SerializeField] private Button _twitterButton;
 
     [Header("Button Text")]
     [SerializeField] private TextMeshProUGUI _musicButtonText;
@@ -30,13 +30,55 @@ public class MenuScreenView : MonoBehaviour
 
     [Header("Animation Durations")]
     [SerializeField] private float _moveTime;
+
+    [Header("Button Names")]
+    public string Music = "Music: ";
+    public string Sound = "Sound: ";
+    public string Notification = "Notification: ";
+    public string OnState = "On";
+    public string OffState = "Off";
+
     private Vector2 _startPosition;
 
-    private string _music = "Music: ";
-    private string _sound = "Sound: ";
-    private string _notification = "Notification: ";
-    private string _on = "On";
-    private string _off = "Off";
+    public void Initialize(GameSettingModel settings)
+    {
+        SetButtonText(_musicButtonText, Music, settings.MusicOn);
+        SetButtonText(_soundButtonText, Sound, settings.SoundOn);
+        SetButtonText(_notificationButtonText, Notification, settings.NotificationsOn);
+    }
+
+    public void SetActive(bool isActivated)
+    {
+        if (isActivated)
+        {
+            Show();
+            return;
+        }
+
+        Hide();
+    }
+
+    public void SetButtonText(Settings parameter, bool state)
+    {
+        switch (parameter)
+        {
+            case Settings.Music:
+                SetButtonText(_musicButtonText, Music, state);
+                break;
+
+            case Settings.Sound:
+                SetButtonText(_soundButtonText, Sound, state);
+                break;
+
+            case Settings.Notifications:
+                SetButtonText(_notificationButtonText, Notification, state);
+                break;
+
+            case Settings.Ads:
+                // ChangeAdsState();
+                break;
+        }
+    }
 
     private void SetPosition(Vector2 position)
     {
@@ -47,51 +89,22 @@ public class MenuScreenView : MonoBehaviour
     {
         if (isOn)
         {
-            buttonText.text = name + _on;
+            buttonText.text = name + OnState;
             return;
         }
 
-        buttonText.text = name + _off;
+        buttonText.text = name + OffState;
     }
 
-    private void Initialize(GameSettingModel settings)
-    {
-        SetButtonText(_musicButtonText, _music, settings.MusicOn);
-        SetButtonText(_soundButtonText, _sound, settings.SoundOn);
-        SetButtonText(_notificationButtonText, _notification, settings.NotificationsOn);
-    }
-
-    public void ChangeButtonText(Settings parameter, bool state)
-    {
-        switch (parameter)
-        {
-            case Settings.Music:
-                SetButtonText(_musicButtonText, _music, state);
-                break;
-
-            case Settings.Sound:
-                SetButtonText(_soundButtonText, _sound, state);
-                break;
-
-            case Settings.Notifications:
-                SetButtonText(_notificationButtonText, _notification, state);
-                break;
-
-            case Settings.Ads:
-                // ChangeAdsState();
-                break;
-        }
-    }
-
-    public void Show(GameSettingModel settings)
+    private void Show()
     {
         _startPosition = transform.localPosition;
-        Initialize(settings);
+        // Initialize(settings);
         gameObject.SetActive(true);
         transform.MoveFromScreenBorder(0f, 1.5f, _moveTime);
     }
 
-    public void Hide()
+    private void Hide()
     {
         var sequence = DOTween.Sequence();
         transform.MoveToScreenBorder(0f, 1.5f, _moveTime, sequence);
@@ -101,5 +114,85 @@ public class MenuScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+
+    public Button GetMusicButton()
+    {
+        return _musicButton;
+    }
+
+    public Button GetSoundButton()
+    {
+        return _soundButton;
+    }
+
+    public Button GetNotificationButton()
+    {
+        return _notificationButton;
+    }
+
+    public Button GetRemoveAdsButton()
+    {
+        return _removeAdsButton;
+    }
+
+    public Button GetLikeButton()
+    {
+        return _likeButton;
+    }
+
+    public Button GetInstagramButton()
+    {
+        return _instagramButton;
+    }
+
+    public Button GetFacebookButton()
+    {
+        return _facebookButton;
+    }
+
+    public Button GetTelegramButton()
+    {
+        return _telegramButton;
+    }
+
+    public Button GetTwitterButton()
+    {
+        return _twitterButton;
+    }
+
+    public Button GetHideButton()
+    {
+        return _hideButton;
+    }
+}
+
+public interface IMenuScreenView : IInitializable<GameSettingModel>, IActivatableScreen, ISettingButton,
+    ISocialNetButton, IHideButton
+{
+    void SetButtonText(Settings parameter, bool state);
+}
+
+public interface ISettingButton
+{
+    Button GetMusicButton();
+
+    Button GetSoundButton();
+
+    Button GetNotificationButton();
+
+    Button GetRemoveAdsButton();
+}
+
+public interface ISocialNetButton
+{
+    Button GetLikeButton();
+
+    Button GetInstagramButton();
+
+    Button GetFacebookButton();
+
+    Button GetTelegramButton();
+
+    Button GetTwitterButton();
 }
 }

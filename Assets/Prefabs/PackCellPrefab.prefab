@@ -997,13 +997,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1b5d7386175de419ceb2201bdb8576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _purchaseButton: {fileID: 3314334085788624291}
+  _buyButton: {fileID: 3314334085788624291}
   _packSizeObjects:
   - {fileID: 2071463737}
   - {fileID: 455176075}
   - {fileID: 249667247}
-  _dollarIcon: {fileID: 21300000, guid: 73059e536af825448a968aa2272739d6, type: 3}
-  _goldIcon: {fileID: 21300000, guid: 3d00702d96ddb9f4bb05ee9e82593372, type: 3}
   _packSizeImages:
   - {fileID: 2071463739}
   - {fileID: 455176077}
@@ -1011,6 +1009,7 @@ MonoBehaviour:
   _currencyImage: {fileID: 866675128}
   _profitText: {fileID: 991954869}
   _priceText: {fileID: 215362538}
+  _currency: {fileID: 11400000, guid: ad492e40e6bf12a4e932f8f9c21aee33, type: 2}
 --- !u!114 &8814775791703550312
 MonoBehaviour:
   m_ObjectHideFlags: 0

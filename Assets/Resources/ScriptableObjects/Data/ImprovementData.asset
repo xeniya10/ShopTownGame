@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5aba8f3cadd2941b5eb0bc0bd8557f, type: 3}
   m_Name: ImprovementData
   m_EditorClassIdentifier: 
+  BusinessNames: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   ManagerNames:
   - Flora
   - Jackie

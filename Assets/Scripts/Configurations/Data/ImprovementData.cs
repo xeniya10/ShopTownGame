@@ -7,6 +7,15 @@ namespace ShopTown.Data
 [CreateAssetMenu(fileName = "ImprovementData", menuName = "ImprovementData")]
 public class ImprovementData : ScriptableObject
 {
+    public BusinessData BusinessNames;
+
+    public ImprovementModel DefaultModel = new ImprovementModel()
+    {
+        ImprovementLevel = 1,
+        IsActivated = false,
+        State = ImprovementState.Hide
+    };
+
     [Header("Manager Data")]
     public List<string> ManagerNames = new List<string>()
     {

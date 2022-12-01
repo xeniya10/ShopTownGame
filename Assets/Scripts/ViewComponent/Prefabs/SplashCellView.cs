@@ -1,21 +1,53 @@
+using DG.Tweening;
+using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class SplashCellView : MonoBehaviour
+public class SplashCellView : MonoBehaviour, ISplashCellView
 {
     [SerializeField] private RectTransform _cellRectTransform;
     [SerializeField] private Image _cellImage;
-    [SerializeField] private SplashCellCollection _splashCellCollection;
+    [SerializeField] private SplashCellContainer _splashCellContainer;
 
-    [HideInInspector] public Vector2 StartPosition;
-    [HideInInspector] public Vector2 TargetPosition;
+    [Header("Animation Durations")]
+    [SerializeField] private float _scaleTime;
+    [SerializeField] private float _moveTime;
+
+    private Vector2 _startPosition;
+    private Vector2 _targetPosition;
+
+    public ISplashCellView Create(Transform parent)
+    {
+        var cell = Instantiate(this, parent);
+        return cell;
+    }
+
+    public void Initialize(SplashCellModel model)
+    {
+        SetSprite(model.SpriteNumber);
+        SetSize(model.Size);
+        _startPosition = model.StartPosition;
+        _targetPosition = model.TargetPosition;
+        SetPosition(_startPosition);
+    }
+
+    public void AppearAnimation(Sequence sequence)
+    {
+        transform.Move(_targetPosition, _moveTime * 0.5f, sequence);
+    }
+
+    public void DisappearAnimation(Sequence sequence)
+    {
+        var scale = new Vector2(0, 0);
+        transform.Scale(scale, _scaleTime, sequence);
+    }
 
     private void SetSprite(int i)
     {
-        _cellImage.sprite = _splashCellCollection.Sprites[i];
+        _cellImage.sprite = _splashCellContainer.Sprites[i];
     }
 
     private void SetPosition(Vector2 position)
@@ -23,23 +55,19 @@ public class SplashCellView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    public void SetSize(float size)
+    private void SetSize(float size)
     {
         _cellRectTransform.sizeDelta = new Vector2(size, size);
     }
+}
 
-    public SplashCellView Create(Transform parent)
-    {
-        var cell = Instantiate(this, parent);
-        return cell;
-    }
+public interface ISplashCellView : IInitializable<SplashCellModel>, ICreatable<ISplashCellView>, ISplashAnimation
+{}
 
-    public void Initialize(int spriteNumber, Vector2 startPosition, Vector2 targetPosition)
-    {
-        SetSprite(spriteNumber);
-        StartPosition = startPosition;
-        TargetPosition = targetPosition;
-        SetPosition(StartPosition);
-    }
+public interface ISplashAnimation
+{
+    void AppearAnimation(Sequence sequence);
+
+    void DisappearAnimation(Sequence sequence);
 }
 }

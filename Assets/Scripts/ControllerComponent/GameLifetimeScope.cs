@@ -34,69 +34,56 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField] private PacksData _packsData;
 
     [Header("Sprite Containers")]
-    [SerializeField] private ImprovementCollection _improvementSprites;
+    [SerializeField] private ImprovementContainer _improvementSprites;
 
     [Header("Audio")]
     [SerializeField] private AudioSourceView _audioSource;
 
     protected override void Configure(IContainerBuilder builder)
     {
-        RegisterModel(builder);
-        RegisterPresenter(builder);
         RegisterView(builder);
+        RegisterPresenter(builder);
         RegisterController(builder);
     }
 
     private void RegisterController(IContainerBuilder builder)
     {
-        builder.Register<DataController>(Lifetime.Scoped);
+        builder.Register<DataManager>(Lifetime.Scoped).AsImplementedInterfaces();
         builder.Register<GameBoardController>(Lifetime.Scoped);
-        builder.Register<ImprovementController>(Lifetime.Scoped);
         builder.Register<ManagerController>(Lifetime.Scoped);
         builder.Register<UpgradeController>(Lifetime.Scoped);
         builder.RegisterEntryPoint<GameplayController>(Lifetime.Scoped);
     }
 
-    private void RegisterModel(IContainerBuilder builder)
-    {
-        builder.Register<StorageManager>(Lifetime.Scoped);
-
-        builder.Register<GameDataModel>(Lifetime.Scoped);
-        builder.Register<GameSettingModel>(Lifetime.Scoped);
-
-        builder.Register<SplashBoardModel>(Lifetime.Scoped);
-        builder.Register<GameBoardModel>(Lifetime.Scoped);
-
-        builder.Register<ImprovementModel>(Lifetime.Scoped);
-        builder.Register<GameCellModel>(Lifetime.Scoped);
-        // builder.Register<ManagerModel>(Lifetime.Scoped);
-        // builder.Register<UpgradeModel>(Lifetime.Scoped);
-    }
-
     private void RegisterPresenter(IContainerBuilder builder)
     {
-        builder.Register<SplashScreenPresenter>(Lifetime.Scoped);
-        builder.Register<GameScreenPresenter>(Lifetime.Scoped);
+        builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>();
+        builder.Register<AudioSourcePresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
 
-        builder.Register<GameCellPresenter>(Lifetime.Scoped);
-        builder.Register<ImprovementPresenter>(Lifetime.Scoped);
-        builder.Register<ManagerPresenter>(Lifetime.Scoped);
-        builder.Register<UpgradePresenter>(Lifetime.Scoped);
+        builder.UseEntryPoints(entryPoints =>
+        {
+            entryPoints.Add<SplashScreenPresenter>();
+            entryPoints.Add<GameScreenPresenter>();
+            entryPoints.Add<MenuScreenPresenter>();
+            entryPoints.Add<PurchaseScreenPresenter>();
+            entryPoints.Add<NewBusinessScreenPresenter>();
+            entryPoints.Add<WelcomeScreenPresenter>();
+        });
     }
 
     private void RegisterView(IContainerBuilder builder)
     {
-        builder.RegisterInstance(_splashScreen);
-        builder.RegisterInstance(_gameScreen);
-        builder.RegisterInstance(_menuScreen);
-        builder.RegisterInstance(_purchaseScreen);
-        builder.RegisterInstance(_newBusinessScreen);
-        builder.RegisterInstance(_welcomeScreen);
+        builder.RegisterInstance(_splashScreen).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_gameScreen).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_menuScreen).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_purchaseScreen).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_newBusinessScreen).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_welcomeScreen).AsImplementedInterfaces().AsSelf();
 
         builder.RegisterInstance(_improvementPrefab).AsImplementedInterfaces().AsSelf();
-        builder.RegisterInstance(_gameCellPrefab);
-        builder.RegisterInstance(_splashPrefab);
-        builder.RegisterInstance(_packCellPrefab);
+        builder.RegisterInstance(_gameCellPrefab).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_splashPrefab).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_packCellPrefab).AsImplementedInterfaces().AsSelf();
 
         builder.RegisterInstance(_improvementSprites);
 
@@ -106,7 +93,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_improvementData);
         builder.RegisterInstance(_packsData);
 
-        builder.RegisterInstance(_audioSource);
+        builder.RegisterInstance(_audioSource).As<IAudioSource>().AsSelf();
     }
 }
 }

@@ -8,6 +8,16 @@ namespace ShopTown.Data
 [CreateAssetMenu(fileName = "GameCellData", menuName = "GameCellData")]
 public class GameCellData : ScriptableObject
 {
+    public GameCellModel DefaultGameCell = new GameCellModel()
+    {
+        Level = 0,
+        BackgroundNumber = int.MinValue,
+        State = CellState.Lock,
+        IsManagerActivated = false,
+        ActivatedUpgradeLevel = 0,
+        AreAllUpgradeLevelsActivated = false
+    };
+
     public List<MoneyModel> BaseProfit = new List<MoneyModel>()
     {
         new MoneyModel(1, Currency.Dollar),

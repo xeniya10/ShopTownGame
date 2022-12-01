@@ -6,14 +6,10 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class PackCellView : MonoBehaviour
+public class PackCellView : MonoBehaviour, IPackCellView
 {
-    [SerializeField] private Button _purchaseButton;
+    [SerializeField] private Button _buyButton;
     [SerializeField] private List<GameObject> _packSizeObjects;
-
-    [Header("Currency Sprites")]
-    [SerializeField] private Sprite _dollarIcon;
-    [SerializeField] private Sprite _goldIcon;
 
     [Header("Images")]
     [SerializeField] private List<Image> _packSizeImages;
@@ -23,16 +19,36 @@ public class PackCellView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _profitText;
     [SerializeField] private TextMeshProUGUI _priceText;
 
+    [Header("Currency Sprites")]
+    [SerializeField] private CurrencyContainer _currency;
+
+    public IPackCellView Create(Transform parent)
+    {
+        return Instantiate(this, parent);
+    }
+
+    public void Initialize(PackModel model)
+    {
+        SetProfit(model.Profit);
+        SetPrice(model.Price);
+        SetPackSize(model.Size);
+    }
+
+    public Button GetBuyButton()
+    {
+        return _buyButton;
+    }
+
     private void SetProfit(MoneyModel profit)
     {
         _profitText.text = profit.ToFormattedString();
         if (profit.Value == Currency.Dollar)
         {
-            SetPackCurrency(_dollarIcon);
+            SetPackCurrency(_currency.DollarIcon);
             return;
         }
 
-        SetPackCurrency(_goldIcon);
+        SetPackCurrency(_currency.GoldIcon);
     }
 
     private void SetPrice(double price)
@@ -57,17 +73,8 @@ public class PackCellView : MonoBehaviour
             image.sprite = currencyIcon;
         }
     }
-
-    public PackCellView Create(Transform parent)
-    {
-        return Instantiate(this, parent);
-    }
-
-    public void Initialize(MoneyModel profit, double price, int size)
-    {
-        SetProfit(profit);
-        SetPrice(price);
-        SetPackSize(size);
-    }
 }
+
+public interface IPackCellView : ICreatable<IPackCellView>, IInitializable<PackModel>, IBuyButton
+{}
 }

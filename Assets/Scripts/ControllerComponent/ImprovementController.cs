@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
@@ -10,42 +9,41 @@ using VContainer;
 
 namespace ShopTown.ControllerComponent
 {
-public abstract class ImprovementController : StorageManager
+public abstract class ImprovementController : StorageManager, IDisposable
 {
-    private GameDataModel _data;
-    [Inject] protected readonly ImprovementView _view;
-    [Inject] protected readonly GameScreenView _gameScreen;
-    [Inject] protected readonly BusinessData _business;
+    [Inject] protected readonly IGameData _data;
+    [Inject] protected readonly IImprovementView _view;
+    [Inject] protected readonly IBoard _board;
     [Inject] protected readonly ImprovementData _improvementData;
-    [Inject] protected readonly ImprovementCollection _improvementSprites;
+    [Inject] protected readonly ImprovementContainer _improvementSprites;
 
     protected abstract string _key { get; set; }
 
-    protected List<ImprovementModel> _models;
     protected List<ImprovementPresenter> _improvements;
+    protected List<ImprovementModel> _models;
 
     public Action<ImprovementModel> ImprovementActivateEvent;
 
-    public void Initialize(ref GameDataModel data)
+    public void Initialize()
     {
-        // PlayerPrefs.DeleteKey(_key);
-        _data = data;
-        _models = JsonConvert.DeserializeObject<List<ImprovementModel>>(Load(_key));
-
-        if (_models == null)
-        {
-            CreateDefaultModels();
-        }
-
-        _improvements = new List<ImprovementPresenter>();
+        DeleteKey(_key);
+        SetData(ref _models, _key, CreateDefaultModels);
         CreateImprovements();
     }
 
     protected abstract void CreateImprovements();
 
-    protected void TryBuy(ImprovementPresenter improvement)
+    protected void InitializeImprovement(ImprovementPresenter improvement)
     {
-        if (_data.CanBuy(improvement.Model.Cost))
+        improvement.Initialize(_improvementData, _improvementSprites);
+        improvement.ModelChangeEvent += () => Save(_key, _models);
+        improvement.SubscribeToBuyButton(TryBuy);
+        _improvements.Add(improvement);
+    }
+
+    private void TryBuy(ImprovementPresenter improvement)
+    {
+        if (_data.GameData.CanBuy(improvement.Model.Cost))
         {
             improvement.Activate();
             ImprovementActivateEvent?.Invoke(improvement.Model);
@@ -56,18 +54,20 @@ public abstract class ImprovementController : StorageManager
     {
         _models = new List<ImprovementModel>();
 
-        for (var i = 0; i < _data.MaxLevel; i++)
+        for (var i = 0; i < _data.GameData.MaxLevel; i++)
         {
             var improvement = new ImprovementModel();
-            improvement.Initialize(i + 1);
-            _models.Add(improvement);
+            improvement.SetDefaultData(_improvementData.DefaultModel);
+            improvement.Level = i + 1;
             if (i == 0)
             {
-                improvement.SetState(ImprovementState.Lock);
+                improvement.State = ImprovementState.Lock;
             }
+
+            _models.Add(improvement);
         }
 
-        SaveData();
+        Save(_key, _models);
     }
 
     public ImprovementPresenter FindImprovement(int level)
@@ -86,7 +86,7 @@ public abstract class ImprovementController : StorageManager
         FindImprovement(level)?.SetState(ImprovementState.Unlock);
     }
 
-    public void SaveData()
+    public void Dispose()
     {
         Save(_key, _models);
     }
@@ -98,16 +98,13 @@ public class ManagerController : ImprovementController
 
     protected override void CreateImprovements()
     {
+        _improvements = new List<ImprovementPresenter>();
+
         foreach (var model in _models)
         {
-            var view = _view.Create(_gameScreen.ManagerBoard);
-            ImprovementPresenter manager =
-                new ManagerPresenter(model, view, _business, _improvementData, _improvementSprites);
-
-            manager.Initialize();
-            manager.ModelChangeEvent += () => Save(_key, _models);
-            manager.SubscribeToBuyButton(TryBuy);
-            _improvements.Add(manager);
+            var view = _view.Create(_board.GetManagerBoard());
+            ImprovementPresenter manager = new ManagerPresenter(model, view);
+            InitializeImprovement(manager);
         }
     }
 }
@@ -118,16 +115,13 @@ public class UpgradeController : ImprovementController
 
     protected override void CreateImprovements()
     {
+        _improvements = new List<ImprovementPresenter>();
+
         foreach (var model in _models)
         {
-            var view = _view.Create(_gameScreen.UpgradeBoard);
-            ImprovementPresenter upgrade =
-                new UpgradePresenter(model, view, _business, _improvementData, _improvementSprites);
-
-            upgrade.Initialize();
-            upgrade.ModelChangeEvent += () => Save(_key, _models);
-            upgrade.SubscribeToBuyButton(TryBuy);
-            _improvements.Add(upgrade);
+            var view = _view.Create(_board.GetUpgradeBoard());
+            ImprovementPresenter upgrade = new UpgradePresenter(model, view);
+            InitializeImprovement(upgrade);
         }
     }
 }

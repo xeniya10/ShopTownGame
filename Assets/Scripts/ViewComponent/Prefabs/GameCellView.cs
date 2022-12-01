@@ -8,7 +8,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class GameCellView : MonoBehaviour
+namespace ShopTown.ViewComponent
+{
+public class GameCellView : MonoBehaviour, IGameCellView
 {
     [SerializeField] private RectTransform _cellRect;
 
@@ -19,36 +21,48 @@ public class GameCellView : MonoBehaviour
     [SerializeField] private List<GameObject> _upgrades = new List<GameObject>();
 
     [Header("Buttons")]
-    public Button CellButton;
-    public Button BuyButton;
+    [SerializeField] private Button _cellButton;
+    [SerializeField] private Button _buyButton;
 
     [Header("Images")]
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private Image _businessImage;
+    [SerializeField] private Image _selectorImage;
     [SerializeField] private Image _progressImage;
     [SerializeField] private Image _unlockImage;
     [SerializeField] private Image _lockImage;
     [SerializeField] private Image _managerImage;
     [SerializeField] private List<Image> _upgradeImages = new List<Image>();
-    public Image _selectorImage;
 
     [Header("Text Fields")]
     [SerializeField] private TextMeshProUGUI _progressTimeText;
     [SerializeField] private TextMeshProUGUI _priceText;
 
     [Header("Collections")]
-    [SerializeField] private GameCellCollection _gameCellCollection;
-    [SerializeField] private ImprovementCollection _improvementCollection;
+    [SerializeField] private GameCellContainer _gameCellContainer;
+    [SerializeField] private ImprovementContainer _improvementContainer;
 
     [Header("Animation Duration")]
     [SerializeField] private float _fadeTime;
+
     private Sequence _inProgressAnimation;
 
-    public GameCellView Create(Transform parent, float size)
+    public IGameCellView Create(Transform parent)
     {
-        SetSize(size);
         var cell = Instantiate(this, parent);
         return cell;
+    }
+
+    public void Initialize(GameCellModel model)
+    {
+        SetSize(model.Size);
+        SetBusinessSprite(model.Level);
+        SetImprovementSprites(model.Level);
+        SetBackgroundSprite(model);
+
+        SetPosition(model.Position);
+        SetCost(model.Cost);
+        InitializeImprovements(model);
     }
 
     public void InitializeImprovements(GameCellModel model)
@@ -92,25 +106,29 @@ public class GameCellView : MonoBehaviour
         _businessImage.Fade(0, _fadeTime, null, () => StartAnimation(model));
     }
 
-    private void Initialize(GameCellModel model)
+    public void SetActiveSelector(bool isActivated)
     {
-        SetBusinessSprite(model.Level);
-        SetImprovementSprites(model.Level);
-        if (model.BackgroundNumber < 0)
-        {
-            model.BackgroundNumber = Random.Range(0, _gameCellCollection.BackgroundSprites.Count);
-        }
-
-        SetBackgroundSprite(model.BackgroundNumber);
-
-        SetPosition(model.Position);
-        SetCost(model.Cost);
-        InitializeImprovements(model);
+        _selectorImage.gameObject.SetActive(isActivated);
     }
 
-    private void SetBackgroundSprite(int i)
+    public Button GetBuyButton()
     {
-        _backgroundImage.sprite = _gameCellCollection.BackgroundSprites[i];
+        return _buyButton;
+    }
+
+    public Button GetCellButton()
+    {
+        return _cellButton;
+    }
+
+    private void SetBackgroundSprite(GameCellModel model)
+    {
+        if (model.BackgroundNumber < 0)
+        {
+            model.BackgroundNumber = Random.Range(0, _gameCellContainer.BackgroundSprites.Count);
+        }
+
+        _backgroundImage.sprite = _gameCellContainer.BackgroundSprites[model.BackgroundNumber];
     }
 
     private void SetBusinessSprite(int level)
@@ -120,7 +138,7 @@ public class GameCellView : MonoBehaviour
             return;
         }
 
-        _businessImage.sprite = _gameCellCollection.BusinessSprites[level - 1];
+        _businessImage.sprite = _gameCellContainer.BusinessSprites[level - 1];
     }
 
     private void SetImprovementSprites(int level)
@@ -130,10 +148,10 @@ public class GameCellView : MonoBehaviour
             return;
         }
 
-        _managerImage.sprite = _improvementCollection.ManagerSprites[level - 1];
-        _upgradeImages[0].sprite = _improvementCollection.FirstLevelUpgradeSprites[level - 1];
-        _upgradeImages[1].sprite = _improvementCollection.SecondLevelUpgradeSprites[level - 1];
-        _upgradeImages[2].sprite = _improvementCollection.ThirdLevelUpgradeSprites[level - 1];
+        _managerImage.sprite = _improvementContainer.ManagerSprites[level - 1];
+        _upgradeImages[0].sprite = _improvementContainer.FirstLevelUpgradeSprites[level - 1];
+        _upgradeImages[1].sprite = _improvementContainer.SecondLevelUpgradeSprites[level - 1];
+        _upgradeImages[2].sprite = _improvementContainer.ThirdLevelUpgradeSprites[level - 1];
     }
 
     private void SetActivateManager(bool isActivated)
@@ -232,4 +250,33 @@ public class GameCellView : MonoBehaviour
             upgrade.SetActive(false);
         }
     }
+}
+
+public interface ICreatable<T>
+{
+    T Create(Transform parent);
+}
+
+public interface IInitializable<T>
+{
+    void Initialize(T model);
+}
+
+public interface IBuyButton
+{
+    Button GetBuyButton();
+}
+
+public interface IGameCellView : ICreatable<IGameCellView>, IInitializable<GameCellModel>, IBuyButton
+{
+    void InitializeImprovements(GameCellModel model);
+
+    void StartAnimation(GameCellModel model, Action onCompleteAnimation = null);
+
+    void StartLevelUpAnimation(GameCellModel model);
+
+    void SetActiveSelector(bool isActivated);
+
+    Button GetCellButton();
+}
 }

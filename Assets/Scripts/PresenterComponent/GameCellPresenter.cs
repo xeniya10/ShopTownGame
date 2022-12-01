@@ -1,25 +1,20 @@
 using System;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
+using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-// T1 - presenter
-// public interface ICreatable<T1, T2>
-// {
-//     T1 Create(Transform parent, T2 model);
-// }
-
-public class GameCellPresenter
+public class GameCellPresenter : ButtonSubscription
 {
-    private readonly GameCellData _cellData;
-    private readonly GameCellView _view;
     public readonly GameCellModel Model;
+    private readonly IGameCellView _view;
+    private readonly GameCellData _cellData;
 
     public Action ModelChangeEvent;
     public Action<MoneyModel> InProgressAnimationEndEvent;
 
-    public GameCellPresenter(GameCellView view, GameCellModel model, GameCellData cellData)
+    public GameCellPresenter(IGameCellView view, GameCellModel model, GameCellData cellData)
     {
         _view = view;
         Model = model;
@@ -32,20 +27,15 @@ public class GameCellPresenter
         _view.InitializeImprovements(Model);
         SetParameters();
     }
-    //
-    // public GameCellPresenter Create(Transform parent, GameCellModel model)
-    // {
-    //     var view = _view.Create(parent, model.Size);
-    //     view.StartAnimation(model);
-    //     view.InitializeImprovements(model);
-    //     var presenter = new GameCellPresenter(view, ref model, _cellData);
-    //     presenter.SetParameters();
-    //     return presenter;
-    // }
 
     public void SetState(CellState state, Action callBack = null)
     {
-        Model.SetState(state);
+        if (state is CellState.Lock or CellState.Unlock)
+        {
+            Model.SetDefaultData(_cellData.DefaultGameCell);
+        }
+
+        Model.State = state;
         SetParameters();
         ModelChangeEvent?.Invoke();
         if (state == CellState.InProgress)
@@ -55,36 +45,6 @@ public class GameCellPresenter
         }
 
         _view.StartAnimation(Model, callBack);
-    }
-
-    private void GetInProgress()
-    {
-        if (Model.IsManagerActivated)
-        {
-            var timeAfterStart = (float)DateTime.Now.Subtract(Model.StartTime).TotalSeconds;
-            var progressTime = (float)Model.TotalTime.TotalSeconds;
-
-            if (timeAfterStart > progressTime)
-            {
-                Model.StartTime = DateTime.Now.Subtract(TimeSpan.FromSeconds(timeAfterStart % progressTime));
-            }
-        }
-        else
-        {
-            Model.StartTime = DateTime.Now;
-        }
-
-        _view.StartAnimation(Model, () =>
-        {
-            InProgressAnimationEndEvent?.Invoke(Model.Profit);
-            if (Model.IsManagerActivated)
-            {
-                GetInProgress();
-                return;
-            }
-
-            Model.SetState(CellState.Active);
-        });
     }
 
     public void LevelUp()
@@ -119,6 +79,65 @@ public class GameCellPresenter
         _view.InitializeImprovements(Model);
     }
 
+    public void SetCost(int activationNumber)
+    {
+        if (activationNumber > _cellData.Cost.Count - 1)
+        {
+            var lastElement = _cellData.Cost[_cellData.Cost.Count - 1];
+            var costNumber = lastElement.Number * (activationNumber - _cellData.Cost.Count + 2);
+            Model.Cost = new MoneyModel(costNumber, lastElement.Value);
+
+            return;
+        }
+
+        Model.Cost = _cellData.Cost[activationNumber];
+    }
+
+    public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
+    {
+        SubscribeToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
+    }
+
+    public void SubscribeToCellClick(Action<GameCellPresenter> callBack)
+    {
+        SubscribeToButton(_view.GetCellButton(), () => callBack?.Invoke(this));
+    }
+
+    public void SetActiveSelector(bool isActive)
+    {
+        _view.SetActiveSelector(isActive);
+    }
+
+    private void GetInProgress()
+    {
+        if (Model.IsManagerActivated)
+        {
+            var timeAfterStart = (float)DateTime.Now.Subtract(Model.StartTime).TotalSeconds;
+            var progressTime = (float)Model.TotalTime.TotalSeconds;
+
+            if (timeAfterStart > progressTime)
+            {
+                Model.StartTime = DateTime.Now.Subtract(TimeSpan.FromSeconds(timeAfterStart % progressTime));
+            }
+        }
+        else
+        {
+            Model.StartTime = DateTime.Now;
+        }
+
+        _view.StartAnimation(Model, () =>
+        {
+            InProgressAnimationEndEvent?.Invoke(Model.Profit);
+            if (Model.IsManagerActivated)
+            {
+                GetInProgress();
+                return;
+            }
+
+            Model.State = CellState.Active;
+        });
+    }
+
     private void SetParameters()
     {
         SetTime();
@@ -136,20 +155,6 @@ public class GameCellPresenter
         Model.TotalTime = _cellData.ProcessTime[Model.Level - 1];
     }
 
-    public void SetCost(int activationNumber)
-    {
-        if (activationNumber > _cellData.Cost.Count - 1)
-        {
-            var lastElement = _cellData.Cost[_cellData.Cost.Count - 1];
-            Model.Cost = new MoneyModel(lastElement.Number * (activationNumber - _cellData.Cost.Count + 2),
-                lastElement.Value);
-
-            return;
-        }
-
-        Model.Cost = _cellData.Cost[activationNumber];
-    }
-
     private void SetProfit()
     {
         if (Model.Level < 1)
@@ -161,21 +166,6 @@ public class GameCellPresenter
         var profitMultiplier = Model.ActivatedUpgradeLevel + 1;
         var baseProfit = _cellData.BaseProfit[Model.Level - 1];
         Model.Profit = new MoneyModel(baseProfit.Number * profitMultiplier, baseProfit.Value);
-    }
-
-    public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
-    {
-        _view.BuyButton.onClick.AddListener(() => callBack?.Invoke(this));
-    }
-
-    public void SubscribeToClick(Action<GameCellPresenter> callBack)
-    {
-        _view.CellButton.onClick.AddListener(() => callBack?.Invoke(this));
-    }
-
-    public void SetActiveSelector(bool isActive)
-    {
-        _view._selectorImage.gameObject.SetActive(isActive);
     }
 
     public bool IsNeighborOf(GameCellPresenter cell)

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ShopTown.SpriteContainer
 {
 [CreateAssetMenu(fileName = "ImprovementSprites", menuName = "ImprovementSprites")]
-public class ImprovementCollection : ScriptableObject
+public class ImprovementContainer : ScriptableObject
 {
     [Header("Manager Sprites")]
     public List<Sprite> ManagerSprites = new List<Sprite>();

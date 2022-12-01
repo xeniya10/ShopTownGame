@@ -6,51 +6,63 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class SplashScreenView : MonoBehaviour
+public class SplashScreenView : MonoBehaviour, ISplashScreenView
 {
     [Header("Components")]
-    public Transform CellField;
-    public Button StartButton;
+    [SerializeField] private Transform _splashField;
+    [SerializeField] private Button _startButton;
     [SerializeField] private Image _splashScreenImage;
     [SerializeField] private TextMeshProUGUI _startButtonText;
     [SerializeField] private TextMeshProUGUI _gameNameText;
 
     [Header("Animation Durations")]
-    [SerializeField] private float _scaleTime;
     [SerializeField] private float _fadeTime;
     [SerializeField] private float _moveTime;
 
-    [NonSerialized] public Sequence AppearSequence;
-    [NonSerialized] public Sequence DisappearSequence;
-
-    public void InitializeSequences()
+    public void AppearAnimation(Sequence sequence)
     {
-        AppearSequence = DOTween.Sequence();
-        DisappearSequence = DOTween.Sequence();
+        MoveAnimation(_gameNameText.transform, sequence);
+        MoveAnimation(_startButton.transform, sequence);
     }
 
-    public void AppearCell(SplashCellView cell)
+    public void DisappearAnimation(Sequence sequence)
     {
-        cell.transform.Move(cell.TargetPosition, _moveTime * 0.5f, AppearSequence);
+        FadeAnimation(_startButtonText, sequence);
+        FadeAnimation(_gameNameText, sequence);
+        FadeAnimation(_splashScreenImage, sequence, () => gameObject.SetActive(false));
     }
 
-    public void AppearTextFields()
+    public Transform GetSplashField()
     {
-        _gameNameText.transform.MoveFromScreenBorder(-1.5f, 0f, _moveTime, AppearSequence);
-        StartButton.transform.MoveFromScreenBorder(-1.5f, 0f, _moveTime, AppearSequence);
+        return _splashField;
     }
 
-    public void DisappearTextFields()
+    public Button GetStartButton()
     {
-        _startButtonText.Fade(0, _fadeTime, DisappearSequence);
-        _gameNameText.Fade(0, _fadeTime, DisappearSequence);
-        _splashScreenImage.Fade(0, _fadeTime, DisappearSequence, () => gameObject.SetActive(false));
+        return _startButton;
     }
 
-    public void DisappearCells(SplashCellView cell)
+    private void MoveAnimation(Transform uiElement, Sequence sequence)
     {
-        var scale = new Vector2(0, 0);
-        cell.transform.Scale(scale, _scaleTime, DisappearSequence);
+        uiElement.MoveFromScreenBorder(-1.5f, 0f, _moveTime, sequence);
     }
+
+    private void FadeAnimation(Graphic uiElement, Sequence sequence, Action callBack = null)
+    {
+        uiElement.Fade(0, _fadeTime, sequence, () => callBack?.Invoke());
+    }
+}
+
+public interface ISplashScreenView : ISplashField, IStartButton, ISplashAnimation
+{}
+
+public interface IStartButton
+{
+    Button GetStartButton();
+}
+
+public interface ISplashField
+{
+    Transform GetSplashField();
 }
 }

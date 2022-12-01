@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ShopTown.SpriteContainer
 {
 [CreateAssetMenu(fileName = "SplashCellSprites", menuName = "SplashCellSprites")]
-public class SplashCellCollection : ScriptableObject
+public class SplashCellContainer : ScriptableObject
 {
     public List<Sprite> Sprites = new List<Sprite>();
 }

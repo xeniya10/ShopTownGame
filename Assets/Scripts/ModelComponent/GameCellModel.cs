@@ -1,9 +1,11 @@
 using System;
+using UnityEngine;
 
 namespace ShopTown.ModelComponent
 {
 public enum CellState { Lock, Unlock, Active, InProgress }
 
+[Serializable]
 public class GameCellModel
 {
     // Description
@@ -29,34 +31,30 @@ public class GameCellModel
     public MoneyModel Cost;
     public MoneyModel Profit;
 
-    public void Initialize(int level, DateTime startTime, bool isManagerActivated = false, int upgradeLevel = 0,
-        bool areAllUpgradeLevelsActivated = false)
+    public void SetDefaultData(GameCellModel defaultModel)
     {
-        Level = level;
-        StartTime = startTime;
-        IsManagerActivated = isManagerActivated;
-        ActivatedUpgradeLevel = upgradeLevel;
-        AreAllUpgradeLevelsActivated = areAllUpgradeLevelsActivated;
+        Level = defaultModel.Level;
+        BackgroundNumber = defaultModel.BackgroundNumber;
+        State = defaultModel.State;
+        IsManagerActivated = defaultModel.IsManagerActivated;
+        ActivatedUpgradeLevel = defaultModel.ActivatedUpgradeLevel;
+        AreAllUpgradeLevelsActivated = defaultModel.AreAllUpgradeLevelsActivated;
     }
+}
 
-    public void SetState(CellState state)
+public class SplashCellModel
+{
+    public float Size;
+    public int SpriteNumber;
+    public Vector2 StartPosition;
+    public Vector2 TargetPosition;
+
+    public SplashCellModel(int spriteNumber, float size, Vector2 startPosition, Vector2 targetPosition)
     {
-        State = state;
-        switch (State)
-        {
-            case CellState.Lock:
-                Initialize(0, DateTime.MaxValue);
-                break;
-
-            case CellState.Unlock:
-                Initialize(0, DateTime.MaxValue);
-                break;
-        }
-    }
-
-    public void SetGridIndex(int rowIndex, int columnIndex)
-    {
-        GridIndex = new[] {columnIndex, rowIndex};
+        SpriteNumber = spriteNumber;
+        Size = size;
+        StartPosition = startPosition;
+        TargetPosition = targetPosition;
     }
 }
 }

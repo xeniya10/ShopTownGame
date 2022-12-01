@@ -6379,14 +6379,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bfcefc4c7045974da98a938fd850b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuyButton: {fileID: 5916342858564497767}
+  _buyButton: {fileID: 5916342858564497767}
   _salute: {fileID: 6062652234357975033}
-  _dollarIcon: {fileID: 21300000, guid: 73059e536af825448a968aa2272739d6, type: 3}
-  _goldIcon: {fileID: 21300000, guid: 3d00702d96ddb9f4bb05ee9e82593372, type: 3}
   _improvementImage: {fileID: 8568159226380776440}
   _lockImage: {fileID: 8393723764564323258}
   _currencyImage: {fileID: 11897446686716090}
   _nameText: {fileID: 3641624121910351034}
   _descriptionText: {fileID: 3902685440533807263}
   _priceText: {fileID: 5241479598379349384}
+  _currency: {fileID: 11400000, guid: ad492e40e6bf12a4e932f8f9c21aee33, type: 2}
   _fadeTime: 0.4

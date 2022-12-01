@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class PurchaseScreenView : MonoBehaviour
+public class PurchaseScreenView : MonoBehaviour, IPurchaseScreenView
 {
-    public Button HideButton;
+    [SerializeField] private Button _hideButton;
 
     [Header("Transforms")]
-    public Transform DollarPacks;
-    public Transform GoldPacks;
+    [SerializeField] private Transform _dollarPacks;
+    [SerializeField] private Transform _goldPacks;
 
     [Header("Animation Duration")]
     [SerializeField] private float _moveTime;
@@ -22,14 +22,14 @@ public class PurchaseScreenView : MonoBehaviour
         transform.localPosition = position;
     }
 
-    public void Show()
+    private void Show()
     {
         _startPosition = transform.localPosition;
         gameObject.SetActive(true);
         transform.MoveFromScreenBorder(0f, 1.5f, _moveTime);
     }
 
-    public void Hide()
+    private void Hide()
     {
         var sequence = DOTween.Sequence();
         transform.MoveToScreenBorder(0f, 1.5f, _moveTime, sequence);
@@ -39,5 +39,41 @@ public class PurchaseScreenView : MonoBehaviour
             SetPosition(_startPosition);
         });
     }
+
+    public void SetActive(bool isActivated)
+    {
+        if (isActivated)
+        {
+            Show();
+            return;
+        }
+
+        Hide();
+    }
+
+    public Button GetHideButton()
+    {
+        return _hideButton;
+    }
+
+    public Transform GetDollarArea()
+    {
+        return _dollarPacks;
+    }
+
+    public Transform GetGoldArea()
+    {
+        return _goldPacks;
+    }
+}
+
+public interface IPurchaseScreenView : IHideButton, IPackArea, IActivatableScreen
+{}
+
+public interface IPackArea
+{
+    Transform GetDollarArea();
+
+    Transform GetGoldArea();
 }
 }

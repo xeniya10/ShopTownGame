@@ -6,136 +6,104 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public abstract class ImprovementPresenter
+public abstract class ImprovementPresenter : ButtonSubscription
 {
     public readonly ImprovementModel Model;
     protected readonly IImprovementView _view;
-    protected readonly BusinessData _business;
-    protected readonly ImprovementData _improvementData;
-    protected readonly ImprovementCollection _improvementSprites;
 
     public Action ModelChangeEvent;
 
-    protected ImprovementPresenter(ImprovementModel model, IImprovementView view, BusinessData business,
-        ImprovementData improvementData, ImprovementCollection improvementSprites)
+    protected ImprovementPresenter(ImprovementModel model, IImprovementView view)
     {
         Model = model;
         _view = view;
-        _business = business;
-        _improvementData = improvementData;
-        _improvementSprites = improvementSprites;
     }
 
-    public void Initialize()
+    public void Initialize(ImprovementData improvementData, ImprovementContainer improvementSprites)
     {
-        SetParameters();
+        SetParameters(improvementData);
         _view.Initialize(Model);
-        SetSprite();
+        SetSprite(improvementSprites);
         SetState(Model.State);
     }
 
-    public abstract void SubscribeToBuyButton(Action<ImprovementPresenter> callBack);
+    public void SubscribeToBuyButton(Action<ImprovementPresenter> callBack)
+    {
+        SubscribeToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
+    }
 
     public void SetState(ImprovementState state)
     {
-        Model.SetState(state);
+        Model.State = state;
         if (Model.IsActivated)
         {
-            Model.SetState(ImprovementState.Lock);
+            Model.State = ImprovementState.Lock;
         }
 
-        switch (state)
-        {
-            case ImprovementState.Hide:
-                _view.Hide();
-                break;
-
-            case ImprovementState.Lock:
-                _view.Lock();
-                break;
-
-            case ImprovementState.Unlock:
-                _view.Unlock();
-                break;
-        }
-
+        _view.StartAnimation(Model.State);
         ModelChangeEvent?.Invoke();
     }
 
-    private void SetParameters()
+    private void SetParameters(ImprovementData improvementData)
     {
-        SetName();
-        SetDescription();
-        SetCost();
+        SetName(improvementData);
+        SetDescription(improvementData);
+        SetCost(improvementData);
     }
 
-    protected abstract void SetSprite();
+    protected abstract void SetSprite(ImprovementContainer improvementSprites);
 
-    protected abstract void SetName();
+    protected abstract void SetName(ImprovementData improvementData);
 
-    protected abstract void SetDescription();
+    protected abstract void SetDescription(ImprovementData improvementData);
 
-    protected abstract void SetCost();
+    protected abstract void SetCost(ImprovementData improvementData);
 
     public abstract void Activate();
 }
 
 public class ManagerPresenter : ImprovementPresenter
 {
-    public ManagerPresenter(ImprovementModel model, IImprovementView view, BusinessData business,
-        ImprovementData improvementData, ImprovementCollection improvementSprites) : base(model, view, business,
-        improvementData, improvementSprites)
+    public ManagerPresenter(ImprovementModel model, IImprovementView view) : base(model, view)
     {}
 
     public override void Activate()
     {
-        _view.Activate();
+        _view.ActivateAnimation();
         Model.IsActivated = true;
         SetState(ImprovementState.Lock);
     }
 
-    public override void SubscribeToBuyButton(Action<ImprovementPresenter> callBack)
+    protected override void SetSprite(ImprovementContainer improvementSprites)
     {
-        _view.SubscribeToBuyButton(() => callBack.Invoke(this));
+        _view.SetImprovementSprite(improvementSprites.ManagerSprites[Model.Level - 1]);
     }
 
-    protected override void SetSprite()
+    protected override void SetName(ImprovementData improvementData)
     {
-        _view.SetImprovementSprite(_improvementSprites.ManagerSprites[Model.Level - 1]);
+        Model.Name = improvementData.ManagerNames[Model.Level - 1];
     }
 
-    protected override void SetName()
+    protected override void SetDescription(ImprovementData improvementData)
     {
-        Model.Name = _improvementData.ManagerNames[Model.Level - 1];
-    }
-
-    protected override void SetDescription()
-    {
-        var businessName = _business.LevelNames[Model.Level - 1];
+        var businessName = improvementData.BusinessNames.LevelNames[Model.Level - 1];
         Model.Description = $"Hire manager to run your {businessName}";
     }
 
-    protected override void SetCost()
+    protected override void SetCost(ImprovementData improvementData)
     {
-        Model.Cost = _improvementData.ManagerBaseCost[Model.Level - 1];
+        Model.Cost = improvementData.ManagerBaseCost[Model.Level - 1];
     }
 }
 
 public class UpgradePresenter : ImprovementPresenter
 {
-    public UpgradePresenter(ImprovementModel model, IImprovementView view, BusinessData business,
-        ImprovementData improvementData, ImprovementCollection improvementSprites) : base(model, view, business,
-        improvementData, improvementSprites)
+    public UpgradePresenter(ImprovementModel model, IImprovementView view) : base(model, view)
     {}
-
-    public override void SubscribeToBuyButton(Action<ImprovementPresenter> callBack)
-    {
-        _view.SubscribeToBuyButton(() => callBack.Invoke(this));
-    }
 
     public override void Activate()
     {
-        _view.Activate();
+        _view.ActivateAnimation();
         LevelUp();
     }
 
@@ -152,50 +120,50 @@ public class UpgradePresenter : ImprovementPresenter
         _view.Initialize(Model);
     }
 
-    protected override void SetSprite()
+    protected override void SetSprite(ImprovementContainer improvementSprites)
     {
         if (Model.ImprovementLevel == 2)
         {
-            _view.SetImprovementSprite(_improvementSprites.SecondLevelUpgradeSprites[Model.Level - 1]);
+            _view.SetImprovementSprite(improvementSprites.SecondLevelUpgradeSprites[Model.Level - 1]);
             return;
         }
 
         if (Model.ImprovementLevel == 3)
         {
-            _view.SetImprovementSprite(_improvementSprites.ThirdLevelUpgradeSprites[Model.Level - 1]);
+            _view.SetImprovementSprite(improvementSprites.ThirdLevelUpgradeSprites[Model.Level - 1]);
             return;
         }
 
-        _view.SetImprovementSprite(_improvementSprites.FirstLevelUpgradeSprites[Model.Level - 1]);
+        _view.SetImprovementSprite(improvementSprites.FirstLevelUpgradeSprites[Model.Level - 1]);
     }
 
-    protected override void SetName()
+    protected override void SetName(ImprovementData improvementData)
     {
         if (Model.ImprovementLevel == 2)
         {
-            Model.Name = _improvementData.SecondLevelUpgradeNames[Model.Level - 1];
+            Model.Name = improvementData.SecondLevelUpgradeNames[Model.Level - 1];
             return;
         }
 
         if (Model.ImprovementLevel == 3)
         {
-            Model.Name = _improvementData.ThirdLevelUpgradeNames[Model.Level - 1];
+            Model.Name = improvementData.ThirdLevelUpgradeNames[Model.Level - 1];
             return;
         }
 
-        Model.Name = _improvementData.FirstLevelUpgradeNames[Model.Level - 1];
+        Model.Name = improvementData.FirstLevelUpgradeNames[Model.Level - 1];
     }
 
-    protected override void SetDescription()
+    protected override void SetDescription(ImprovementData improvementData)
     {
-        var businessName = _business.LevelNames[Model.Level - 1];
+        var businessName = improvementData.BusinessNames.LevelNames[Model.Level - 1];
         var multiplier = Model.ImprovementLevel + 1;
         Model.Description = $"Increase {businessName} profit x{multiplier.ToString()}";
     }
 
-    protected override void SetCost()
+    protected override void SetCost(ImprovementData improvementData)
     {
-        var baseCost = _improvementData.UpgradeBaseCost[Model.Level - 1];
+        var baseCost = improvementData.UpgradeBaseCost[Model.Level - 1];
         Model.Cost = new MoneyModel(baseCost.Number * Model.ImprovementLevel, baseCost.Value);
     }
 }

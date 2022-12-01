@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using ShopTown.ModelComponent;
 using TMPro;
@@ -7,33 +6,10 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public interface IImprovementView
-{
-    IImprovementView Create(Transform parent);
-
-    void Initialize(ImprovementModel model);
-
-    void SetImprovementSprite(Sprite sprite);
-
-    void SubscribeToBuyButton(Action callBack);
-
-    void Hide();
-
-    void Lock();
-
-    void Unlock();
-
-    void Activate();
-}
-
 public class ImprovementView : MonoBehaviour, IImprovementView
 {
-    public Button BuyButton;
+    [SerializeField] protected Button _buyButton;
     [SerializeField] protected ParticleSystem _salute;
-
-    [Header("Currency Sprites")]
-    [SerializeField] protected Sprite _dollarIcon;
-    [SerializeField] protected Sprite _goldIcon;
 
     [Header("Images")]
     [SerializeField] protected Image _improvementImage;
@@ -45,35 +21,11 @@ public class ImprovementView : MonoBehaviour, IImprovementView
     [SerializeField] protected TextMeshProUGUI _descriptionText;
     [SerializeField] protected TextMeshProUGUI _priceText;
 
+    [Header("Currency Sprites")]
+    [SerializeField] private CurrencyContainer _currency;
+
     [Header("Animation Duration")]
     [SerializeField] protected float _fadeTime;
-
-    public void SetImprovementSprite(Sprite sprite)
-    {
-        _improvementImage.sprite = sprite;
-    }
-
-    private void SetCost(MoneyModel cost)
-    {
-        _priceText.text = cost.ToFormattedString();
-        if (cost.Value == Currency.Dollar)
-        {
-            _currencyImage.sprite = _dollarIcon;
-            return;
-        }
-
-        _currencyImage.sprite = _goldIcon;
-    }
-
-    private void SetName(string managerName)
-    {
-        _nameText.text = managerName;
-    }
-
-    private void SetDescription(string description)
-    {
-        _descriptionText.text = description;
-    }
 
     public IImprovementView Create(Transform parent)
     {
@@ -87,17 +39,67 @@ public class ImprovementView : MonoBehaviour, IImprovementView
         SetCost(model.Cost);
     }
 
-    public void SubscribeToBuyButton(Action callBack)
+    public void StartAnimation(ImprovementState state)
     {
-        BuyButton.onClick.AddListener(() => callBack?.Invoke());
+        switch (state)
+        {
+            case ImprovementState.Hide:
+                HideAnimation();
+                break;
+
+            case ImprovementState.Lock:
+                LockAnimation();
+                break;
+
+            case ImprovementState.Unlock:
+                UnlockAnimation();
+                break;
+        }
     }
 
-    public void Hide()
+    public void ActivateAnimation()
+    {
+        _salute.Play();
+    }
+
+    public void SetImprovementSprite(Sprite sprite)
+    {
+        _improvementImage.sprite = sprite;
+    }
+
+    public Button GetBuyButton()
+    {
+        return _buyButton;
+    }
+
+    private void SetCost(MoneyModel cost)
+    {
+        _priceText.text = cost.ToFormattedString();
+        if (cost.Value == Currency.Dollar)
+        {
+            _currencyImage.sprite = _currency.DollarIcon;
+            return;
+        }
+
+        _currencyImage.sprite = _currency.GoldIcon;
+    }
+
+    private void SetName(string managerName)
+    {
+        _nameText.text = managerName;
+    }
+
+    private void SetDescription(string description)
+    {
+        _descriptionText.text = description;
+    }
+
+    private void HideAnimation()
     {
         gameObject.SetActive(false);
     }
 
-    public void Lock()
+    private void LockAnimation()
     {
         gameObject.SetActive(true);
 
@@ -109,15 +111,19 @@ public class ImprovementView : MonoBehaviour, IImprovementView
             });
     }
 
-    public void Unlock()
+    private void UnlockAnimation()
     {
         gameObject.SetActive(true);
         _lockImage.DOFade(0, _fadeTime).OnComplete(() => _lockImage.gameObject.SetActive(false));
     }
+}
 
-    public void Activate()
-    {
-        _salute.Play();
-    }
+public interface IImprovementView : ICreatable<IImprovementView>, IInitializable<ImprovementModel>, IBuyButton
+{
+    void SetImprovementSprite(Sprite sprite);
+
+    void StartAnimation(ImprovementState state);
+
+    void ActivateAnimation();
 }
 }
