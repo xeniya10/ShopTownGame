@@ -8,7 +8,7 @@ public class DefaultDataConfiguration : ScriptableObject
 {
     public GameDataModel GameData = new GameDataModel()
     {
-        CurrentDollarBalance = new MoneyModel(1000000, Currency.Dollar),
+        CurrentDollarBalance = new MoneyModel(1000, Currency.Dollar),
         CurrentGoldBalance = new MoneyModel(0, Currency.Gold),
         MinLevel = 1,
         MaxLevel = 27,

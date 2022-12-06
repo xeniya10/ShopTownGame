@@ -42,13 +42,13 @@ public class GameLifetimeScope : LifetimeScope
     protected override void Configure(IContainerBuilder builder)
     {
         RegisterView(builder);
+        builder.Register<DataManager>(Lifetime.Scoped).AsImplementedInterfaces();
         RegisterPresenter(builder);
         RegisterController(builder);
     }
 
     private void RegisterController(IContainerBuilder builder)
     {
-        builder.Register<DataManager>(Lifetime.Scoped).AsImplementedInterfaces();
         builder.Register<GameBoardController>(Lifetime.Scoped);
         builder.Register<ManagerController>(Lifetime.Scoped);
         builder.Register<UpgradeController>(Lifetime.Scoped);
@@ -58,6 +58,7 @@ public class GameLifetimeScope : LifetimeScope
     private void RegisterPresenter(IContainerBuilder builder)
     {
         builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>();
+        builder.Register<WelcomeScreenPresenter>(Lifetime.Scoped).As<IInitializable<MoneyModel>>();
         builder.Register<AudioSourcePresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
 
         builder.UseEntryPoints(entryPoints =>
@@ -67,7 +68,7 @@ public class GameLifetimeScope : LifetimeScope
             entryPoints.Add<MenuScreenPresenter>();
             entryPoints.Add<PurchaseScreenPresenter>();
             entryPoints.Add<NewBusinessScreenPresenter>();
-            entryPoints.Add<WelcomeScreenPresenter>();
+            // entryPoints.Add<WelcomeScreenPresenter>();
         });
     }
 

@@ -5625,7 +5625,7 @@ MonoBehaviour:
   _thirdUpgradeName: {fileID: 1397766836}
   _leftConfetti: {fileID: 1939670642}
   _rightConfetti: {fileID: 890354394}
-  _gameCellCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _gameCellContainer: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
   _improvementSprites: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
   _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
@@ -6957,7 +6957,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -0.000030517578, y: -0.000015258789}
-  m_SizeDelta: {x: 200, y: 300}
+  m_SizeDelta: {x: 110, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &750041962
 MonoBehaviour:
@@ -6979,7 +6979,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000.0
+  m_text: 000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
   m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
@@ -7006,14 +7006,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 69.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 80
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: -4
@@ -13389,7 +13389,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 95, y: -150.25839}
+  m_AnchoredPosition: {x: 135, y: -150.25839}
   m_SizeDelta: {x: 125, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1003166008
@@ -17221,7 +17221,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
+  m_Spacing: 20
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -17663,8 +17663,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 267.5, y: -150.25839}
-  m_SizeDelta: {x: 200, y: 300.51678}
+  m_AnchoredPosition: {x: 272.5, y: -150.25839}
+  m_SizeDelta: {x: 110, y: 300.51678}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1901655312
 CanvasRenderer:

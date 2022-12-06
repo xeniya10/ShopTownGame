@@ -19,6 +19,21 @@ public class GameDataModel
 
     [NonSerialized] public Action ChangeEvent;
 
+    public void SetDefaultData(GameDataModel defaultData)
+    {
+        CurrentDollarBalance =
+            new MoneyModel(defaultData.CurrentDollarBalance.Number, defaultData.CurrentDollarBalance.Value);
+
+        CurrentGoldBalance =
+            new MoneyModel(defaultData.CurrentGoldBalance.Number, defaultData.CurrentGoldBalance.Value);
+
+        MinLevel = defaultData.MinLevel;
+        MaxLevel = defaultData.MaxLevel;
+        MaxOpenedLevel = defaultData.MaxOpenedLevel;
+        MaxUpgradeLevel = defaultData.MaxUpgradeLevel;
+        ActivationNumber = defaultData.ActivationNumber;
+    }
+
     public void AddToBalance(MoneyModel number)
     {
         if (number.Value == Currency.Dollar)
@@ -80,24 +95,38 @@ public class GameSettingModel
 
     [NonSerialized] public Action ChangeEvent;
 
-    public void ChangeState(Settings parameter)
+    public void SetDefaultData(GameSettingModel defaultData)
     {
+        MusicOn = defaultData.MusicOn;
+        SoundOn = defaultData.SoundOn;
+        NotificationsOn = defaultData.NotificationsOn;
+        AdsOn = defaultData.AdsOn;
+    }
+
+    public void ChangeState(Settings parameter, out bool param)
+    {
+        param = false;
+
         switch (parameter)
         {
             case Settings.Music:
                 ChangeState(ref MusicOn);
+                param = MusicOn;
                 break;
 
             case Settings.Sound:
                 ChangeState(ref SoundOn);
+                param = SoundOn;
                 break;
 
             case Settings.Notifications:
                 ChangeState(ref NotificationsOn);
+                param = NotificationsOn;
                 break;
 
             case Settings.Ads:
                 ChangeState(ref AdsOn);
+                param = AdsOn;
                 break;
         }
 

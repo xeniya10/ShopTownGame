@@ -1,4 +1,4 @@
-using ShopTown.PresenterComponent;
+using ShopTown.ModelComponent;
 using VContainer;
 using VContainer.Unity;
 
@@ -29,10 +29,10 @@ public class GameplayController : IInitializable
         _upgradeController.Unlock(level, isActivate);
     }
 
-    private void InitializeImprovements(GameCellPresenter cell)
+    private void InitializeImprovements(GameCellModel cell)
     {
-        cell.InitializeManager(_managerController.FindImprovement(cell.Model.Level).Model);
-        cell.InitializeUpgrade(_upgradeController.FindImprovement(cell.Model.Level).Model);
+        _gameBoardController.InitializeManager(_managerController.FindImprovement(cell.Level).Model);
+        _gameBoardController.InitializeUpgrade(_upgradeController.FindImprovement(cell.Level).Model);
     }
 }
 }

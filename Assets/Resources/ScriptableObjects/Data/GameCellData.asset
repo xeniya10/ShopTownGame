@@ -12,6 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f460afc5a0c9a408b1de032c36c7d0, type: 3}
   m_Name: GameCellData
   m_EditorClassIdentifier: 
+  DefaultGameCell:
+    Level: 0
+    BackgroundNumber: 5
+    Size: 0
+    GridIndex: 
+    Position: []
+    State: 0
+    IsManagerActivated: 0
+    ActivatedUpgradeLevel: 0
+    AreAllUpgradeLevelsActivated: 0
+    Cost:
+      Number: 0
+      Value: 0
+    Profit:
+      Number: 0
+      Value: 0
   BaseProfit:
   - Number: 1
     Value: 0

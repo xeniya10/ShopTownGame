@@ -11,8 +11,8 @@ public class DataManager : StorageManager, IGameData, IDisposable
     public GameDataModel GameData { get { return _gameData; } }
     public GameSettingModel Settings { get { return _settings; } }
 
-    private readonly GameDataModel _gameData;
-    private readonly GameSettingModel _settings;
+    private GameDataModel _gameData;
+    private GameSettingModel _settings;
 
     private readonly string _gameDataKey = "GameData";
     private readonly string _settingKey = "Setting";
@@ -23,13 +23,32 @@ public class DataManager : StorageManager, IGameData, IDisposable
     {
         _defaultData = container.Resolve<DefaultDataConfiguration>();
 
-        DeleteKey(_gameDataKey);
-        DeleteKey(_settingKey);
+        // DeleteKey(_gameDataKey);
+        // DeleteKey(_settingKey);
 
-        SetData(ref _gameData, _gameDataKey, _defaultData.GameData);
+        InitializeGameData();
+        InitializeSettings();
+    }
+
+    private void InitializeGameData()
+    {
+        SetData(ref _gameData, _gameDataKey, () =>
+        {
+            _gameData = new GameDataModel();
+            _gameData.SetDefaultData(_defaultData.GameData);
+        });
+
         _gameData.ChangeEvent += () => Save(_gameDataKey, _gameData);
+    }
 
-        SetData(ref _settings, _settingKey, _defaultData.Setting);
+    private void InitializeSettings()
+    {
+        SetData(ref _settings, _settingKey, () =>
+        {
+            _settings = new GameSettingModel();
+            _settings.SetDefaultData(_defaultData.Setting);
+        });
+
         _settings.ChangeEvent += () => Save(_settingKey, _settings);
     }
 
@@ -56,16 +75,6 @@ public abstract class StorageManager
     protected void DeleteKey(string key)
     {
         PlayerPrefs.DeleteKey(key);
-    }
-
-    protected void SetData<T>(ref T variable, string key, T defaultValue)
-    {
-        variable = JsonConvert.DeserializeObject<T>(Load(key));
-
-        if (variable == null)
-        {
-            variable = defaultValue;
-        }
     }
 
     protected void SetData<T>(ref T variable, string key, Action creationDefaultValue)

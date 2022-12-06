@@ -19,26 +19,26 @@ public abstract class ImprovementController : StorageManager, IDisposable
 
     protected abstract string _key { get; set; }
 
-    protected List<ImprovementPresenter> _improvements;
     protected List<ImprovementModel> _models;
+    protected List<ImprovementPresenter> _presenters;
 
     public Action<ImprovementModel> ImprovementActivateEvent;
 
     public void Initialize()
     {
-        DeleteKey(_key);
+        // DeleteKey(_key);
         SetData(ref _models, _key, CreateDefaultModels);
-        CreateImprovements();
+        CreateBoard();
     }
 
-    protected abstract void CreateImprovements();
+    protected abstract void CreateBoard();
 
     protected void InitializeImprovement(ImprovementPresenter improvement)
     {
         improvement.Initialize(_improvementData, _improvementSprites);
         improvement.ModelChangeEvent += () => Save(_key, _models);
         improvement.SubscribeToBuyButton(TryBuy);
-        _improvements.Add(improvement);
+        _presenters.Add(improvement);
     }
 
     private void TryBuy(ImprovementPresenter improvement)
@@ -72,7 +72,7 @@ public abstract class ImprovementController : StorageManager, IDisposable
 
     public ImprovementPresenter FindImprovement(int level)
     {
-        return _improvements.Find(manager => manager.Model.Level == level);
+        return _presenters.Find(manager => manager.Model.Level == level);
     }
 
     public void Unlock(int level, bool isCellActivated)
@@ -96,9 +96,9 @@ public class ManagerController : ImprovementController
 {
     protected override string _key { get; set; } = "Managers";
 
-    protected override void CreateImprovements()
+    protected override void CreateBoard()
     {
-        _improvements = new List<ImprovementPresenter>();
+        _presenters = new List<ImprovementPresenter>();
 
         foreach (var model in _models)
         {
@@ -113,9 +113,9 @@ public class UpgradeController : ImprovementController
 {
     protected override string _key { get; set; } = "Upgrades";
 
-    protected override void CreateImprovements()
+    protected override void CreateBoard()
     {
-        _improvements = new List<ImprovementPresenter>();
+        _presenters = new List<ImprovementPresenter>();
 
         foreach (var model in _models)
         {

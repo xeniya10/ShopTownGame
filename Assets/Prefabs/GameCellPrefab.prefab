@@ -129,8 +129,8 @@ MonoBehaviour:
   - {fileID: 2722506753168927797}
   _progressTimeText: {fileID: 4765561674394547569}
   _priceText: {fileID: 523893662949467066}
-  _gameCellCollection: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
-  _improvementCollection: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
+  _gameCellContainer: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
+  _improvementContainer: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _fadeTime: 0.4
 --- !u!1 &297791839497315789
 GameObject:

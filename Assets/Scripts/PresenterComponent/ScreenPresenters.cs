@@ -92,10 +92,10 @@ public class MenuScreenPresenter : ButtonSubscription, IInitializable
         _menu.Initialize(_data.Settings);
         SubscribeToButton(_menu.GetHideButton(), () => _menu.SetActive(false));
 
-        SetSetting(_menu.GetMusicButton(), Settings.Music, _data.Settings.MusicOn);
-        SetSetting(_menu.GetSoundButton(), Settings.Sound, _data.Settings.SoundOn);
-        SetSetting(_menu.GetNotificationButton(), Settings.Notifications, _data.Settings.NotificationsOn);
-        SetSetting(_menu.GetRemoveAdsButton(), Settings.Ads, _data.Settings.AdsOn);
+        SetSetting(_menu.GetMusicButton(), Settings.Music);
+        SetSetting(_menu.GetSoundButton(), Settings.Sound);
+        SetSetting(_menu.GetNotificationButton(), Settings.Notifications);
+        SetSetting(_menu.GetRemoveAdsButton(), Settings.Ads);
 
         // SubscribeToButton(_menuScreenView.LikeButton, () => Application.OpenURL());
         SubscribeToButton(_menu.GetInstagramButton(), () => Application.OpenURL("https://www.instagram.com/"));
@@ -104,11 +104,11 @@ public class MenuScreenPresenter : ButtonSubscription, IInitializable
         SubscribeToButton(_menu.GetTwitterButton(), () => Application.OpenURL("https://twitter.com/"));
     }
 
-    private void SetSetting(Button button, Settings setting, bool param)
+    private void SetSetting(Button button, Settings setting)
     {
         SubscribeToButton(button, () =>
         {
-            _data.Settings.ChangeState(setting);
+            _data.Settings.ChangeState(setting, out var param);
             _menu.SetButtonText(setting, param);
         });
     }
@@ -153,14 +153,14 @@ public class NewBusinessScreenPresenter : ButtonSubscription, IShowable<GameCell
     }
 }
 
-public class WelcomeScreenPresenter : ButtonSubscription, IInitializable
+public class WelcomeScreenPresenter : ButtonSubscription, IInitializable<MoneyModel>
 {
-    [Inject] private readonly IGameData _data;
     [Inject] private readonly IWelcomeScreenView _view;
 
-    public void Initialize()
+    public void Initialize(MoneyModel model)
     {
-        _view.Initialize(_data.GameData);
+        _view.Initialize(model);
+        _view.SetActive(true);
         SubscribeToButton(_view.GetHideButton(), () => _view.SetActive(false));
     }
 }

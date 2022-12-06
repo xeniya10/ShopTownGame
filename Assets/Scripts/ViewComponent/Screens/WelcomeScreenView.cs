@@ -17,10 +17,9 @@ public class WelcomeScreenView : MonoBehaviour, IWelcomeScreenView
 
     private Vector2 _startPosition;
 
-    public void Initialize(GameDataModel data)
+    public void Initialize(MoneyModel money)
     {
-        SetMoneyNumber(data.CurrentDollarBalance);
-        SetMoneyNumber(data.CurrentGoldBalance);
+        _moneyText.text = money.ToFormattedString();
     }
 
     public void SetActive(bool isActivated)
@@ -37,11 +36,6 @@ public class WelcomeScreenView : MonoBehaviour, IWelcomeScreenView
     public Button GetHideButton()
     {
         return _hideButton;
-    }
-
-    private void SetMoneyNumber(MoneyModel number)
-    {
-        _moneyText.text = number.ToFormattedString();
     }
 
     private void SetPosition(Vector2 position)
@@ -68,7 +62,7 @@ public class WelcomeScreenView : MonoBehaviour, IWelcomeScreenView
     }
 }
 
-public interface IWelcomeScreenView : IInitializable<GameDataModel>, IActivatableScreen, IHideButton
+public interface IWelcomeScreenView : IInitializable<MoneyModel>, IActivatableScreen, IHideButton
 {}
 
 public interface IHideButton

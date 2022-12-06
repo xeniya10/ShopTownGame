@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8be093df75c74e4c97918d1eee96b47, type: 3}
   m_Name: DefaultGameData
   m_EditorClassIdentifier: 
-  DefaultGameData:
-    CurrentMoneyBalance:
-      Number: 1000000
+  GameData:
+    CurrentDollarBalance:
+      Number: 10000
       Value: 0
     CurrentGoldBalance:
       Number: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
     MaxOpenedLevel: 0
     MaxUpgradeLevel: 3
     ActivationNumber: 0
-  DefaultGameSetting:
+  Setting:
     MusicOn: 1
     SoundOn: 1
     NotificationsOn: 1

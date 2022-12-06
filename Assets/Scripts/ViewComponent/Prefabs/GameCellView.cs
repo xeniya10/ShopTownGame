@@ -202,6 +202,7 @@ public class GameCellView : MonoBehaviour, IGameCellView
 
     private void ActivateAnimation(Action callBack)
     {
+        _progressBar.SetActive(false);
         _lockObject.SetActive(false);
         var sequence = DOTween.Sequence();
 
@@ -223,9 +224,13 @@ public class GameCellView : MonoBehaviour, IGameCellView
 
         if (DateTime.Now.CompareTo(model.StartTime) > 0)
         {
-            var fr = (float)(DateTime.Now.Subtract(model.StartTime).TotalSeconds / model.TotalTime.TotalSeconds);
             startTime = DateTime.Now.Subtract(model.StartTime);
-            _progressImage.fillAmount = 1 - fr;
+            var fr = (float)(startTime.TotalSeconds / model.TotalTime.TotalSeconds);
+
+            if (fr < 1)
+            {
+                _progressImage.fillAmount = 1 - fr;
+            }
         }
 
         _inProgressAnimation = DOTween.Sequence();
