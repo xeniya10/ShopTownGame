@@ -1,4 +1,5 @@
 using ShopTown.ModelComponent;
+using ShopTown.PresenterComponent;
 using VContainer;
 using VContainer.Unity;
 
@@ -6,9 +7,9 @@ namespace ShopTown.ControllerComponent
 {
 public class GameplayController : IInitializable
 {
-    [Inject] private readonly GameBoardController _gameBoardController;
-    [Inject] private readonly ManagerController _managerController;
-    [Inject] private readonly UpgradeController _upgradeController;
+    [Inject] private readonly IGameBoardController _gameBoardController;
+    [Inject] private readonly IImprovementController<ManagerPresenter> _managerController;
+    [Inject] private readonly IImprovementController<UpgradePresenter> _upgradeController;
 
     public void Initialize()
     {
@@ -16,11 +17,11 @@ public class GameplayController : IInitializable
         _managerController.Initialize();
         _upgradeController.Initialize();
 
-        _gameBoardController.CellActivateEvent += InitializeImprovements;
-        _gameBoardController.CellUnlockEvent += UnlockImprovements;
+        _gameBoardController.ActivateEvent += InitializeImprovements;
+        _gameBoardController.UnlockEvent += UnlockImprovements;
 
-        _managerController.ImprovementActivateEvent += _gameBoardController.InitializeManager;
-        _upgradeController.ImprovementActivateEvent += _gameBoardController.InitializeUpgrade;
+        _managerController.ActivateEvent += _gameBoardController.InitializeManager;
+        _upgradeController.ActivateEvent += _gameBoardController.InitializeUpgrade;
     }
 
     private void UnlockImprovements(int level, bool isActivate)

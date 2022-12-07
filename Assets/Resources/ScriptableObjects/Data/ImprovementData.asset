@@ -13,6 +13,16 @@ MonoBehaviour:
   m_Name: ImprovementData
   m_EditorClassIdentifier: 
   BusinessNames: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
+  DefaultModel:
+    Level: 0
+    ImprovementLevel: 1
+    Description: 
+    Name: 
+    Cost:
+      Number: 0
+      Value: 0
+    IsActivated: 0
+    State: 0
   ManagerNames:
   - Flora
   - Jackie

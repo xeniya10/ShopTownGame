@@ -61,17 +61,4 @@ public class WelcomeScreenView : MonoBehaviour, IWelcomeScreenView
         });
     }
 }
-
-public interface IWelcomeScreenView : IInitializable<MoneyModel>, IActivatableScreen, IHideButton
-{}
-
-public interface IHideButton
-{
-    Button GetHideButton();
-}
-
-public interface IActivatableScreen
-{
-    void SetActive(bool isActivated);
-}
 }

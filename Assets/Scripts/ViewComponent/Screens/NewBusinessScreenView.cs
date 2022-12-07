@@ -36,7 +36,7 @@ public class NewBusinessScreenView : MonoBehaviour, INewBusinessScreenView
     [SerializeField] private GameCellContainer _gameCellContainer;
     [SerializeField] private ImprovementContainer _improvementSprites;
     [SerializeField] private BusinessData _businessData;
-    [SerializeField] private GameCellData _gameCellData;
+    [SerializeField] private BoardData _boardData;
     [SerializeField] private ImprovementData _improvementData;
 
     [Header("Animation Durations")]
@@ -115,13 +115,13 @@ public class NewBusinessScreenView : MonoBehaviour, INewBusinessScreenView
 
     private void SetBusinessName(int level)
     {
-        _businessName.text = _businessData.LevelNames[level - 1];
+        _businessName.text = _businessData.Names[level - 1];
     }
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _gameCellData.ProcessTime[level - 1].ToNameFormatString();
-        _profit.text = _gameCellData.BaseProfit[level - 1].ToFormattedString();
+        _time.text = _boardData.ProcessTime[level - 1].ToTimeSpan().ToNameFormatString();
+        _profit.text = _boardData.BaseProfit[level - 1].ToFormattedString();
     }
 
     private void SetManagerName(int level)
@@ -141,7 +141,4 @@ public class NewBusinessScreenView : MonoBehaviour, INewBusinessScreenView
         transform.localPosition = position;
     }
 }
-
-public interface INewBusinessScreenView : IInitializable<GameCellModel>, IHideButton, IActivatableScreen
-{}
 }

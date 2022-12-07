@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8be093df75c74e4c97918d1eee96b47, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  DefaultGameData:
+    DollarBalance:
+      Number: 1000
+      Value: 0
+    GoldBalance:
+      Number: 0
+      Value: 1
+    MinLevel: 1
+    MaxLevel: 27
+    MaxOpenedLevel: 0
+    MaxUpgradeLevel: 3
+    ActivationNumber: 0
+  DefaultSetting:
+    MusicOn: 1
+    SoundOn: 1
+    NotificationsOn: 1
+    AdsOn: 1

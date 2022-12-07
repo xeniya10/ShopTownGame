@@ -52,17 +52,4 @@ public class SplashScreenView : MonoBehaviour, ISplashScreenView
         uiElement.Fade(0, _fadeTime, sequence, () => callBack?.Invoke());
     }
 }
-
-public interface ISplashScreenView : ISplashField, IStartButton, ISplashAnimation
-{}
-
-public interface IStartButton
-{
-    Button GetStartButton();
-}
-
-public interface ISplashField
-{
-    Transform GetSplashField();
-}
 }

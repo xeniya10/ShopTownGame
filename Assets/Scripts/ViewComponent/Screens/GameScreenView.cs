@@ -33,8 +33,8 @@ public class GameScreenView : MonoBehaviour, IGameScreenView
 
     public void Initialize(GameDataModel data)
     {
-        SetDollarNumber(data.CurrentDollarBalance);
-        SetGoldNumber(data.CurrentGoldBalance);
+        SetDollarNumber(data.DollarBalance);
+        SetGoldNumber(data.GoldBalance);
     }
 
     public Transform GetGameBoard()
@@ -66,29 +66,5 @@ public class GameScreenView : MonoBehaviour, IGameScreenView
     {
         return _menuButton;
     }
-}
-
-public interface IGameScreenView : IInitializable<GameDataModel>, IBoard, IPurchaseButton, IMenuButton
-{}
-
-public interface IBoard
-{
-    Transform GetGameBoard();
-
-    Transform GetManagerBoard();
-
-    Transform GetUpgradeBoard();
-}
-
-public interface IPurchaseButton
-{
-    Button GetDollarAddButton();
-
-    Button GetGoldAddButton();
-}
-
-public interface IMenuButton
-{
-    Button GetMenuButton();
 }
 }

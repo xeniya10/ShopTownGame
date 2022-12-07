@@ -27,9 +27,9 @@ public class GameLifetimeScope : LifetimeScope
     [SerializeField] private PackCellView _packCellPrefab;
 
     [Header("Data Containers")]
-    [SerializeField] private DefaultDataConfiguration _defaultData;
+    [SerializeField] private GameData _defaultData;
     [SerializeField] private BusinessData _businessData;
-    [SerializeField] private GameCellData _gameCellData;
+    [SerializeField] private BoardData _boardData;
     [SerializeField] private ImprovementData _improvementData;
     [SerializeField] private PacksData _packsData;
 
@@ -49,9 +49,9 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterController(IContainerBuilder builder)
     {
-        builder.Register<GameBoardController>(Lifetime.Scoped);
-        builder.Register<ManagerController>(Lifetime.Scoped);
-        builder.Register<UpgradeController>(Lifetime.Scoped);
+        builder.Register<GameBoardController>(Lifetime.Scoped).AsImplementedInterfaces();
+        builder.Register<ManagerController>(Lifetime.Scoped).As<IImprovementController<ManagerPresenter>>();
+        builder.Register<UpgradeController>(Lifetime.Scoped).As<IImprovementController<UpgradePresenter>>();
         builder.RegisterEntryPoint<GameplayController>(Lifetime.Scoped);
     }
 
@@ -90,7 +90,7 @@ public class GameLifetimeScope : LifetimeScope
 
         builder.RegisterInstance(_defaultData);
         builder.RegisterInstance(_businessData);
-        builder.RegisterInstance(_gameCellData);
+        builder.RegisterInstance(_boardData);
         builder.RegisterInstance(_improvementData);
         builder.RegisterInstance(_packsData);
 

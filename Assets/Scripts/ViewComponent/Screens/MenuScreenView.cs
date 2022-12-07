@@ -40,7 +40,7 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
 
     private Vector2 _startPosition;
 
-    public void Initialize(GameSettingModel settings)
+    public void Initialize(SettingModel settings)
     {
         SetButtonText(_musicButtonText, Music, settings.MusicOn);
         SetButtonText(_soundButtonText, Sound, settings.SoundOn);
@@ -58,23 +58,23 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
         Hide();
     }
 
-    public void SetButtonText(Settings parameter, bool state)
+    public void SetButtonText(Setting parameter, bool state)
     {
         switch (parameter)
         {
-            case Settings.Music:
+            case Setting.Music:
                 SetButtonText(_musicButtonText, Music, state);
                 break;
 
-            case Settings.Sound:
+            case Setting.Sound:
                 SetButtonText(_soundButtonText, Sound, state);
                 break;
 
-            case Settings.Notifications:
+            case Setting.Notifications:
                 SetButtonText(_notificationButtonText, Notification, state);
                 break;
 
-            case Settings.Ads:
+            case Setting.Ads:
                 // ChangeAdsState();
                 break;
         }
@@ -164,35 +164,5 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
     {
         return _hideButton;
     }
-}
-
-public interface IMenuScreenView : IInitializable<GameSettingModel>, IActivatableScreen, ISettingButton,
-    ISocialNetButton, IHideButton
-{
-    void SetButtonText(Settings parameter, bool state);
-}
-
-public interface ISettingButton
-{
-    Button GetMusicButton();
-
-    Button GetSoundButton();
-
-    Button GetNotificationButton();
-
-    Button GetRemoveAdsButton();
-}
-
-public interface ISocialNetButton
-{
-    Button GetLikeButton();
-
-    Button GetInstagramButton();
-
-    Button GetFacebookButton();
-
-    Button GetTelegramButton();
-
-    Button GetTwitterButton();
 }
 }

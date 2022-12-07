@@ -5628,7 +5628,7 @@ MonoBehaviour:
   _gameCellContainer: {fileID: 11400000, guid: 1ead833547caa0843a6f5bc24adbd441, type: 2}
   _improvementSprites: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
-  _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
+  _boardData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
   _improvementData: {fileID: 11400000, guid: 37e0ba50b9936b543969c464d3a99fa3, type: 2}
   _moveTime: 0.4
 --- !u!1 &611250540
@@ -7116,7 +7116,7 @@ MonoBehaviour:
   _packCellPrefab: {fileID: 8316831076640140123, guid: 289888c5264dddc44944b5cd5fcd8022, type: 3}
   _defaultData: {fileID: 11400000, guid: 05efcd7b1c390fa43bfcec2ed0112cd5, type: 2}
   _businessData: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
-  _gameCellData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
+  _boardData: {fileID: 11400000, guid: 82883d38c6233c84e80b5b88f0140905, type: 2}
   _improvementData: {fileID: 11400000, guid: 37e0ba50b9936b543969c464d3a99fa3, type: 2}
   _packsData: {fileID: 11400000, guid: 9334f12724dc49545b10625de06ddc1d, type: 2}
   _improvementSprites: {fileID: 11400000, guid: cae539682de5449498176fe51606bc8c, type: 2}

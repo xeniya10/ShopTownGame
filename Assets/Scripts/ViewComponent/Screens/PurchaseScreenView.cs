@@ -66,14 +66,4 @@ public class PurchaseScreenView : MonoBehaviour, IPurchaseScreenView
         return _goldPacks;
     }
 }
-
-public interface IPurchaseScreenView : IHideButton, IPackArea, IActivatableScreen
-{}
-
-public interface IPackArea
-{
-    Transform GetDollarArea();
-
-    Transform GetGoldArea();
-}
 }
