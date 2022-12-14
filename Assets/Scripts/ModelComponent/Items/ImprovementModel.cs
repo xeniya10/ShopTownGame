@@ -1,11 +1,12 @@
 using System;
+using ShopTown.PresenterComponent;
 
 namespace ShopTown.ModelComponent
 {
 public enum ImprovementState { Hide, Lock, Unlock }
 
 [Serializable]
-public class ImprovementModel
+public class ImprovementModel : IModel
 {
     // Description
     public int Level;

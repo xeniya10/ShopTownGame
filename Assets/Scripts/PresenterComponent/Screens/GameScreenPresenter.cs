@@ -16,9 +16,9 @@ public class GameScreenPresenter : ButtonSubscription, IInitializable
     {
         _gameScreen.Initialize(_data.GameData);
         _data.GameData.ChangeEvent += () => _gameScreen.Initialize(_data.GameData);
-        SubscribeToButton(_gameScreen.GetDollarAddButton(), () => _purchaseScreen.SetActive(true));
-        SubscribeToButton(_gameScreen.GetGoldAddButton(), () => _purchaseScreen.SetActive(true));
-        SubscribeToButton(_gameScreen.GetMenuButton(), () => _menuScreen.SetActive(true));
+        SubscribeToButton(_gameScreen.GetDollarAddButton(), _purchaseScreen.ChangeActivation);
+        SubscribeToButton(_gameScreen.GetGoldAddButton(), _purchaseScreen.ChangeActivation);
+        SubscribeToButton(_gameScreen.GetMenuButton(), _menuScreen.ChangeActivation);
     }
 }
 }

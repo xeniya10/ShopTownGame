@@ -5,9 +5,9 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public class ManagerPresenter : ImprovementPresenter
+public class ManagerPresenter : ImprovementPresenter, IManager
 {
-    public ManagerPresenter(ImprovementModel model, IImprovementView view) : base(model, view)
+    public ManagerPresenter(IModel model, IView view) : base(model, view)
     {}
 
     public override void Activate()

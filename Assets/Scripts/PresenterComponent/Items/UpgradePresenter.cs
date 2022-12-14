@@ -5,9 +5,9 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public class UpgradePresenter : ImprovementPresenter
+public class UpgradePresenter : ImprovementPresenter, IUpgrade
 {
-    public UpgradePresenter(ImprovementModel model, IImprovementView view) : base(model, view)
+    public UpgradePresenter(IModel model, IView view) : base(model, view)
     {}
 
     public override void Activate()

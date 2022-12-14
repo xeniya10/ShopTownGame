@@ -4,25 +4,25 @@ using UnityEngine;
 
 namespace ShopTown.ControllerComponent
 {
-public abstract class StorageManager
+public class StorageManager : IStorageManager
 {
-    protected void Save(string key, object value)
+    public void Save(string key, object value)
     {
         var json = JsonConvert.SerializeObject(value, Formatting.Indented);
         PlayerPrefs.SetString(key, json);
     }
 
-    private string Load(string key)
+    public string Load(string key)
     {
         return PlayerPrefs.GetString(key);
     }
 
-    protected void DeleteKey(string key)
+    public void DeleteKey(string key)
     {
         PlayerPrefs.DeleteKey(key);
     }
 
-    protected void SetData<T>(ref T variable, string key, Action creationDefaultValue)
+    public void SetData<T>(ref T variable, string key, Action creationDefaultValue)
     {
         variable = JsonConvert.DeserializeObject<T>(Load(key));
 

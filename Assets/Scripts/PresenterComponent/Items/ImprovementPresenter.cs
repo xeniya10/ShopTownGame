@@ -6,17 +6,19 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public abstract class ImprovementPresenter : ButtonSubscription
+public abstract class ImprovementPresenter : ButtonSubscription, IImprovement
 {
-    public readonly ImprovementModel Model;
+    public ImprovementModel Model { get { return _model; } }
+
+    protected readonly ImprovementModel _model;
     protected readonly IImprovementView _view;
 
-    public Action ModelChangeEvent;
+    public event Action ChangeEvent;
 
-    protected ImprovementPresenter(ImprovementModel model, IImprovementView view)
+    protected ImprovementPresenter(IModel model, IView view)
     {
-        Model = model;
-        _view = view;
+        _model = (ImprovementModel)model;
+        _view = (IImprovementView)view;
     }
 
     public void Initialize(ImprovementData improvementData, ImprovementContainer improvementSprites)
@@ -41,7 +43,7 @@ public abstract class ImprovementPresenter : ButtonSubscription
         }
 
         _view.StartAnimation(Model.State);
-        ModelChangeEvent?.Invoke();
+        ChangeEvent?.Invoke();
     }
 
     private void SetParameters(ImprovementData improvementData)

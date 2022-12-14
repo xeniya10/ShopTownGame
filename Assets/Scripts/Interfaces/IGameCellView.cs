@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public interface IGameCellView : IInstantiatable<IGameCellView>, IInitializable<GameCellModel>, IBuyButton
+public interface IGameCellView : ICellView<IGameCellView, GameCellModel>
 {
     void InitializeImprovements(GameCellModel model);
 

@@ -1,15 +1,23 @@
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
-using VContainer;
 using VContainer.Unity;
 
 namespace ShopTown.ControllerComponent
 {
 public class GameplayController : IInitializable
 {
-    [Inject] private readonly IGameBoardController _gameBoardController;
-    [Inject] private readonly IImprovementController<ManagerPresenter> _managerController;
-    [Inject] private readonly IImprovementController<UpgradePresenter> _upgradeController;
+    private readonly IGameBoardController _gameBoardController;
+    private readonly IImprovementController<ManagerPresenter> _managerController;
+    private readonly IImprovementController<UpgradePresenter> _upgradeController;
+
+    public GameplayController(IGameBoardController gameBoardController,
+        IImprovementController<ManagerPresenter> managerController,
+        IImprovementController<UpgradePresenter> upgradeController)
+    {
+        _gameBoardController = gameBoardController;
+        _managerController = managerController;
+        _upgradeController = upgradeController;
+    }
 
     public void Initialize()
     {

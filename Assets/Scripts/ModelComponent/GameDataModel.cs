@@ -8,6 +8,7 @@ public class GameDataModel
     // Monetary Parameters
     public MoneyModel DollarBalance;
     public MoneyModel GoldBalance;
+    public MoneyModel OfflineDollarBalance;
 
     // Level Parameters
     public int MinLevel;
@@ -15,6 +16,8 @@ public class GameDataModel
     public int MaxOpenedLevel;
     public int MaxUpgradeLevel;
     public int ActivationNumber;
+
+    public SettingModel Settings;
 
     [NonSerialized] public Action ChangeEvent;
 
@@ -27,6 +30,20 @@ public class GameDataModel
         MaxOpenedLevel = defaultData.MaxOpenedLevel;
         MaxUpgradeLevel = defaultData.MaxUpgradeLevel;
         ActivationNumber = defaultData.ActivationNumber;
+
+        Settings = new SettingModel();
+        Settings.SetDefaultData(defaultData.Settings);
+    }
+
+    public void AddToOfflineBalance(MoneyModel profit)
+    {
+        if (OfflineDollarBalance == null)
+        {
+            OfflineDollarBalance = new MoneyModel(profit.Number, profit.Value);
+            return;
+        }
+
+        OfflineDollarBalance.Number += profit.Number;
     }
 
     public void AddToBalance(MoneyModel number)

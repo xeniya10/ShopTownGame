@@ -15,7 +15,7 @@ public class MenuScreenPresenter : ButtonSubscription, IInitializable
 
     public void Initialize()
     {
-        _menu.Initialize(_data.Settings);
+        _menu.Initialize(_data.GameData.Settings);
         SubscribeToButton(_menu.GetHideButton(), () => _menu.SetActive(false));
 
         SetSetting(_menu.GetMusicButton(), Setting.Music);
@@ -34,7 +34,7 @@ public class MenuScreenPresenter : ButtonSubscription, IInitializable
     {
         SubscribeToButton(button, () =>
         {
-            _data.Settings.ChangeState(setting, out var param);
+            _data.GameData.Settings.ChangeState(setting, out var param);
             _menu.SetButtonText(setting, param);
         });
     }

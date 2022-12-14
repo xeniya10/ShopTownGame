@@ -1,18 +1,30 @@
+using ShopTown.ControllerComponent;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
 using VContainer;
+using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
-public class WelcomeScreenPresenter : ButtonSubscription, IInitializable<MoneyModel>
+public class WelcomeScreenPresenter : ButtonSubscription, IInitializable
 {
-    [Inject] private readonly IWelcomeScreenView _view;
+    [Inject] private readonly IGameData _data;
+    [Inject] private readonly IGameBoardController _gameBoard;
+    [Inject] private readonly IScreenView<MoneyModel> _view;
 
-    public void Initialize(MoneyModel model)
+    public void Initialize()
     {
-        _view.Initialize(model);
-        _view.SetActive(true);
+        _gameBoard.SetOfflineProfitEvent += Show;
         SubscribeToButton(_view.GetHideButton(), () => _view.SetActive(false));
+    }
+
+    private void Show()
+    {
+        if (_data.GameData.OfflineDollarBalance != null)
+        {
+            _view.Initialize(_data.GameData.OfflineDollarBalance);
+            _view.SetActive(true);
+        }
     }
 }
 }

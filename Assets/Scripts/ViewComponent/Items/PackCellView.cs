@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class PackCellView : MonoBehaviour, IPackCellView
+public class PackCellView : MonoBehaviour, ICellView<PackModel>
 {
     [SerializeField] private Button _buyButton;
 
@@ -21,7 +21,7 @@ public class PackCellView : MonoBehaviour, IPackCellView
     [Header("Currency Sprites")]
     [SerializeField] private CurrencyContainer _currency;
 
-    public IPackCellView Instantiate(Transform parent)
+    public ICellView<PackModel> Instantiate(Transform parent)
     {
         return Instantiate(this, parent);
     }

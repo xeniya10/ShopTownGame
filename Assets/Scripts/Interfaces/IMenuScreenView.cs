@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public interface IMenuScreenView : IInitializable<SettingModel>, IActivatableScreen, ISettingButton, ISocialNetButton,
-    IHideButton
+public interface IMenuScreenView : IScreenView<SettingModel>, IChangeActivation, ISettingButton, ISocialNetButton
 {
     void SetButtonText(Setting parameter, bool state);
 }

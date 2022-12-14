@@ -5,45 +5,41 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public class GameCellPresenter : ButtonSubscription
+public class GameCellPresenter : ButtonSubscription, IGameCell
 {
-    public readonly GameCellModel Model;
-    private readonly IGameCellView _view;
+    private GameCellModel _model;
+    private IGameCellView _view;
 
-    public Action ChangeEvent;
-    public Action<MoneyModel> InProgressEndEvent;
-    public Action<MoneyModel> WelcomeBackEvent;
+    public GameCellModel Model { get { return _model; } }
 
-    public GameCellPresenter(IGameCellView view, GameCellModel model)
+    public event Action ChangeEvent;
+    public event Action<MoneyModel> InProgressEndEvent;
+    public event Action<MoneyModel> GetOfflineProfitEvent;
+
+    public GameCellPresenter(IModel model, IView view)
     {
-        _view = view;
-        Model = model;
-    }
-
-    public void Initialize(BoardData cellData)
-    {
-        _view.StartAnimation(Model);
-        _view.InitializeImprovements(Model);
-        SetState(Model.State, cellData);
+        _model = (GameCellModel)model;
+        _view = (IGameCellView)view;
     }
 
     public void SetState(CellState state, BoardData cellData, Action callBack = null)
     {
-        if (state is CellState.Lock or CellState.Unlock)
-        {
-            Model.SetDefaultData(cellData.DefaultCell);
-            Model.State = state;
-        }
-
         Model.State = state;
         SetParameters(cellData);
-        ChangeEvent?.Invoke();
-        if (state == CellState.InProgress)
+        switch (state)
         {
-            GetInProgress();
-            return;
+            case CellState.Lock or CellState.Unlock:
+                Model.SetDefaultData(cellData.DefaultCell);
+                Model.State = state;
+                break;
+
+            case CellState.InProgress:
+                CalculateStartTime();
+                callBack = GetInProgressCallBack;
+                break;
         }
 
+        ChangeEvent?.Invoke();
         _view.StartAnimation(Model, callBack);
     }
 
@@ -75,7 +71,6 @@ public class GameCellPresenter : ButtonSubscription
 
         Model.AreAllUpgradeLevelsActivated = upgrade.IsActivated;
         SetParameters(cellData);
-
         _view.InitializeImprovements(Model);
     }
 
@@ -86,7 +81,6 @@ public class GameCellPresenter : ButtonSubscription
             var lastElement = cellData.Cost[cellData.Cost.Count - 1];
             var costNumber = lastElement.Number * (activationNumber - cellData.Cost.Count + 2);
             Model.Cost = new MoneyModel(costNumber, lastElement.Value);
-
             return;
         }
 
@@ -108,7 +102,7 @@ public class GameCellPresenter : ButtonSubscription
         _view.SetActiveSelector(isActive);
     }
 
-    private void GetInProgress()
+    private void CalculateStartTime()
     {
         var timeAfterStart = (float)DateTime.Now.Subtract(Model.StartTime).TotalSeconds;
         var progressTime = (float)Model.TotalTime.TotalSeconds;
@@ -120,7 +114,7 @@ public class GameCellPresenter : ButtonSubscription
 
         else
         {
-            if (timeAfterStart > progressTime)
+            if (timeAfterStart >= progressTime)
             {
                 var multiplier = 1;
                 if (Model.IsManagerActivated)
@@ -136,24 +130,24 @@ public class GameCellPresenter : ButtonSubscription
 
                 var profit = new MoneyModel(multiplier * Model.Profit.Number, Model.Profit.Value);
                 InProgressEndEvent?.Invoke(profit);
-                WelcomeBackEvent?.Invoke(profit);
+                GetOfflineProfitEvent?.Invoke(profit);
             }
         }
+    }
 
-        _view.StartAnimation(Model, () =>
+    private void GetInProgressCallBack()
+    {
+        if (Model.State == CellState.InProgress)
         {
-            if (Model.State == CellState.InProgress)
+            InProgressEndEvent?.Invoke(Model.Profit);
+            if (Model.IsManagerActivated)
             {
-                InProgressEndEvent?.Invoke(Model.Profit);
-                if (Model.IsManagerActivated)
-                {
-                    GetInProgress();
-                    return;
-                }
-
-                Model.State = CellState.Active;
+                GetInProgressCallBack();
+                return;
             }
-        });
+
+            Model.State = CellState.Active;
+        }
     }
 
     private void SetParameters(BoardData cellData)

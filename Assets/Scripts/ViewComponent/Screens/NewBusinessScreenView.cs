@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class NewBusinessScreenView : MonoBehaviour, INewBusinessScreenView
+public class NewBusinessScreenView : MonoBehaviour, IScreenView<GameCellModel>
 {
     [SerializeField] private Button _hideButton;
 
@@ -120,7 +120,7 @@ public class NewBusinessScreenView : MonoBehaviour, INewBusinessScreenView
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _boardData.ProcessTime[level - 1].ToTimeSpan().ToNameFormatString();
+        _time.text = _boardData.ProcessTime[level - 1].ToTimeSpan().ToSymbolFormatString();
         _profit.text = _boardData.BaseProfit[level - 1].ToFormattedString();
     }
 

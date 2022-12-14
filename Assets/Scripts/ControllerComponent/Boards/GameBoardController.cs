@@ -8,29 +8,29 @@ using VContainer;
 
 namespace ShopTown.ControllerComponent
 {
-public class GameBoardController : StorageManager, IGameBoardController, IDisposable
+public class GameBoardController : IGameBoardController
 {
     [Inject] private readonly IGameData _data;
-    [Inject] private readonly IInitializable<MoneyModel> _welcome;
-    [Inject] private readonly IShowable<GameCellModel> _profile;
+    [Inject] private readonly IStorageManager _storage;
     [Inject] private readonly IBoard _board;
+    [Inject] private readonly IPresenterFactory<IGameCell> _presenterFactory;
     [Inject] private readonly IGameCellView _view;
     [Inject] private readonly BoardData _defaultData;
 
     private string _key = "GameBoard";
-    private MoneyModel _offlineProfit;
 
     private List<GameCellModel> _models = new List<GameCellModel>();
-    private List<GameCellPresenter> _presenters = new List<GameCellPresenter>();
+    private List<IGameCell> _presenters = new List<IGameCell>();
     private List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
 
     public event Action<GameCellModel> ActivateEvent;
     public event Action<int, bool> UnlockEvent;
+    public event Action SetOfflineProfitEvent;
 
     public void Initialize()
     {
-        DeleteKey(_key);
-        SetData(ref _models, _key, CreateDefaultModels);
+        _storage.DeleteKey(_key);
+        _storage.SetData(ref _models, _key, CreateDefaultModels);
         CreateBoard();
     }
 
@@ -57,7 +57,7 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
             }
         }
 
-        Save(_key, _models);
+        _storage.Save(_key, _models);
     }
 
     private void CreateBoard()
@@ -65,26 +65,23 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
         foreach (var model in _models)
         {
             var view = _view.Instantiate(_board.GetGameBoard());
-            var cell = new GameCellPresenter(view, model);
-            cell.ChangeEvent += () => Save(_key, _models);
-            cell.InProgressEndEvent += (profit) => _data.GameData.AddToBalance(profit);
-            cell.WelcomeBackEvent += AddOfflineProfit;
-            cell.SubscribeToBuyButton(TryBuy);
-            cell.SubscribeToCellClick(Select);
-            cell.Initialize(_defaultData);
+            var presenter = _presenterFactory.Create(model, view);
+            presenter.ChangeEvent += () => _storage.Save(_key, _models);
+            presenter.InProgressEndEvent += (profit) => _data.GameData.AddToBalance(profit);
+            presenter.GetOfflineProfitEvent += (profit) => _data.GameData.AddToOfflineBalance(profit);
+            presenter.SubscribeToBuyButton(TryBuy);
+            presenter.SubscribeToCellClick(Select);
+            presenter.SetState(model.State, _defaultData);
 
             if (model.Cost == null && model.State == CellState.Unlock)
             {
-                cell.SetCost(_data.GameData.ActivationNumber, _defaultData);
+                presenter.SetCost(_data.GameData.ActivationNumber, _defaultData);
             }
 
-            _presenters.Add(cell);
+            _presenters.Add(presenter);
         }
 
-        if (_offlineProfit != null)
-        {
-            _welcome.Initialize(_offlineProfit);
-        }
+        SetOfflineProfitEvent?.Invoke();
     }
 
     private void TryBuy(GameCellPresenter cell)
@@ -94,7 +91,6 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
             cell.Model.Level = _data.GameData.MinLevel;
             cell.SetState(CellState.Active, _defaultData);
             UnlockNeighbors(cell);
-            ShowLevelProfile(cell.Model);
             ActivateEvent?.Invoke(cell.Model);
             UnlockEvent?.Invoke(cell.Model.Level, HasCellWithLevel(cell.Model.Level));
         }
@@ -136,30 +132,9 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
             oneCell.LevelUp(_defaultData);
             otherCell.SetCost(_data.GameData.ActivationNumber, _defaultData);
             otherCell.SetState(CellState.Unlock, _defaultData);
-            ShowLevelProfile(oneCell.Model);
             ActivateEvent?.Invoke(oneCell.Model);
             UnlockEvent?.Invoke(oneCell.Model.Level - 1, HasCellWithLevel(oneCell.Model.Level - 1));
             UnlockEvent?.Invoke(oneCell.Model.Level, HasCellWithLevel(oneCell.Model.Level));
-        }
-    }
-
-    private void AddOfflineProfit(MoneyModel profit)
-    {
-        if (_offlineProfit == null)
-        {
-            _offlineProfit = new MoneyModel(profit.Number, profit.Value);
-            return;
-        }
-
-        _offlineProfit.Number += profit.Number;
-    }
-
-    private void ShowLevelProfile(GameCellModel model)
-    {
-        if (model.Level > _data.GameData.MaxOpenedLevel)
-        {
-            _profile.Show(model);
-            _data.GameData.SetMaxOpenedLevel(model.Level);
         }
     }
 
@@ -188,7 +163,7 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
 
     public void Dispose()
     {
-        Save(_key, _models);
+        _storage.Save(_key, _models);
     }
 
     public void InitializeManager(ImprovementModel improvement)
@@ -201,12 +176,12 @@ public class GameBoardController : StorageManager, IGameBoardController, IDispos
         FindAllCells(improvement.Level).ForEach(cell => cell.InitializeUpgrade(improvement, _defaultData));
     }
 
-    private GameCellPresenter FindCell(int level)
+    private IGameCell FindCell(int level)
     {
         return _presenters.Find(cell => cell.Model.Level == level);
     }
 
-    private List<GameCellPresenter> FindAllCells(int level)
+    private List<IGameCell> FindAllCells(int level)
     {
         return _presenters.FindAll(cell => cell.Model.Level == level);
     }

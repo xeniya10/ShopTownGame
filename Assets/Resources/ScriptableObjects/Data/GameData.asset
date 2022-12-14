@@ -19,13 +19,16 @@ MonoBehaviour:
     GoldBalance:
       Number: 0
       Value: 1
+    OfflineDollarBalance:
+      Number: 0
+      Value: 0
     MinLevel: 1
     MaxLevel: 27
     MaxOpenedLevel: 0
     MaxUpgradeLevel: 3
     ActivationNumber: 0
-  DefaultSetting:
-    MusicOn: 1
-    SoundOn: 1
-    NotificationsOn: 1
-    AdsOn: 1
+    Settings:
+      MusicOn: 1
+      SoundOn: 1
+      NotificationsOn: 1
+      AdsOn: 1

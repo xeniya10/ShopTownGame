@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShopTown.ViewComponent
 {
-public interface IImprovementView : IInstantiatable<IImprovementView>, IInitializable<ImprovementModel>, IBuyButton
+public interface IImprovementView : ICellView<IImprovementView, ImprovementModel>
 {
     void SetImprovementSprite(Sprite sprite);
 

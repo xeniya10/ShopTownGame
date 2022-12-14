@@ -1,6 +1,5 @@
 using ShopTown.ControllerComponent;
 using ShopTown.Data;
-using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.SpriteContainer;
 using ShopTown.ViewComponent;
@@ -42,24 +41,28 @@ public class GameLifetimeScope : LifetimeScope
     protected override void Configure(IContainerBuilder builder)
     {
         RegisterView(builder);
-        builder.Register<DataManager>(Lifetime.Scoped).AsImplementedInterfaces();
         RegisterPresenter(builder);
         RegisterController(builder);
     }
 
     private void RegisterController(IContainerBuilder builder)
     {
+        builder.Register<StorageManager>(Lifetime.Scoped).As<IStorageManager>();
+        builder.Register<DataManager>(Lifetime.Scoped).AsImplementedInterfaces();
+
         builder.Register<GameBoardController>(Lifetime.Scoped).AsImplementedInterfaces();
         builder.Register<ManagerController>(Lifetime.Scoped).As<IImprovementController<ManagerPresenter>>();
         builder.Register<UpgradeController>(Lifetime.Scoped).As<IImprovementController<UpgradePresenter>>();
+
         builder.RegisterEntryPoint<GameplayController>(Lifetime.Scoped);
     }
 
     private void RegisterPresenter(IContainerBuilder builder)
     {
-        builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>();
-        builder.Register<WelcomeScreenPresenter>(Lifetime.Scoped).As<IInitializable<MoneyModel>>();
         builder.Register<AudioSourcePresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
+        builder.Register<GameCellFactory>(Lifetime.Scoped).As<IPresenterFactory<IGameCell>>().AsSelf();
+        builder.Register<ManagerFactory>(Lifetime.Scoped).As<IPresenterFactory<IManager>>().AsSelf();
+        builder.Register<UpgradeFactory>(Lifetime.Scoped).As<IPresenterFactory<IUpgrade>>().AsSelf();
 
         builder.UseEntryPoints(entryPoints =>
         {
@@ -68,7 +71,7 @@ public class GameLifetimeScope : LifetimeScope
             entryPoints.Add<MenuScreenPresenter>();
             entryPoints.Add<PurchaseScreenPresenter>();
             entryPoints.Add<NewBusinessScreenPresenter>();
-            // entryPoints.Add<WelcomeScreenPresenter>();
+            entryPoints.Add<WelcomeScreenPresenter>();
         });
     }
 

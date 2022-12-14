@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 public static class TimeSpanExtension
 {
@@ -16,34 +17,46 @@ public static class TimeSpanExtension
 
         if (timeSpan.Days == 0)
         {
-            return timeSpan.ToString(timeSpan.Hours < 10 ? @"h\:mm" : @"hh\:mm");
+            return timeSpan.ToString(timeSpan.Hours < 10 ? @"h\:mm\:ss" : @"hh\:mm\:ss");
         }
 
         return timeSpan.ToString(timeSpan.Days < 10 ? @"d\.hh\:mm" : @"dd\.hh\:mm");
     }
 
-    public static string ToNameFormatString(this TimeSpan timeSpan)
+    public static string ToSymbolFormatString(this TimeSpan timeSpan)
     {
-        if (timeSpan.Days == 0 && timeSpan.Hours == 0 && timeSpan.Minutes == 0)
+        var seconds = $"{timeSpan.Seconds} s";
+        var minutes = $"{timeSpan.Minutes} m ";
+        var hours = $"{timeSpan.Hours} h ";
+        var days = $"{timeSpan.Days} d ";
+
+        var symbolFormatTimeSpan = new StringBuilder();
+
+        if (timeSpan.Days != 0)
         {
-            return $"{timeSpan.Seconds} s";
+            symbolFormatTimeSpan.Append(days);
         }
 
-        if (timeSpan.Days == 0 && timeSpan.Hours == 0)
+        if (timeSpan.Hours != 0)
         {
-            return $"{timeSpan.Minutes} m";
+            symbolFormatTimeSpan.Append(hours);
         }
 
-        if (timeSpan.Days == 0)
+        if (timeSpan.Minutes != 0)
         {
-            return $"{timeSpan.Hours} h";
+            symbolFormatTimeSpan.Append(minutes);
         }
 
-        if (timeSpan.Days != 0 && timeSpan.Hours != 0)
+        if (timeSpan.Seconds != 0)
         {
-            return $"{timeSpan.Days} d {timeSpan.Hours} h";
+            symbolFormatTimeSpan.Append(seconds);
         }
 
-        return $"{timeSpan.Days} d";
+        if (symbolFormatTimeSpan[^1] == ' ')
+        {
+            symbolFormatTimeSpan.Remove(symbolFormatTimeSpan.Length - 1, 1);
+        }
+
+        return symbolFormatTimeSpan.ToString();
     }
 }

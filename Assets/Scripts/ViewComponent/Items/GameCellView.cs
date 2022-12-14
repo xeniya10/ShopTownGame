@@ -222,11 +222,11 @@ public class GameCellView : MonoBehaviour, IGameCellView
         if (DateTime.Now.CompareTo(model.StartTime) > 0)
         {
             startTime = DateTime.Now.Subtract(model.StartTime);
-            var fr = (float)(startTime.TotalSeconds / model.TotalTime.TotalSeconds);
+            var filledAmount = (float)(startTime.TotalSeconds / model.TotalTime.TotalSeconds);
 
-            if (fr < 1)
+            if (filledAmount < 1)
             {
-                _progressImage.fillAmount = 1 - fr;
+                _progressImage.fillAmount = 1 - filledAmount;
             }
         }
 

@@ -7,7 +7,5 @@ namespace ShopTown.Data
 public class GameData : ScriptableObject
 {
     public GameDataModel DefaultGameData = new GameDataModel();
-
-    public SettingModel DefaultSetting = new SettingModel();
 }
 }

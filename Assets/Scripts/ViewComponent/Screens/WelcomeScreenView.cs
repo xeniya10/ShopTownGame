@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ShopTown.ViewComponent
 {
-public class WelcomeScreenView : MonoBehaviour, IWelcomeScreenView
+public class WelcomeScreenView : MonoBehaviour, IScreenView<MoneyModel>
 {
     [Header("Components")]
     [SerializeField] private Button _hideButton;

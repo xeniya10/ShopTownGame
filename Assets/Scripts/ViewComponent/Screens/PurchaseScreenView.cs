@@ -65,5 +65,10 @@ public class PurchaseScreenView : MonoBehaviour, IPurchaseScreenView
     {
         return _goldPacks;
     }
+
+    public void ChangeActivation()
+    {
+        SetActive(!gameObject.activeSelf);
+    }
 }
 }

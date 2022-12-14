@@ -164,5 +164,10 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
     {
         return _hideButton;
     }
+
+    public void ChangeActivation()
+    {
+        SetActive(!gameObject.activeSelf);
+    }
 }
 }

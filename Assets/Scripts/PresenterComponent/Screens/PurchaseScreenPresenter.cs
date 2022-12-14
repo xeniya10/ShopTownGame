@@ -11,7 +11,7 @@ namespace ShopTown.PresenterComponent
 public class PurchaseScreenPresenter : ButtonSubscription, IInitializable
 {
     [Inject] public readonly IPurchaseScreenView _purchaseScreen;
-    [Inject] private readonly IPackCellView _packCell;
+    [Inject] private readonly ICellView<PackModel> _packCell;
     [Inject] private readonly PacksData _packsData;
 
     public void Initialize()

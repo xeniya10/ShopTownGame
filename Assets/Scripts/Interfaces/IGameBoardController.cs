@@ -1,10 +1,11 @@
 using System;
 using ShopTown.ModelComponent;
 
-public interface IGameBoardController
+public interface IGameBoardController : IDisposable
 {
     event Action<GameCellModel> ActivateEvent;
     event Action<int, bool> UnlockEvent;
+    event Action SetOfflineProfitEvent;
 
     void Initialize();
 

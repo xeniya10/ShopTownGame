@@ -21,8 +21,7 @@ public class SplashCellView : MonoBehaviour, ISplashCellView
 
     public ISplashCellView Instantiate(Transform parent)
     {
-        var cell = Instantiate(this, parent);
-        return cell;
+        return Instantiate(this, parent);
     }
 
     public void Initialize(SplashCellModel model)

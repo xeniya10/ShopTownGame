@@ -9,9 +9,10 @@ using VContainer;
 
 namespace ShopTown.ControllerComponent
 {
-public abstract class ImprovementController<T> : StorageManager, IImprovementController<T>, IDisposable
+public abstract class ImprovementController<T> : IImprovementController<T>, IDisposable
 {
     [Inject] protected readonly IGameData _data;
+    [Inject] protected readonly IStorageManager _storage;
     [Inject] protected readonly IImprovementView _view;
     [Inject] protected readonly IBoard _board;
     [Inject] protected readonly ImprovementData _improvementData;
@@ -26,8 +27,8 @@ public abstract class ImprovementController<T> : StorageManager, IImprovementCon
 
     public void Initialize()
     {
-        DeleteKey(_key);
-        SetData(ref _models, _key, CreateDefaultModels);
+        _storage.DeleteKey(_key);
+        _storage.SetData(ref _models, _key, CreateDefaultModels);
         CreateBoard();
     }
 
@@ -36,7 +37,7 @@ public abstract class ImprovementController<T> : StorageManager, IImprovementCon
     protected void InitializeImprovement(ImprovementPresenter improvement)
     {
         improvement.Initialize(_improvementData, _improvementSprites);
-        improvement.ModelChangeEvent += () => Save(_key, _models);
+        improvement.ChangeEvent += () => _storage.Save(_key, _models);
         improvement.SubscribeToBuyButton(TryBuy);
         _presenters.Add(improvement);
     }
@@ -67,7 +68,7 @@ public abstract class ImprovementController<T> : StorageManager, IImprovementCon
             _models.Add(improvement);
         }
 
-        Save(_key, _models);
+        _storage.Save(_key, _models);
     }
 
     public ImprovementPresenter FindImprovement(int level)
@@ -88,7 +89,7 @@ public abstract class ImprovementController<T> : StorageManager, IImprovementCon
 
     public void Dispose()
     {
-        Save(_key, _models);
+        _storage.Save(_key, _models);
     }
 }
 }
