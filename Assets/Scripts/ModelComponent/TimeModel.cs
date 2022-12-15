@@ -8,6 +8,8 @@ public struct TimeModel
     public int Minutes;
     public int Seconds;
 
+    public double TotalSeconds { get { return ToTimeSpan().TotalSeconds; } }
+
     public TimeModel(int days, int hours, int minutes, int seconds)
     {
         Days = days;

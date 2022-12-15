@@ -1,4 +1,3 @@
-using System;
 using NSubstitute;
 using NUnit.Framework;
 using ShopTown.ControllerComponent;
@@ -40,29 +39,23 @@ public class GameBoardControllerTester
         _controller = container.Resolve<IGameBoardController>();
     }
 
-    [Test] public void SuccessfulSavingDataByCallOfDisposeTest()
+    [Test] public void Initialize_AnyArg_SetsData()
+    {
+        _controller.Initialize();
+        _storage.Received(1).Load(ref Arg.Any<object>(), Arg.Any<string>());
+    }
+
+    [Test] public void Initialize_ByCallingOfCreateBoard_InvokesSetOfflineProfitEvent()
+    {
+        var wasCalled = false;
+        _controller.SetOfflineProfitEvent += () => wasCalled = true;
+        _controller.Initialize();
+        Assert.True(wasCalled);
+    }
+
+    [Test] public void Dispose_AnyArg_CallsSave()
     {
         _controller.Dispose();
         _storage.Received(1).Save(Arg.Any<string>(), Arg.Any<object>());
     }
-
-    [Test] public void SuccessfulSetDataCallTest()
-    {
-        _controller.Initialize();
-        _storage.Received(1).SetData(ref Arg.Any<object>(), Arg.Any<string>(), Arg.Any<Action>());
-    }
-
-    [Test] public void SuccessfulCreationBoardCallTest()
-    {
-        var isInvoked = false;
-        _controller.SetOfflineProfitEvent += () => isInvoked = true;
-        _controller.Initialize();
-        Assert.AreEqual(true, isInvoked);
-
-        // _controller.Initialize();
-        // _factory.Received(1).Create(Arg.Any<GameCellModel>(), Arg.Any<IGameCellView>());
-    }
-
-    // [Test] public void GameBoardControllerCreationDefaultModelsTest()
-    // {}
 }

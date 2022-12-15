@@ -141,6 +141,11 @@ public static class MoneyExtension
 
         formattedTextNumber = textNumber.Substring(0, scaleModulo + 1);
         var fractionText = "." + textNumber.Substring(scaleModulo + 1, 1);
+        if (int.Parse(textNumber.Substring(scaleModulo + 2, 1)) >= 5)
+        {
+            var fractionNumber = int.Parse(textNumber.Substring(scaleModulo + 1, 1)) + 1;
+            fractionText = "." + fractionNumber;
+        }
 
         if (!fractionText.Equals(".0"))
         {

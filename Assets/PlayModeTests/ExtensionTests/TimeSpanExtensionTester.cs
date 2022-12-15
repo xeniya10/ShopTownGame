@@ -52,7 +52,7 @@ public class TimeSpanFormatTester
         "10.10:10"
     };
 
-    [Test] public void TimeNumberFormatTest()
+    [Test] public void ToNumberFormatString_InputSeveralValues_ReturnsFormattedValues()
     {
         for (var i = 0; i < _results.Count; i++)
         {
@@ -84,7 +84,7 @@ public class TimeSpanFormatTester
         "10 d 10 h 10 m 10 s"
     };
 
-    [Test] public void TimeSymbolFormatTest()
+    [Test] public void ToSymbolFormatString_InputSeveralValues_ReturnsFormattedValues()
     {
         for (var i = 0; i < _results.Count; i++)
         {

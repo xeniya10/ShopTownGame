@@ -1,4 +1,3 @@
-using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.PresenterComponent;
 using ShopTown.SpriteContainer;
@@ -7,7 +6,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace ControllerComponent
+namespace ShopTown.ControllerComponent
 {
 public class GameLifetimeScope : LifetimeScope
 {

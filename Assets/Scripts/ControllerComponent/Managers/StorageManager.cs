@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -11,25 +10,20 @@ public class StorageManager : IStorageManager
         var json = JsonConvert.SerializeObject(value, Formatting.Indented);
         PlayerPrefs.SetString(key, json);
     }
-
-    public string Load(string key)
-    {
-        return PlayerPrefs.GetString(key);
-    }
+    //
+    // public string Load(string key)
+    // {
+    //     return PlayerPrefs.GetString(key);
+    // }
 
     public void DeleteKey(string key)
     {
         PlayerPrefs.DeleteKey(key);
     }
 
-    public void SetData<T>(ref T variable, string key, Action creationDefaultValue)
+    public void Load<T>(ref T variable, string key)
     {
-        variable = JsonConvert.DeserializeObject<T>(Load(key));
-
-        if (variable == null)
-        {
-            creationDefaultValue?.Invoke();
-        }
+        variable = JsonConvert.DeserializeObject<T>(PlayerPrefs.GetString(key));
     }
 }
 }

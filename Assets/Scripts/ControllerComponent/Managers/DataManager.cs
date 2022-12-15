@@ -23,14 +23,21 @@ public class DataManager : StorageManager, IGameData, IDisposable
 
     private void InitializeGameData()
     {
-        SetData(ref _gameData, _gameDataKey, () =>
+        Load(ref _gameData, _gameDataKey);
+
+        if (_gameData == null)
         {
-            _gameData = new GameDataModel();
-            _gameData.SetDefaultData(_defaultData.DefaultGameData);
-        });
+            CreateDefaultData();
+        }
 
         _gameData.ChangeEvent += () => Save(_gameDataKey, _gameData);
         _gameData.Settings.ChangeEvent += () => Save(_gameDataKey, _gameData);
+    }
+
+    private void CreateDefaultData()
+    {
+        _gameData = new GameDataModel();
+        _gameData.SetDefaultData(_defaultData.DefaultGameData);
     }
 
     public void Dispose()

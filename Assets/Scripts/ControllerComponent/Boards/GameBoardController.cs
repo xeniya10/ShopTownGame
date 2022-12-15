@@ -30,7 +30,7 @@ public class GameBoardController : IGameBoardController
     public void Initialize()
     {
         _storage.DeleteKey(_key);
-        _storage.SetData(ref _models, _key, CreateDefaultModels);
+        _storage.Load(ref _models, _key);
         CreateBoard();
     }
 
@@ -62,6 +62,11 @@ public class GameBoardController : IGameBoardController
 
     private void CreateBoard()
     {
+        if (_models == null)
+        {
+            CreateDefaultModels();
+        }
+
         foreach (var model in _models)
         {
             var view = _view.Instantiate(_board.GetGameBoard());
@@ -92,7 +97,7 @@ public class GameBoardController : IGameBoardController
             cell.SetState(CellState.Active, _defaultData);
             UnlockNeighbors(cell);
             ActivateEvent?.Invoke(cell.Model);
-            UnlockEvent?.Invoke(cell.Model.Level, HasCellWithLevel(cell.Model.Level));
+            UnlockEvent?.Invoke(cell.Model.Level, IsCellWithLevel(cell.Model.Level));
         }
     }
 
@@ -107,34 +112,34 @@ public class GameBoardController : IGameBoardController
         }
 
         var oneCell = _selectedCells[1];
-        var otherCell = _selectedCells[0];
+        var anotherCell = _selectedCells[0];
 
-        if (oneCell.Equals(otherCell) && oneCell.Model.State == CellState.Active)
+        if (oneCell.Equals(anotherCell) && oneCell.Model.State == CellState.Active)
         {
             selectedCell.Model.StartTime = DateTime.MaxValue;
             selectedCell.SetState(CellState.InProgress, _defaultData);
         }
 
-        if (oneCell.IsNeighborOf(otherCell) && oneCell.HasSameLevelAs(otherCell))
+        if (oneCell.IsNeighborOf(anotherCell) && oneCell.HasSameLevelAs(anotherCell))
         {
-            Merge(oneCell, otherCell);
+            Merge(oneCell, anotherCell);
         }
 
         _selectedCells.ForEach(cell => cell.SetActiveSelector(false));
         _selectedCells.Clear();
     }
 
-    private void Merge(GameCellPresenter oneCell, GameCellPresenter otherCell)
+    private void Merge(GameCellPresenter oneCell, GameCellPresenter anotherCell)
     {
         if (oneCell.Model.Level < _data.GameData.MaxLevel)
         {
             _data.GameData.SetActivationNumber(_data.GameData.ActivationNumber + 1);
             oneCell.LevelUp(_defaultData);
-            otherCell.SetCost(_data.GameData.ActivationNumber, _defaultData);
-            otherCell.SetState(CellState.Unlock, _defaultData);
+            anotherCell.SetCost(_data.GameData.ActivationNumber, _defaultData);
+            anotherCell.SetState(CellState.Unlock, _defaultData);
             ActivateEvent?.Invoke(oneCell.Model);
-            UnlockEvent?.Invoke(oneCell.Model.Level - 1, HasCellWithLevel(oneCell.Model.Level - 1));
-            UnlockEvent?.Invoke(oneCell.Model.Level, HasCellWithLevel(oneCell.Model.Level));
+            UnlockEvent?.Invoke(oneCell.Model.Level - 1, IsCellWithLevel(oneCell.Model.Level - 1));
+            UnlockEvent?.Invoke(oneCell.Model.Level, IsCellWithLevel(oneCell.Model.Level));
         }
     }
 
@@ -151,7 +156,7 @@ public class GameBoardController : IGameBoardController
         }
     }
 
-    private bool HasCellWithLevel(int level)
+    private bool IsCellWithLevel(int level)
     {
         if (FindCell(level) == null)
         {

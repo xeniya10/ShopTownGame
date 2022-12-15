@@ -7,6 +7,7 @@ using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameCellPresenterTester
 {
@@ -14,7 +15,23 @@ public class GameCellPresenterTester
     private IGameCellView _view;
     private BoardData _boardData;
     private IGameCell _presenter;
-    private Action _testCallBack;
+
+    private void PrepareCaseTest(bool isMangerActivated, int timeMultiplier = 1)
+    {
+        _boardData.BaseProfit.Add(new MoneyModel(Random.Range(1, 100000)));
+        _boardData.ProcessTime.Add(new TimeModel(Random.Range(0, 3), Random.Range(0, 60), Random.Range(0, 60),
+            Random.Range(0, 60)));
+
+        _boardData.Cost.Add(new MoneyModel(Random.Range(1, 100000)));
+
+        _presenter.Model.Level = 1;
+        _presenter.Model.IsManagerActivated = isMangerActivated;
+        var processTimeInSeconds = _boardData.ProcessTime[_presenter.Model.Level - 1].ToTimeSpan().TotalSeconds *
+            timeMultiplier;
+
+        var processTime = TimeSpan.FromSeconds(processTimeInSeconds);
+        _presenter.Model.StartTime = DateTime.Now.Subtract(processTime);
+    }
 
     [SetUp] public void CreateTestObjects()
     {
@@ -24,183 +41,295 @@ public class GameCellPresenterTester
         _presenter = new GameCellPresenter(_model, _view);
     }
 
-    [Test] public void UnlockingTest()
+    [Test] public void SetState_OnUnlock_CallsChangeEvent()
     {
+        var wasCalled = false;
+        _presenter.ChangeEvent += () => wasCalled = true;
+        _presenter.SetState(CellState.Unlock, _boardData);
+        Assert.True(wasCalled);
+    }
+
+    [Test] public void SetState_OnUnlock_SetsUnlock()
+    {
+        _presenter.Model.State = CellState.Active;
         _presenter.SetState(CellState.Unlock, _boardData);
         Assert.AreEqual(CellState.Unlock, _presenter.Model.State);
     }
 
-    [Test] public void ActivationTest()
+    [Test] public void SetState_OnUnlock_SetsActive()
     {
+        _presenter.Model.State = CellState.Unlock;
         _presenter.SetState(CellState.Active, _boardData);
         Assert.AreEqual(CellState.Active, _presenter.Model.State);
     }
 
-    [Test] public void GetInProgressByClickTest()
+    [Test] public void SetState_InProgressByClick_SetsInProgress()
     {
         _presenter.Model.StartTime = DateTime.MaxValue;
+        _presenter.Model.State = CellState.Active;
         _presenter.SetState(CellState.InProgress, _boardData);
         Assert.AreEqual(CellState.InProgress, _presenter.Model.State);
     }
 
-    private void PrepareGetInProgressCaseTest(bool isMangerActivated, int timeMultiplier = 1)
+    [Test] public void SetState_InProgressWithoutManager_SetsActive()
     {
-        _presenter.Model.Level = 1;
-        _presenter.Model.IsManagerActivated = isMangerActivated;
-        _boardData.BaseProfit.Add(new MoneyModel(1));
-        _boardData.ProcessTime.Add(new TimeModel(0, 0, 0, 40));
-        var processTime =
-            TimeSpan.FromSeconds(_boardData.ProcessTime[_presenter.Model.Level - 1].Seconds * timeMultiplier);
-
-        _presenter.Model.StartTime = DateTime.Now.Subtract(processTime);
-    }
-
-    [Test] public void GetInProgressNotActivatedManagerCaseTest()
-    {
-        var profit = new MoneyModel(0);
-        PrepareGetInProgressCaseTest(false);
-
-        _presenter.GetOfflineProfitEvent += (offlineProfit) => profit.Number = offlineProfit.Number;
+        PrepareCaseTest(false);
         _presenter.SetState(CellState.InProgress, _boardData);
-
-        Assert.AreEqual(_presenter.Model.Profit.Number, profit.Number);
         Assert.AreEqual(CellState.Active, _presenter.Model.State);
     }
 
-    [Test] public void GetInProgressActivatedManagerCaseTest()
+    [Test] public void SetState_InProgressWithoutManager_CallsInProgressEndEvent()
+    {
+        var wasCalled = false;
+        PrepareCaseTest(false);
+        _presenter.InProgressEndEvent += (x) => wasCalled = true;
+        _presenter.SetState(CellState.InProgress, _boardData);
+        Assert.True(wasCalled);
+    }
+
+    [Test] public void SetState_InProgressWithoutManager_CallsGetOfflineProfitEvent()
+    {
+        var profit = new MoneyModel(0);
+        PrepareCaseTest(false);
+        _presenter.GetOfflineProfitEvent += (offlineProfit) => profit.Number = offlineProfit.Number;
+        _presenter.SetState(CellState.InProgress, _boardData);
+        Assert.AreEqual(_presenter.Model.Profit.Number, profit.Number);
+    }
+
+    [Test] public void SetState_InProgressWithManager_SetsActive()
+    {
+        PrepareCaseTest(true);
+        _presenter.SetState(CellState.InProgress, _boardData);
+        Assert.AreEqual(CellState.InProgress, _presenter.Model.State);
+    }
+
+    [Test] public void SetState_InProgressWithManager_CallsInProgressEndEvent()
+    {
+        var wasCalled = false;
+        PrepareCaseTest(true);
+        _presenter.InProgressEndEvent += (x) => wasCalled = true;
+        _presenter.SetState(CellState.InProgress, _boardData);
+        Assert.True(wasCalled);
+    }
+
+    [Test] public void SetState_InProgressWithManager_CallsGetOfflineProfitEvent()
     {
         var multiplier = 3;
         var profit = new MoneyModel(0);
-        PrepareGetInProgressCaseTest(true, multiplier);
-
+        PrepareCaseTest(true, multiplier);
         _presenter.GetOfflineProfitEvent += (offlineProfit) => profit.Number = offlineProfit.Number;
         _presenter.SetState(CellState.InProgress, _boardData);
-
         Assert.AreEqual(_presenter.Model.Profit.Number * multiplier, profit.Number);
-        Assert.AreEqual(CellState.InProgress, _presenter.Model.State);
     }
 
-    [Test] public void SettingParametersTest()
+    [Test] public void SetState_InProgress_InvokesInProgressEndEventByCallBack()
     {
-        _boardData.BaseProfit.Add(new MoneyModel(1));
-        _boardData.ProcessTime.Add(new TimeModel(0, 0, 0, 1));
-        _boardData.Cost.Add(new MoneyModel(1));
-
-        _presenter.Model.Level = 1;
-        _presenter.SetState(CellState.Active, _boardData);
-        _presenter.SetCost(0, _boardData);
-
-        Assert.AreEqual(1, _presenter.Model.Profit.Number);
-        Assert.AreEqual(1, _presenter.Model.TotalTime.TotalSeconds);
-        Assert.AreEqual(1, _presenter.Model.Cost.Number);
-
-        _presenter.SetCost(1, _boardData);
-        Assert.AreEqual(2, _presenter.Model.Cost.Number);
+        var wasCalled = false;
+        _presenter.Model.StartTime = DateTime.MaxValue;
+        _view.StartAnimation(Arg.Any<GameCellModel>(), Arg.Invoke());
+        _presenter.InProgressEndEvent += (x) => wasCalled = true;
+        _presenter.SetState(CellState.InProgress, _boardData);
+        Assert.True(wasCalled);
     }
 
-    [Test] public void LevelUpTest()
+    [Test] public void SetState_InProgress_SetsActiveByCallBack()
     {
-        _presenter.Model.Level = -1;
-        _presenter.LevelUp(_boardData);
-        Assert.AreEqual(0, _presenter.Model.Level);
-    }
-
-    [Test] public void InitializingNotActivatedManagerTest()
-    {
-        var manager = Substitute.For<ImprovementModel>();
-        manager.IsActivated = false;
-        PrepareGetInProgressCaseTest(true);
-        _presenter.Model.State = CellState.Active;
-        _presenter.InitializeManager(manager, _boardData);
-        Assert.AreEqual(false, _presenter.Model.IsManagerActivated);
+        _presenter.Model.StartTime = DateTime.MaxValue;
+        _view.StartAnimation(Arg.Any<GameCellModel>(), Arg.Invoke());
+        _presenter.SetState(CellState.InProgress, _boardData);
         Assert.AreEqual(CellState.Active, _presenter.Model.State);
     }
 
-    [Test] public void InitializingActivatedManagerTest()
+    [Test] public void SetCost_InRange_SetsTheSameCostValue()
+    {
+        var activationNumber = 0;
+        PrepareCaseTest(false);
+        _presenter.SetCost(activationNumber, _boardData);
+        Assert.AreEqual(_boardData.Cost[^1].Number, _presenter.Model.Cost.Number);
+    }
+
+    [Test] public void SetCost_OutOfRange_SetsTheSameCostValue()
+    {
+        var activationNumber = 1;
+        PrepareCaseTest(false);
+        _presenter.SetCost(activationNumber, _boardData);
+        Assert.AreEqual(_boardData.Cost[^1].Number * (activationNumber - _boardData.Cost.Count + 2),
+            _presenter.Model.Cost.Number);
+    }
+
+    [Test] public void SetProfit_InRange_SetsTheSameProfitValue()
+    {
+        PrepareCaseTest(false);
+        _presenter.SetState(CellState.Active, _boardData);
+        Assert.AreEqual(_boardData.BaseProfit[^1].Number, _presenter.Model.Profit.Number);
+    }
+
+    [Test] public void SetProfit_OutOfRange_SetsTheSameProfitValue()
+    {
+        PrepareCaseTest(false);
+        _presenter.Model.Level = 0;
+        _presenter.SetState(CellState.Active, _boardData);
+        Assert.Null(_presenter.Model.Profit);
+    }
+
+    [Test] public void SetTime_InRange_SetsTheSameProcessTimeValue()
+    {
+        PrepareCaseTest(false);
+        _presenter.SetState(CellState.Active, _boardData);
+        Assert.AreEqual(_boardData.ProcessTime[^1].TotalSeconds, _presenter.Model.TotalTime.TotalSeconds);
+    }
+
+    [Test] public void SetTime_OutOfRange_SetsTheSameProcessTimeValue()
+    {
+        PrepareCaseTest(false);
+        _presenter.Model.Level = 0;
+        _presenter.SetState(CellState.Active, _boardData);
+        Assert.AreEqual(TimeSpan.Zero, _presenter.Model.TotalTime);
+    }
+
+    [Test] public void LevelUp_ZeroLevel_SetsTheFirstLevel()
+    {
+        PrepareCaseTest(false);
+        _presenter.Model.Level = 0;
+        _presenter.LevelUp(_boardData);
+        Assert.AreEqual(1, _presenter.Model.Level);
+    }
+
+    [Test] public void InitializeManager_NotActivatedManager_SetsActive()
+    {
+        var manager = Substitute.For<ImprovementModel>();
+        manager.IsActivated = false;
+        PrepareCaseTest(true);
+        _presenter.Model.State = CellState.Active;
+        _presenter.InitializeManager(manager, _boardData);
+        Assert.AreEqual(CellState.Active, _presenter.Model.State);
+    }
+
+    [Test] public void InitializeManager_ActivatedManager_SetsInProgress()
     {
         var manager = Substitute.For<ImprovementModel>();
         manager.IsActivated = true;
+        PrepareCaseTest(false);
         _presenter.Model.State = CellState.Active;
         _presenter.InitializeManager(manager, _boardData);
-        Assert.AreEqual(true, _presenter.Model.IsManagerActivated);
         Assert.AreEqual(CellState.InProgress, _presenter.Model.State);
     }
 
-    [Test] public void InitializingNotActivatedUpgradeTest()
+    [Test] public void InitializeManager_ActivatedManager_SetsManagerState()
+    {
+        var manager = Substitute.For<ImprovementModel>();
+        manager.IsActivated = true;
+        PrepareCaseTest(false);
+        _presenter.InitializeManager(manager, _boardData);
+        Assert.True(_presenter.Model.IsManagerActivated);
+    }
+
+    [Test] public void InitializeUpgrade_NotActivatedUpgrade_SetsUpgradeLevel()
     {
         var upgrade = Substitute.For<ImprovementModel>();
         upgrade.ImprovementLevel = 2;
+        PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(1, _presenter.Model.ActivatedUpgradeLevel);
+        Assert.AreEqual(upgrade.ImprovementLevel - 1, _presenter.Model.ActivatedUpgradeLevel);
     }
 
-    [Test] public void InitializingActivatedUpgradeTest()
+    [Test] public void InitializeUpgrade_NotActivatedUpgrade_SetsProfit()
+    {
+        var upgrade = Substitute.For<ImprovementModel>();
+        upgrade.ImprovementLevel = 2;
+        PrepareCaseTest(false);
+        _presenter.InitializeUpgrade(upgrade, _boardData);
+        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.Profit.Number / _boardData.BaseProfit[^1].Number);
+    }
+
+    [Test] public void InitializeUpgrade_ActivatedUpgrade_SetsUpgradeState()
     {
         var upgrade = Substitute.For<ImprovementModel>();
         upgrade.ImprovementLevel = 3;
         upgrade.IsActivated = true;
+        PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(3, _presenter.Model.ActivatedUpgradeLevel);
-        Assert.AreEqual(true, _presenter.Model.AreAllUpgradeLevelsActivated);
+        Assert.True(_presenter.Model.AreAllUpgradeLevelsActivated);
     }
 
-    [Test] public void SubscriptionToBuyButtonTest()
+    [Test] public void InitializeUpgrade_ActivatedUpgrade_SetsUpgradeLevel()
     {
-        _presenter.Model.State = CellState.Unlock;
+        var upgrade = Substitute.For<ImprovementModel>();
+        upgrade.ImprovementLevel = 3;
+        upgrade.IsActivated = true;
+        PrepareCaseTest(false);
+        _presenter.InitializeUpgrade(upgrade, _boardData);
+        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.ActivatedUpgradeLevel);
+    }
+
+    [Test] public void InitializeUpgrade_ActivatedUpgrade_SetsProfit()
+    {
+        var upgrade = Substitute.For<ImprovementModel>();
+        upgrade.ImprovementLevel = 3;
+        upgrade.IsActivated = true;
+        PrepareCaseTest(false);
+        _presenter.InitializeUpgrade(upgrade, _boardData);
+        Assert.AreEqual(upgrade.ImprovementLevel + 1,
+            _presenter.Model.Profit.Number / _boardData.BaseProfit[^1].Number);
+    }
+
+    [Test] public void SubscriptionToBuyButton_ByClick_InvokesCallBack()
+    {
+        var wasCalled = false;
         var button = Substitute.For<Button>();
         _view.GetBuyButton().Returns(button);
-        _presenter.SubscribeToBuyButton((cell) => cell.Model.State = CellState.Active);
+        _presenter.SubscribeToBuyButton((cell) => wasCalled = true);
         _view.GetBuyButton().onClick?.Invoke();
-        Assert.AreEqual(CellState.Active, _presenter.Model.State);
+        Assert.True(wasCalled);
     }
 
-    [Test] public void SubscriptionToCellButtonTest()
+    [Test] public void SubscriptionToCellButton_ByClick_InvokesCallBack()
     {
-        _presenter.Model.State = CellState.Unlock;
+        var wasCalled = false;
         var button = Substitute.For<Button>();
         _view.GetCellButton().Returns(button);
-        _presenter.SubscribeToCellClick((cell) => cell.Model.State = CellState.Active);
+        _presenter.SubscribeToCellClick((cell) => wasCalled = true);
         _view.GetCellButton().onClick?.Invoke();
-        Assert.AreEqual(CellState.Active, _presenter.Model.State);
+        Assert.True(wasCalled);
     }
 
-    [Test] public void SuccessfulCheckingOfNeighborTest()
+    [Test] public void IsNeighborOf_CheckingOfTwoNeighbors_ReturnsTrue()
     {
         var model = Substitute.For<GameCellModel>();
         var view = Substitute.For<IGameCellView>();
         var presenter = new GameCellPresenter(model, view);
         presenter.Model.GridIndex = new[] {1, 1};
         _presenter.Model.GridIndex = new[] {1, 2};
-        Assert.AreEqual(true, _presenter.IsNeighborOf(presenter));
+        Assert.True(_presenter.IsNeighborOf(presenter));
     }
 
-    [Test] public void FailedCheckingOfNeighborTest()
+    [Test] public void IsNeighborOf_CheckingOfTwoNotNeighbors_ReturnsFalse()
     {
         var model = Substitute.For<GameCellModel>();
         var view = Substitute.For<IGameCellView>();
         var presenter = new GameCellPresenter(model, view);
         presenter.Model.GridIndex = new[] {1, 1};
         _presenter.Model.GridIndex = new[] {2, 2};
-        Assert.AreEqual(false, _presenter.IsNeighborOf(presenter));
+        Assert.False(_presenter.IsNeighborOf(presenter));
     }
 
-    [Test] public void SuccessfulCheckingOfLevelTest()
+    [Test] public void HasSameLevelAs_CheckingOfCellsWithTheSameLevel_ReturnsTrue()
     {
         var model = Substitute.For<GameCellModel>();
         var view = Substitute.For<IGameCellView>();
         var presenter = new GameCellPresenter(model, view);
         presenter.Model.Level = 1;
         _presenter.Model.Level = 1;
-        Assert.AreEqual(true, _presenter.HasSameLevelAs(presenter));
+        Assert.True(_presenter.HasSameLevelAs(presenter));
     }
 
-    [Test] public void FailedCheckingOfLevelTest()
+    [Test] public void HasSameLevelAs_CheckingOfCellsWithDifferentLevels_ReturnsFalse()
     {
         var model = Substitute.For<GameCellModel>();
         var view = Substitute.For<IGameCellView>();
         var presenter = new GameCellPresenter(model, view);
         presenter.Model.Level = 1;
         _presenter.Model.Level = 2;
-        Assert.AreEqual(false, _presenter.HasSameLevelAs(presenter));
+        Assert.False(_presenter.HasSameLevelAs(presenter));
     }
 }

@@ -2,7 +2,7 @@ using System;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 
-public interface IImprovementController<T>
+public interface IImprovementController<T> : IDisposable
 {
     event Action<ImprovementModel> ActivateEvent;
 

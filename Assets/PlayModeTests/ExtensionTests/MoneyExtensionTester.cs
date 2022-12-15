@@ -10,6 +10,9 @@ public class MoneyModelFormatTester
         new MoneyModel(9.5, Currency.Dollar),
         new MoneyModel(500, Currency.Dollar),
         new MoneyModel(900.5, Currency.Dollar),
+        new MoneyModel(5000, Currency.Dollar),
+        new MoneyModel(9510, Currency.Dollar),
+        new MoneyModel(9590, Currency.Dollar),
         new MoneyModel(5000000, Currency.Dollar),
         new MoneyModel(9510000, Currency.Dollar)
     };
@@ -19,11 +22,14 @@ public class MoneyModelFormatTester
         "9.5",
         "500",
         "900.5",
+        "5K",
+        "9.5K",
+        "9.6K",
         "5M",
         "9.5M"
     };
 
-    [Test] public void MoneyFormatTest()
+    [Test] public void ToFormattedString_InputSeveralValues_ReturnsFormattedValues()
     {
         for (var i = 0; i < _results.Count; i++)
         {

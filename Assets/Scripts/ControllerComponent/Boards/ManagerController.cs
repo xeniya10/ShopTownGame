@@ -12,6 +12,10 @@ public class ManagerController : ImprovementController<ManagerPresenter>
     protected override void CreateBoard()
     {
         _presenters = new List<ImprovementPresenter>();
+        if (_models == null)
+        {
+            CreateDefaultModels();
+        }
 
         foreach (var model in _models)
         {

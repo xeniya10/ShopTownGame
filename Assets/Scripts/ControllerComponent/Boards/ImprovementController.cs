@@ -9,7 +9,7 @@ using VContainer;
 
 namespace ShopTown.ControllerComponent
 {
-public abstract class ImprovementController<T> : IImprovementController<T>, IDisposable
+public abstract class ImprovementController<T> : IImprovementController<T>
 {
     [Inject] protected readonly IGameData _data;
     [Inject] protected readonly IStorageManager _storage;
@@ -28,7 +28,7 @@ public abstract class ImprovementController<T> : IImprovementController<T>, IDis
     public void Initialize()
     {
         _storage.DeleteKey(_key);
-        _storage.SetData(ref _models, _key, CreateDefaultModels);
+        _storage.Load(ref _models, _key);
         CreateBoard();
     }
 
@@ -51,7 +51,7 @@ public abstract class ImprovementController<T> : IImprovementController<T>, IDis
         }
     }
 
-    private void CreateDefaultModels()
+    protected void CreateDefaultModels()
     {
         _models = new List<ImprovementModel>();
 

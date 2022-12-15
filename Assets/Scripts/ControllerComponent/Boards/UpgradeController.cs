@@ -13,10 +13,15 @@ public class UpgradeController : ImprovementController<UpgradePresenter>
     {
         _presenters = new List<ImprovementPresenter>();
 
+        if (_models == null)
+        {
+            CreateDefaultModels();
+        }
+
         foreach (var model in _models)
         {
             var view = _view.Instantiate(_board.GetUpgradeBoard());
-            ImprovementPresenter upgrade = new UpgradePresenter(model, view);
+            var upgrade = (ImprovementPresenter)_factory.Create(model, view);
             InitializeImprovement(upgrade);
         }
     }
