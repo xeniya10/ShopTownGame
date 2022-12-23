@@ -8,15 +8,16 @@ using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
-public class MenuScreenPresenter : ButtonSubscription, IInitializable
+public class MenuScreenPresenter : IInitializable
 {
+    [Inject] private readonly IButtonSubscriber _subscriber;
     [Inject] private readonly IGameData _data;
-    [Inject] public readonly IMenuScreenView _menu;
+    [Inject] private readonly IMenuScreenView _menu;
 
     public void Initialize()
     {
         _menu.Initialize(_data.GameData.Settings);
-        SubscribeToButton(_menu.GetHideButton(), () => _menu.SetActive(false));
+        _subscriber.AddListenerToButton(_menu.GetHideButton(), () => _menu.SetActive(false));
 
         SetSetting(_menu.GetMusicButton(), Setting.Music);
         SetSetting(_menu.GetSoundButton(), Setting.Sound);
@@ -24,15 +25,19 @@ public class MenuScreenPresenter : ButtonSubscription, IInitializable
         SetSetting(_menu.GetRemoveAdsButton(), Setting.Ads);
 
         // SubscribeToButton(_menuScreenView.LikeButton, () => Application.OpenURL());
-        SubscribeToButton(_menu.GetInstagramButton(), () => Application.OpenURL("https://www.instagram.com/"));
-        SubscribeToButton(_menu.GetFacebookButton(), () => Application.OpenURL("https://www.facebook.com/"));
-        SubscribeToButton(_menu.GetTelegramButton(), () => Application.OpenURL("https://telegram.org/"));
-        SubscribeToButton(_menu.GetTwitterButton(), () => Application.OpenURL("https://twitter.com/"));
+        _subscriber.AddListenerToButton(_menu.GetInstagramButton(),
+            () => Application.OpenURL("https://www.instagram.com/"));
+
+        _subscriber.AddListenerToButton(_menu.GetFacebookButton(),
+            () => Application.OpenURL("https://www.facebook.com/"));
+
+        _subscriber.AddListenerToButton(_menu.GetTelegramButton(), () => Application.OpenURL("https://telegram.org/"));
+        _subscriber.AddListenerToButton(_menu.GetTwitterButton(), () => Application.OpenURL("https://twitter.com/"));
     }
 
     private void SetSetting(Button button, Setting setting)
     {
-        SubscribeToButton(button, () =>
+        _subscriber.AddListenerToButton(button, () =>
         {
             _data.GameData.Settings.ChangeState(setting, out var param);
             _menu.SetButtonText(setting, param);

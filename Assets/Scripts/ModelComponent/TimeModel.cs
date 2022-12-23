@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public struct TimeModel
+public class TimeModel
 {
     public int Days;
     public int Hours;

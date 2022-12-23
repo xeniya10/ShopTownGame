@@ -11,7 +11,8 @@ public class ManagerController : ImprovementController<ManagerPresenter>
 
     protected override void CreateBoard()
     {
-        _presenters = new List<ImprovementPresenter>();
+        _presenters = new List<IImprovement>();
+
         if (_models == null)
         {
             CreateDefaultModels();
@@ -20,7 +21,7 @@ public class ManagerController : ImprovementController<ManagerPresenter>
         foreach (var model in _models)
         {
             var view = _view.Instantiate(_board.GetManagerBoard());
-            var manager = (ImprovementPresenter)_factory.Create(model, view);
+            var manager = _factory.Create(model, view);
             InitializeImprovement(manager);
         }
     }

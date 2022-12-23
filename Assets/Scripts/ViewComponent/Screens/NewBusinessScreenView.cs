@@ -98,42 +98,42 @@ public class NewBusinessScreenView : MonoBehaviour, IScreenView<GameCellModel>
 
     private void SetBusinessSprite(int level)
     {
-        _businessImage.sprite = _gameCellContainer.BusinessSprites[level - 1];
+        _businessImage.sprite = _gameCellContainer.GetBusinessSprites(level);
     }
 
     private void SetManagerSprite(int level)
     {
-        _managerImage.sprite = _improvementSprites.ManagerSprites[level - 1];
+        _managerImage.sprite = _improvementSprites.GetManagerSprites(level);
     }
 
     private void SetUpgradeSprites(int level)
     {
-        _firstUpgradeImage.sprite = _improvementSprites.FirstLevelUpgradeSprites[level - 1];
-        _secondUpgradeImage.sprite = _improvementSprites.SecondLevelUpgradeSprites[level - 1];
-        _thirdUpgradeImage.sprite = _improvementSprites.ThirdLevelUpgradeSprites[level - 1];
+        _firstUpgradeImage.sprite = _improvementSprites.GetUpgradeSprites(level, 1);
+        _secondUpgradeImage.sprite = _improvementSprites.GetUpgradeSprites(level, 2);
+        _thirdUpgradeImage.sprite = _improvementSprites.GetUpgradeSprites(level, 3);
     }
 
     private void SetBusinessName(int level)
     {
-        _businessName.text = _businessData.Names[level - 1];
+        _businessName.text = _businessData.GetName(level);
     }
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _boardData.ProcessTime[level - 1].ToTimeSpan().ToSymbolFormatString();
-        _profit.text = _boardData.BaseProfit[level - 1].ToFormattedString();
+        _time.text = _boardData.GetTime(level).ToTimeSpan().ToSymbolFormatString();
+        _profit.text = _boardData.GetProfit(level).ToFormattedString();
     }
 
     private void SetManagerName(int level)
     {
-        _managerName.text = _improvementData.ManagerNames[level - 1];
+        _managerName.text = _improvementData.GetManagerName(level);
     }
 
     private void SetUpgradeNames(int level)
     {
-        _firstUpgradeName.text = _improvementData.FirstLevelUpgradeNames[level - 1];
-        _secondUpgradeName.text = _improvementData.SecondLevelUpgradeNames[level - 1];
-        _thirdUpgradeName.text = _improvementData.ThirdLevelUpgradeNames[level - 1];
+        _firstUpgradeName.text = _improvementData.GetUpgradeNames(level, 1);
+        _secondUpgradeName.text = _improvementData.GetUpgradeNames(level, 2);
+        _thirdUpgradeName.text = _improvementData.GetUpgradeNames(level, 3);
     }
 
     private void SetPosition(Vector2 position)

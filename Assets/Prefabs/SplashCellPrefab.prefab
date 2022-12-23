@@ -93,8 +93,8 @@ MonoBehaviour:
   _cellRectTransform: {fileID: 7763017702156308329}
   _cellImage: {fileID: 7871535858252253721}
   _splashCellContainer: {fileID: 11400000, guid: 4361bf23c9c330541a14f970d71467db, type: 2}
-  _scaleTime: 0.4
-  _moveTime: 0.4
+  _scaleTime: 0.1
+  _moveTime: 0.1
 --- !u!114 &8467469878352501433
 MonoBehaviour:
   m_ObjectHideFlags: 0

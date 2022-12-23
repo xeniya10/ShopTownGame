@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5aba8f3cadd2941b5eb0bc0bd8557f, type: 3}
   m_Name: ImprovementData
   m_EditorClassIdentifier: 
-  BusinessNames: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
-  DefaultModel:
+  _businessNames: {fileID: 11400000, guid: f35f60843ee52ba4cabb1e0168e3ce62, type: 2}
+  _defaultModel:
     Level: 0
     ImprovementLevel: 1
     Description: 
@@ -23,7 +23,7 @@ MonoBehaviour:
       Value: 0
     IsActivated: 0
     State: 0
-  ManagerNames:
+  _managerNames:
   - Flora
   - Jackie
   - Ruby
@@ -50,8 +50,8 @@ MonoBehaviour:
   - Steve
   - Barbara
   - Diana
-  - Irene
-  ManagerBaseCost:
+  - ' Irene'
+  _managerCost:
   - Number: 1000
     Value: 0
   - Number: 5000
@@ -106,7 +106,7 @@ MonoBehaviour:
     Value: 1
   - Number: 1000
     Value: 1
-  FirstLevelUpgradeNames:
+  _firstLevelUpgradeNames:
   - Bouquets
   - Delivery
   - Takeaway
@@ -134,7 +134,7 @@ MonoBehaviour:
   - Necklaces
   - Tech Support
   - Brand Watches
-  SecondLevelUpgradeNames:
+  _secondLevelUpgradeNames:
   - Ornamental Plants
   - Quality Control
   - New Coffee Varieties
@@ -162,7 +162,7 @@ MonoBehaviour:
   - Jeweller
   - Warranty Service
   - Rolex
-  ThirdLevelUpgradeNames:
+  _thirdLevelUpgradeNames:
   - Florist Services
   - Exotic Fruits
   - New Coffee Machine
@@ -190,7 +190,7 @@ MonoBehaviour:
   - Online Ordering
   - YouTube Channel
   - Repair Service
-  UpgradeBaseCost:
+  _upgradeCost:
   - Number: 250000
     Value: 0
   - Number: 400000

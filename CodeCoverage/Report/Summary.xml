@@ -1,85 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CoverageReport scope="Summary">
   <Summary>
-    <Generatedon>12/15/2022 - 12:01:39 PM</Generatedon>
+    <Generatedon>12/21/2022 - 5:11:04 PM</Generatedon>
     <Parser>MultiReportParser (2x OpenCoverParser)</Parser>
     <Assemblies>2</Assemblies>
-    <Classes>62</Classes>
-    <Files>65</Files>
-    <Coveredlines>732</Coveredlines>
-    <Uncoveredlines>1275</Uncoveredlines>
-    <Coverablelines>2007</Coverablelines>
-    <Totallines>3884</Totallines>
-    <Linecoverage>36.4</Linecoverage>
+    <Classes>67</Classes>
+    <Files>66</Files>
+    <Coveredlines>1068</Coveredlines>
+    <Uncoveredlines>1307</Uncoveredlines>
+    <Coverablelines>2375</Coverablelines>
+    <Totallines>4748</Totallines>
+    <Linecoverage>44.9</Linecoverage>
     <Coveredbranches>0</Coveredbranches>
     <Totalbranches>0</Totalbranches>
   </Summary>
   <Coverage>
-    <Assembly name="GameAssembly" classes="57" coverage="23.4" coveredlines="390" coverablelines="1665" totallines="3463" branchcoverage="" coveredbranches="0" totalbranches="0">
-      <Class name="AnimationExtensions" coverage="0" coveredlines="0" coverablelines="98" totallines="87" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ControllerComponent.GameLifetimeScope" coverage="0" coveredlines="0" coverablelines="47" totallines="103" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="DoubleExtension" coverage="0" coveredlines="0" coverablelines="6" totallines="7" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="MoneyExtension" coverage="93.3" coveredlines="84" coverablelines="90" totallines="189" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="MoneyFormat" coverage="88.8" coveredlines="16" coverablelines="18" totallines="189" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.DataManager" coverage="0" coveredlines="0" coverablelines="20" totallines="46" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.GameBoardController" coverage="13.1" coveredlines="16" coverablelines="122" totallines="189" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.GameplayController" coverage="100" coveredlines="23" coverablelines="23" totallines="47" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.ImprovementController[T]" coverage="0" coveredlines="0" coverablelines="46" totallines="95" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.ManagerController" coverage="0" coveredlines="0" coverablelines="10" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.StorageManager" coverage="0" coveredlines="0" coverablelines="17" totallines="35" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ControllerComponent.UpgradeController" coverage="0" coveredlines="0" coverablelines="10" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.Data.BoardData" coverage="100" coveredlines="5" coverablelines="5" totallines="20" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.Data.BusinessData" coverage="0" coveredlines="0" coverablelines="1" totallines="10" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.Data.GameData" coverage="0" coveredlines="0" coverablelines="1" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.Data.ImprovementData" coverage="0" coveredlines="0" coverablelines="7" totallines="28" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.Data.PacksData" coverage="0" coveredlines="0" coverablelines="2" totallines="14" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ModelComponent.GameBoardModel" coverage="5.2" coveredlines="1" coverablelines="19" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    <Assembly name="GameAssembly" classes="58" coverage="24.2" coveredlines="419" coverablelines="1726" totallines="3803" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="AnimationExtensions" coverage="0" coveredlines="0" coverablelines="49" totallines="87" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="DoubleExtension" coverage="0" coveredlines="0" coverablelines="3" totallines="7" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="MoneyExtension" coverage="93.3" coveredlines="42" coverablelines="45" totallines="189" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="MoneyFormat" coverage="88.8" coveredlines="8" coverablelines="9" totallines="189" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.DataManager" coverage="0" coveredlines="0" coverablelines="23" totallines="47" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.GameBoardController" coverage="12.8" coveredlines="16" coverablelines="125" totallines="194" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.GameLifetimeScope" coverage="0" coveredlines="0" coverablelines="51" totallines="109" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.GameplayController" coverage="100" coveredlines="19" coverablelines="19" totallines="45" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.ImprovementController[T]" coverage="84.4" coveredlines="38" coverablelines="45" totallines="95" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.ManagerController" coverage="100" coveredlines="14" coverablelines="14" totallines="29" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.StorageManager" coverage="0" coveredlines="0" coverablelines="10" totallines="29" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ControllerComponent.UpgradeController" coverage="100" coveredlines="14" coverablelines="14" totallines="29" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.BoardData" coverage="0" coveredlines="0" coverablelines="35" totallines="64" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.BusinessData" coverage="0" coveredlines="0" coverablelines="8" totallines="21" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.CurrencyContainer" coverage="0" coveredlines="0" coverablelines="6" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.GameData" coverage="0" coveredlines="0" coverablelines="4" totallines="16" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.ImprovementData" coverage="0" coveredlines="0" coverablelines="62" totallines="113" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.Data.PacksData" coverage="0" coveredlines="0" coverablelines="22" totallines="45" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ModelComponent.GameBoardModel" coverage="0" coveredlines="0" coverablelines="19" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.GameCellModel" coverage="100" coveredlines="8" coverablelines="8" totallines="44" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.GameDataModel" coverage="0" coveredlines="0" coverablelines="50" totallines="97" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ModelComponent.ImprovementModel" coverage="0" coveredlines="0" coverablelines="5" totallines="31" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ModelComponent.ImprovementModel" coverage="100" coveredlines="5" coverablelines="5" totallines="31" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.MoneyModel" coverage="100" coveredlines="5" coverablelines="5" totallines="19" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.PackModel" coverage="0" coveredlines="0" coverablelines="6" totallines="19" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.SettingModel" coverage="0" coveredlines="0" coverablelines="30" totallines="66" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.SplashBoardModel" coverage="0" coveredlines="0" coverablelines="28" totallines="49" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ModelComponent.SplashCellModel" coverage="0" coveredlines="0" coverablelines="7" totallines="20" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.AudioSourcePresenter" coverage="0" coveredlines="0" coverablelines="15" totallines="35" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.ButtonSubscription" coverage="100" coveredlines="3" coverablelines="3" totallines="13" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.AudioPresenter" coverage="0" coveredlines="0" coverablelines="38" totallines="64" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.ButtonSubscriber" coverage="0" coveredlines="0" coverablelines="11" totallines="27" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.PresenterComponent.GameCellFactory" coverage="0" coveredlines="0" coverablelines="3" totallines="13" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.GameCellPresenter" coverage="95.3" coveredlines="124" coverablelines="130" totallines="206" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.GameScreenPresenter" coverage="0" coveredlines="0" coverablelines="7" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.ImprovementPresenter" coverage="20.6" coveredlines="6" coverablelines="29" totallines="66" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.GameCellPresenter" coverage="90.7" coveredlines="118" coverablelines="130" totallines="206" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.GameScreenPresenter" coverage="0" coveredlines="0" coverablelines="7" totallines="25" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.ImprovementPresenter" coverage="89.6" coveredlines="26" coverablelines="29" totallines="66" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.PresenterComponent.ManagerFactory" coverage="0" coveredlines="0" coverablelines="3" totallines="13" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.ManagerPresenter" coverage="10" coveredlines="2" coverablelines="20" totallines="41" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.MenuScreenPresenter" coverage="0" coveredlines="0" coverablelines="19" totallines="42" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.NewBusinessScreenPresenter" coverage="0" coveredlines="0" coverablelines="12" totallines="31" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.PurchaseScreenPresenter" coverage="0" coveredlines="0" coverablelines="12" totallines="33" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.SplashScreenPresenter" coverage="0" coveredlines="0" coverablelines="35" totallines="63" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.ManagerPresenter" coverage="100" coveredlines="20" coverablelines="20" totallines="41" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.MenuScreenPresenter" coverage="0" coveredlines="0" coverablelines="21" totallines="47" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.NewBusinessScreenPresenter" coverage="0" coveredlines="0" coverablelines="12" totallines="32" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.PurchaseScreenPresenter" coverage="0" coveredlines="0" coverablelines="19" totallines="41" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.SplashScreenPresenter" coverage="0" coveredlines="0" coverablelines="36" totallines="65" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.PresenterComponent.UpgradeFactory" coverage="0" coveredlines="0" coverablelines="3" totallines="13" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.PresenterComponent.UpgradePresenter" coverage="4.3" coveredlines="2" coverablelines="46" totallines="79" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.PresenterComponent.UpgradePresenter" coverage="100" coveredlines="30" coverablelines="30" totallines="55" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.PresenterComponent.WelcomeScreenPresenter" coverage="0" coveredlines="0" coverablelines="11" totallines="30" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.SpriteContainer.GameCellContainer" coverage="0" coveredlines="0" coverablelines="2" totallines="12" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.SpriteContainer.ImprovementContainer" coverage="0" coveredlines="0" coverablelines="4" totallines="17" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.SpriteContainer.SplashCellContainer" coverage="0" coveredlines="0" coverablelines="1" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.SpriteContainer.GameCellContainer" coverage="0" coveredlines="0" coverablelines="19" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.SpriteContainer.ImprovementContainer" coverage="0" coveredlines="0" coverablelines="39" totallines="75" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.SpriteContainer.SplashCellContainer" coverage="0" coveredlines="0" coverablelines="8" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.AudioSourceView" coverage="0" coveredlines="0" coverablelines="15" totallines="38" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ViewComponent.GameCellView" coverage="0" coveredlines="0" coverablelines="141" totallines="256" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ViewComponent.GameCellView" coverage="0" coveredlines="0" coverablelines="142" totallines="258" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.GameScreenView" coverage="0" coveredlines="0" coverablelines="28" totallines="70" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ViewComponent.ImprovementView" coverage="0" coveredlines="0" coverablelines="55" totallines="120" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ViewComponent.ImprovementView" coverage="0" coveredlines="0" coverablelines="51" totallines="115" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.MenuScreenView" coverage="5.9" coveredlines="5" coverablelines="84" totallines="173" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.NewBusinessScreenView" coverage="0" coveredlines="0" coverablelines="68" totallines="144" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ViewComponent.PackCellView" coverage="0" coveredlines="0" coverablelines="35" totallines="76" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ViewComponent.PackCellView" coverage="0" coveredlines="0" coverablelines="31" totallines="71" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.PurchaseScreenView" coverage="0" coveredlines="0" coverablelines="36" totallines="74" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.SplashCellView" coverage="0" coveredlines="0" coverablelines="26" totallines="62" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="ShopTown.ViewComponent.SplashScreenView" coverage="0" coveredlines="0" coverablelines="21" totallines="55" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ShopTown.ViewComponent.SplashScreenView" coverage="0" coveredlines="0" coverablelines="23" totallines="59" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="ShopTown.ViewComponent.WelcomeScreenView" coverage="0" coveredlines="0" coverablelines="30" totallines="64" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="TimeModel" coverage="100" coveredlines="10" coverablelines="10" totallines="25" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="TimeSpanExtension" coverage="100" coveredlines="80" coverablelines="80" totallines="62" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="TimeModel" coverage="100" coveredlines="11" coverablelines="11" totallines="25" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="TimeSpanExtension" coverage="100" coveredlines="40" coverablelines="40" totallines="62" branchcoverage="" coveredbranches="0" totalbranches="0" />
     </Assembly>
-    <Assembly name="PlayModeTests" classes="5" coverage="100" coveredlines="342" coverablelines="342" totallines="610" branchcoverage="" coveredbranches="0" totalbranches="0">
-      <Class name="GameBoardControllerTester" coverage="100" coveredlines="33" coverablelines="33" totallines="62" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="GameCellPresenterTester" coverage="100" coveredlines="240" coverablelines="240" totallines="335" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="GameplayControllerTester" coverage="100" coveredlines="46" coverablelines="46" totallines="80" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    <Assembly name="PlayModeTests" classes="9" coverage="100" coveredlines="649" coverablelines="649" totallines="1134" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="GameBoardControllerTester" coverage="100" coveredlines="34" coverablelines="34" totallines="63" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="GameCellPresenterTester" coverage="100" coveredlines="227" coverablelines="227" totallines="314" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="GameplayControllerTester" coverage="100" coveredlines="56" coverablelines="56" totallines="95" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ManagerControllerTester" coverage="100" coveredlines="88" coverablelines="88" totallines="141" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ManagerPresenterTester" coverage="100" coveredlines="63" coverablelines="63" totallines="118" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="MoneyModelFormatTester" coverage="100" coveredlines="8" coverablelines="8" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="TimeSpanFormatTester" coverage="100" coveredlines="15" coverablelines="15" totallines="94" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="UpgradeControllerTester" coverage="100" coveredlines="88" coverablelines="88" totallines="141" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="UpgradePresenterTester" coverage="100" coveredlines="70" coverablelines="70" totallines="129" branchcoverage="" coveredbranches="0" totalbranches="0" />
     </Assembly>
   </Coverage>
 </CoverageReport>

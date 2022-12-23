@@ -35,7 +35,7 @@ public class SplashCellView : MonoBehaviour, ISplashCellView
 
     public void AppearAnimation(Sequence sequence)
     {
-        transform.Move(_targetPosition, _moveTime * 0.5f, sequence);
+        transform.Move(_targetPosition, _moveTime, sequence);
     }
 
     public void DisappearAnimation(Sequence sequence)
@@ -46,7 +46,7 @@ public class SplashCellView : MonoBehaviour, ISplashCellView
 
     private void SetSprite(int i)
     {
-        _cellImage.sprite = _splashCellContainer.Sprites[i];
+        _cellImage.sprite = _splashCellContainer.GetSprite(i);
     }
 
     private void SetPosition(Vector2 position)

@@ -10,18 +10,18 @@ public interface IImprovement
     public ImprovementModel Model { get; }
     public event Action ChangeEvent;
 
-    void Initialize(ImprovementData improvementData, ImprovementContainer improvementSprites);
+    void Initialize(IImprovementData improvementData, IImprovementSprites improvementSprites);
 
-    void SubscribeToBuyButton(Action<ImprovementPresenter> callBack);
+    void AddListenerToBuyButton(IButtonSubscriber subscriber, Action<IImprovement> callBack);
 
     void SetState(ImprovementState state);
 
     void Activate();
 }
 
-public interface IManager
+public interface IManager : IImprovement
 {}
 
-public interface IUpgrade
+public interface IUpgrade : IImprovement
 {}
 }

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using ShopTown.Data;
 using ShopTown.ModelComponent;
 using TMPro;
 using UnityEngine;
@@ -75,13 +76,7 @@ public class ImprovementView : MonoBehaviour, IImprovementView
     private void SetCost(MoneyModel cost)
     {
         _priceText.text = cost.ToFormattedString();
-        if (cost.Value == Currency.Dollar)
-        {
-            _currencyImage.sprite = _currency.DollarIcon;
-            return;
-        }
-
-        _currencyImage.sprite = _currency.GoldIcon;
+        _currencyImage.sprite = _currency.GetIcon(cost.Value);
     }
 
     private void SetName(string managerName)

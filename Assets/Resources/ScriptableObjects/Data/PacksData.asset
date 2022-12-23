@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b07bbf79e8fa8240aa577d14a094bda, type: 3}
   m_Name: PacksData
   m_EditorClassIdentifier: 
-  DollarPacks:
+  _dollarPacks:
   - Profit:
       Number: 10000
       Value: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
       Value: 0
     Price: 49.99
     Size: 3
-  GoldPacks:
+  _goldPacks:
   - Profit:
       Number: 5
       Value: 1

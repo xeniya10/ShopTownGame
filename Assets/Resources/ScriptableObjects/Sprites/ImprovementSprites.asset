@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10fba5befbf08bd46abafe20023f2cb6, type: 3}
   m_Name: ImprovementSprites
   m_EditorClassIdentifier: 
-  ManagerSprites:
+  _managerSprites:
   - {fileID: 21300000, guid: 15ddc0c126195b04b949b688b10157a7, type: 3}
   - {fileID: 21300000, guid: 4a611922411620242b60cf655d260527, type: 3}
   - {fileID: 21300000, guid: d973fd471212c32448cbb9c99d969f01, type: 3}
@@ -40,7 +40,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 37a9ed269a543c348be2fdbf888c4417, type: 3}
   - {fileID: 21300000, guid: dc902ff2968913c4eb44e648d064a489, type: 3}
   - {fileID: 21300000, guid: 76a4edce87e77fc409ca0f8e904e9910, type: 3}
-  FirstLevelUpgradeSprites:
+  _firstLevelUpgradeSprites:
   - {fileID: 21300000, guid: 98696a12a3c348348ad51a0bc93e64c8, type: 3}
   - {fileID: 21300000, guid: 239269f8ff39c9747a2a97c81db6fdc8, type: 3}
   - {fileID: 21300000, guid: 36b0c7224d07a2a43897bc0f928c7203, type: 3}
@@ -68,7 +68,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f3817f96879d1074ab2f91aca6163271, type: 3}
   - {fileID: 21300000, guid: b13eda25387cd4949b19ca5efd19d009, type: 3}
   - {fileID: 21300000, guid: 4dc4528329e64834f9deaaf80fb15f80, type: 3}
-  SecondLevelUpgradeSprites:
+  _secondLevelUpgradeSprites:
   - {fileID: 21300000, guid: ddd5b41a108923f4fb1bbbee8d360a66, type: 3}
   - {fileID: 21300000, guid: 0fbe8448953eb3946be696356b0c239a, type: 3}
   - {fileID: 21300000, guid: dc7ee5c36ea2ebb4eb9cd01d5095c2b6, type: 3}
@@ -96,7 +96,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a304f93c1b9fe334bb6da5857b401489, type: 3}
   - {fileID: 21300000, guid: c8d7bd1f89ab32b4e8b99b3275e58358, type: 3}
   - {fileID: 21300000, guid: 5a8cd8f77e60d8948b328d7e91d1b7c0, type: 3}
-  ThirdLevelUpgradeSprites:
+  _thirdLevelUpgradeSprites:
   - {fileID: 21300000, guid: 0a373c3f444c37845bc51c8d877449e0, type: 3}
   - {fileID: 21300000, guid: ddea93d725f8a9c4d82c56f410313bba, type: 3}
   - {fileID: 21300000, guid: 21ad71c35e6c9c443af7dd3b4376c2d5, type: 3}

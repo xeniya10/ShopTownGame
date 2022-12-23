@@ -4,12 +4,15 @@ using NUnit.Framework;
 using ShopTown.ControllerComponent;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
+using VContainer;
 
 public class GameplayControllerTester
 {
     private IGameBoardController _gameBoardController;
     private IImprovementController<ManagerPresenter> _managerController;
     private IImprovementController<UpgradePresenter> _upgradeController;
+    private IShowable<IGameData> _welcomeScreen;
+    private IShowable<GameCellModel> _newBusinessProfile;
     private GameplayController _gameplayController;
 
     [SetUp] public void CreateTestObjects()
@@ -17,7 +20,19 @@ public class GameplayControllerTester
         _gameBoardController = Substitute.For<IGameBoardController>();
         _managerController = Substitute.For<IImprovementController<ManagerPresenter>>();
         _upgradeController = Substitute.For<IImprovementController<UpgradePresenter>>();
-        _gameplayController = new GameplayController(_gameBoardController, _managerController, _upgradeController);
+        _welcomeScreen = Substitute.For<IShowable<IGameData>>();
+        _newBusinessProfile = Substitute.For<IShowable<GameCellModel>>();
+
+        var builder = new ContainerBuilder();
+        builder.RegisterInstance(_gameBoardController).As<IGameBoardController>();
+        builder.RegisterInstance(_managerController).As<IImprovementController<ManagerPresenter>>();
+        builder.RegisterInstance(_upgradeController).As<IImprovementController<UpgradePresenter>>();
+        builder.RegisterInstance(_welcomeScreen).As<IShowable<IGameData>>();
+        builder.RegisterInstance(_newBusinessProfile).As<IShowable<GameCellModel>>();
+        builder.Register<GameplayController>(Lifetime.Scoped).AsSelf();
+
+        var container = builder.Build();
+        _gameplayController = container.Resolve<GameplayController>();
     }
 
     [Test] public void Initialize__CallsGameBoardControllerInitialization()

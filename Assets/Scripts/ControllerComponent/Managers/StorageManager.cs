@@ -10,11 +10,6 @@ public class StorageManager : IStorageManager
         var json = JsonConvert.SerializeObject(value, Formatting.Indented);
         PlayerPrefs.SetString(key, json);
     }
-    //
-    // public string Load(string key)
-    // {
-    //     return PlayerPrefs.GetString(key);
-    // }
 
     public void DeleteKey(string key)
     {

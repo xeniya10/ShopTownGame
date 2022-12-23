@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ShopTown.Data;
 using ShopTown.ModelComponent;
 using TMPro;
 using UnityEngine;
@@ -41,13 +42,7 @@ public class PackCellView : MonoBehaviour, ICellView<PackModel>
     private void SetProfit(MoneyModel profit)
     {
         _profitText.text = profit.ToFormattedString();
-        if (profit.Value == Currency.Dollar)
-        {
-            SetPackCurrency(_currency.DollarIcon);
-            return;
-        }
-
-        SetPackCurrency(_currency.GoldIcon);
+        SetPackCurrency(_currency.GetIcon(profit.Value));
     }
 
     private void SetPrice(double price)

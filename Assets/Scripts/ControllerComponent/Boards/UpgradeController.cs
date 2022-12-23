@@ -11,7 +11,7 @@ public class UpgradeController : ImprovementController<UpgradePresenter>
 
     protected override void CreateBoard()
     {
-        _presenters = new List<ImprovementPresenter>();
+        _presenters = new List<IImprovement>();
 
         if (_models == null)
         {
@@ -21,7 +21,7 @@ public class UpgradeController : ImprovementController<UpgradePresenter>
         foreach (var model in _models)
         {
             var view = _view.Instantiate(_board.GetUpgradeBoard());
-            var upgrade = (ImprovementPresenter)_factory.Create(model, view);
+            var upgrade = _factory.Create(model, view);
             InitializeImprovement(upgrade);
         }
     }

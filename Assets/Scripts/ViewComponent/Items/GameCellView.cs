@@ -122,10 +122,10 @@ public class GameCellView : MonoBehaviour, IGameCellView
     {
         if (model.BackgroundNumber < 0)
         {
-            model.BackgroundNumber = Random.Range(0, _cellContainer.BackgroundSprites.Count);
+            model.BackgroundNumber = Random.Range(0, _cellContainer.GetBackgroundSpritesCount());
         }
 
-        _backgroundImage.sprite = _cellContainer.BackgroundSprites[model.BackgroundNumber];
+        _backgroundImage.sprite = _cellContainer.GetBackgroundSprites(model.BackgroundNumber);
     }
 
     private void SetBusinessSprite(int level)
@@ -135,7 +135,7 @@ public class GameCellView : MonoBehaviour, IGameCellView
             return;
         }
 
-        _businessImage.sprite = _cellContainer.BusinessSprites[level - 1];
+        _businessImage.sprite = _cellContainer.GetBusinessSprites(level);
     }
 
     private void SetImprovementSprites(int level)
@@ -145,10 +145,12 @@ public class GameCellView : MonoBehaviour, IGameCellView
             return;
         }
 
-        _managerImage.sprite = _improvementContainer.ManagerSprites[level - 1];
-        _upgradeImages[0].sprite = _improvementContainer.FirstLevelUpgradeSprites[level - 1];
-        _upgradeImages[1].sprite = _improvementContainer.SecondLevelUpgradeSprites[level - 1];
-        _upgradeImages[2].sprite = _improvementContainer.ThirdLevelUpgradeSprites[level - 1];
+        _managerImage.sprite = _improvementContainer.GetManagerSprites(level);
+
+        for (var i = 0; i < 3; i++)
+        {
+            _upgradeImages[i].sprite = _improvementContainer.GetUpgradeSprites(level, i + 1);
+        }
     }
 
     private void SetActivateManager(bool isActivated)

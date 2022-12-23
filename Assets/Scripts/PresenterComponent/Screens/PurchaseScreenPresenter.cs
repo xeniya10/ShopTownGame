@@ -1,32 +1,40 @@
-using System.Collections.Generic;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.ViewComponent;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
-public class PurchaseScreenPresenter : ButtonSubscription, IInitializable
+public class PurchaseScreenPresenter : IInitializable
 {
-    [Inject] public readonly IPurchaseScreenView _purchaseScreen;
+    [Inject] private readonly IButtonSubscriber _subscriber;
+    [Inject] private readonly IPurchaseScreenView _purchaseScreen;
     [Inject] private readonly ICellView<PackModel> _packCell;
-    [Inject] private readonly PacksData _packsData;
+    [Inject] private readonly IPackData _packsData;
 
     public void Initialize()
     {
-        SubscribeToButton(_purchaseScreen.GetHideButton(), () => _purchaseScreen.SetActive(false));
-        CreatePacks(_packsData.DollarPacks, _purchaseScreen.GetDollarArea());
-        CreatePacks(_packsData.GoldPacks, _purchaseScreen.GetGoldArea());
+        _subscriber.AddListenerToButton(_purchaseScreen.GetHideButton(), () => _purchaseScreen.SetActive(false));
+        CreateDollarPacks();
+        CreateGoldPacks();
     }
 
-    private void CreatePacks(List<PackModel> packs, Transform parent)
+    private void CreateDollarPacks()
     {
-        foreach (var model in packs)
+        for (var i = 0; i < _packsData.GetDollarPackCount(); i++)
         {
-            var dollarPack = _packCell.Instantiate(parent);
-            dollarPack.Initialize(model);
+            var dollarPack = _packCell.Instantiate(_purchaseScreen.GetDollarArea());
+            dollarPack.Initialize(_packsData.GetDollarPack(i + 1));
+        }
+    }
+
+    private void CreateGoldPacks()
+    {
+        for (var i = 0; i < _packsData.GetGoldPackCount(); i++)
+        {
+            var dollarPack = _packCell.Instantiate(_purchaseScreen.GetGoldArea());
+            dollarPack.Initialize(_packsData.GetGoldPack(i + 1));
         }
     }
 }

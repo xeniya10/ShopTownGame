@@ -17,7 +17,6 @@ public class DataManager : StorageManager, IGameData, IDisposable
     public DataManager(IObjectResolver container)
     {
         _defaultData = container.Resolve<GameData>();
-        DeleteKey(_gameDataKey);
         InitializeGameData();
     }
 
@@ -37,17 +36,12 @@ public class DataManager : StorageManager, IGameData, IDisposable
     private void CreateDefaultData()
     {
         _gameData = new GameDataModel();
-        _gameData.SetDefaultData(_defaultData.DefaultGameData);
+        _gameData.SetDefaultData(_defaultData.GetDefaultModel());
     }
 
     public void Dispose()
     {
         Save(_gameDataKey, _gameData);
     }
-}
-
-public interface IGameData
-{
-    public GameDataModel GameData { get; }
 }
 }

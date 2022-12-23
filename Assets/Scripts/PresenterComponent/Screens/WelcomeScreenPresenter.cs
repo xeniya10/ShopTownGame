@@ -6,23 +6,23 @@ using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
-public class WelcomeScreenPresenter : ButtonSubscription, IInitializable
+public class WelcomeScreenPresenter : IInitializable, IShowable<IGameData>
 {
-    [Inject] private readonly IGameData _data;
-    [Inject] private readonly IGameBoardController _gameBoard;
+    [Inject] private readonly IPlayable _audio;
+    [Inject] private readonly IButtonSubscriber _subscriber;
     [Inject] private readonly IScreenView<MoneyModel> _view;
 
     public void Initialize()
     {
-        _gameBoard.SetOfflineProfitEvent += Show;
-        SubscribeToButton(_view.GetHideButton(), () => _view.SetActive(false));
+        _subscriber.AddListenerToButton(_view.GetHideButton(), () => _view.SetActive(false));
     }
 
-    private void Show()
+    public void Show(IGameData model)
     {
-        if (_data.GameData.OfflineDollarBalance != null)
+        if (model.GameData.OfflineDollarBalance != null)
         {
-            _view.Initialize(_data.GameData.OfflineDollarBalance);
+            _audio.PlayNewCoinSound();
+            _view.Initialize(model.GameData.OfflineDollarBalance);
             _view.SetActive(true);
         }
     }

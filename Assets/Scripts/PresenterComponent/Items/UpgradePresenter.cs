@@ -18,62 +18,38 @@ public class UpgradePresenter : ImprovementPresenter, IUpgrade
 
     private void LevelUp()
     {
-        if (Model.ImprovementLevel == 3)
+        if (_model.ImprovementLevel == 3)
         {
             SetState(ImprovementState.Lock);
-            Model.IsActivated = true;
+            _model.IsActivated = true;
             return;
         }
 
-        Model.ImprovementLevel += 1;
-        _view.Initialize(Model);
+        _model.ImprovementLevel += 1;
+        _view.Initialize(_model);
     }
 
-    protected override void SetSprite(ImprovementContainer improvementSprites)
+    protected override void SetSprite(IImprovementSprites improvementSprites)
     {
-        if (Model.ImprovementLevel == 2)
-        {
-            _view.SetImprovementSprite(improvementSprites.SecondLevelUpgradeSprites[Model.Level - 1]);
-            return;
-        }
-
-        if (Model.ImprovementLevel == 3)
-        {
-            _view.SetImprovementSprite(improvementSprites.ThirdLevelUpgradeSprites[Model.Level - 1]);
-            return;
-        }
-
-        _view.SetImprovementSprite(improvementSprites.FirstLevelUpgradeSprites[Model.Level - 1]);
+        _view.SetImprovementSprite(improvementSprites.GetUpgradeSprites(_model.Level, _model.ImprovementLevel));
     }
 
-    protected override void SetName(ImprovementData improvementData)
+    protected override void SetName(IImprovementData improvementData)
     {
-        if (Model.ImprovementLevel == 2)
-        {
-            Model.Name = improvementData.SecondLevelUpgradeNames[Model.Level - 1];
-            return;
-        }
-
-        if (Model.ImprovementLevel == 3)
-        {
-            Model.Name = improvementData.ThirdLevelUpgradeNames[Model.Level - 1];
-            return;
-        }
-
-        Model.Name = improvementData.FirstLevelUpgradeNames[Model.Level - 1];
+        _model.Name = improvementData.GetUpgradeNames(_model.Level, _model.ImprovementLevel);
     }
 
-    protected override void SetDescription(ImprovementData improvementData)
+    protected override void SetDescription(IImprovementData improvementData)
     {
-        var businessName = improvementData.BusinessNames.Names[Model.Level - 1];
-        var multiplier = Model.ImprovementLevel + 1;
-        Model.Description = $"Increase {businessName} profit x{multiplier.ToString()}";
+        var businessName = improvementData.GetBusinessName(_model.Level);
+        var multiplier = _model.ImprovementLevel + 1;
+        _model.Description = $"Increase {businessName} profit x{multiplier.ToString()}";
     }
 
-    protected override void SetCost(ImprovementData improvementData)
+    protected override void SetCost(IImprovementData improvementData)
     {
-        var baseCost = improvementData.UpgradeBaseCost[Model.Level - 1];
-        Model.Cost = new MoneyModel(baseCost.Number * Model.ImprovementLevel, baseCost.Value);
+        var baseCost = improvementData.GetUpgradeCost(_model.Level);
+        _model.Cost = new MoneyModel(baseCost.Number * _model.ImprovementLevel, baseCost.Value);
     }
 }
 }

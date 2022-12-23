@@ -11,24 +11,24 @@ public interface IGameCell
     public event Action<MoneyModel> InProgressEndEvent;
     public event Action<MoneyModel> GetOfflineProfitEvent;
 
-    void SetState(CellState state, BoardData cellData, Action callBack = null);
+    void SetState(CellState state, IBoardData cellData, Action callBack = null);
 
-    void LevelUp(BoardData cellData);
+    void LevelUp(IBoardData cellData);
 
-    void InitializeManager(ImprovementModel manager, BoardData cellData);
+    void InitializeManager(ImprovementModel manager, IBoardData cellData);
 
-    void InitializeUpgrade(ImprovementModel upgrade, BoardData cellData);
+    void InitializeUpgrade(ImprovementModel upgrade, IBoardData cellData);
 
-    void SetCost(int activationNumber, BoardData cellData);
+    void SetCost(int activationNumber, IBoardData cellData);
 
-    void SubscribeToBuyButton(Action<GameCellPresenter> callBack);
+    void SubscribeToBuyButton(IButtonSubscriber subscriber, Action<IGameCell> callBack);
 
-    void SubscribeToCellClick(Action<GameCellPresenter> callBack);
+    void SubscribeToCellClick(IButtonSubscriber subscriber, Action<IGameCell> callBack);
 
     void SetActiveSelector(bool isActive);
 
-    bool IsNeighborOf(GameCellPresenter cell);
+    bool IsNeighborOf(IGameCell cell);
 
-    bool HasSameLevelAs(GameCellPresenter anotherCell);
+    bool HasSameLevelAs(IGameCell anotherCell);
 }
 }

@@ -6,7 +6,7 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public abstract class ImprovementPresenter : ButtonSubscription, IImprovement
+public abstract class ImprovementPresenter : IImprovement
 {
     public ImprovementModel Model { get { return _model; } }
 
@@ -21,45 +21,45 @@ public abstract class ImprovementPresenter : ButtonSubscription, IImprovement
         _view = (IImprovementView)view;
     }
 
-    public void Initialize(ImprovementData improvementData, ImprovementContainer improvementSprites)
+    public void Initialize(IImprovementData improvementData, IImprovementSprites improvementSprites)
     {
         SetParameters(improvementData);
-        _view.Initialize(Model);
+        _view.Initialize(_model);
         SetSprite(improvementSprites);
-        SetState(Model.State);
+        SetState(_model.State);
     }
 
-    public void SubscribeToBuyButton(Action<ImprovementPresenter> callBack)
+    public void AddListenerToBuyButton(IButtonSubscriber subscriber, Action<IImprovement> callBack)
     {
-        SubscribeToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
+        subscriber.AddListenerToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
     }
 
     public void SetState(ImprovementState state)
     {
-        Model.State = state;
-        if (Model.IsActivated)
+        _model.State = state;
+        if (_model.IsActivated)
         {
-            Model.State = ImprovementState.Lock;
+            _model.State = ImprovementState.Lock;
         }
 
-        _view.StartAnimation(Model.State);
+        _view.StartAnimation(_model.State);
         ChangeEvent?.Invoke();
     }
 
-    private void SetParameters(ImprovementData improvementData)
+    private void SetParameters(IImprovementData improvementData)
     {
         SetName(improvementData);
         SetDescription(improvementData);
         SetCost(improvementData);
     }
 
-    protected abstract void SetSprite(ImprovementContainer improvementSprites);
+    protected abstract void SetSprite(IImprovementSprites improvementSprites);
 
-    protected abstract void SetName(ImprovementData improvementData);
+    protected abstract void SetName(IImprovementData improvementData);
 
-    protected abstract void SetDescription(ImprovementData improvementData);
+    protected abstract void SetDescription(IImprovementData improvementData);
 
-    protected abstract void SetCost(ImprovementData improvementData);
+    protected abstract void SetCost(IImprovementData improvementData);
 
     public abstract void Activate();
 }

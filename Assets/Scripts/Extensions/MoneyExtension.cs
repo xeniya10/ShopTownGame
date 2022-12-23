@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ShopTown.ModelComponent;
+using UnityEngine;
 
 public static class MoneyExtension
 {
@@ -126,8 +127,13 @@ public static class MoneyExtension
         if (scale < _lowestScale)
         {
             formattedTextNumber = number.ToString("#,##0.0");
+            Debug.Log("First start index: " + formattedTextNumber.IndexOf('.'));
 
-            if (formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))
+            // if (formattedTextNumber.IndexOf('.') >= 0 &&
+            //     formattedTextNumber.Substring(formattedTextNumber.IndexOf('.'), 2).Equals(".0"))            
+            // if (formattedTextNumber.Substring(formattedTextNumber[formattedTextNumber.Length - 2], 2).Equals(".0") &&
+            //     formattedTextNumber.Substring(formattedTextNumber[formattedTextNumber.Length - 2], 2).Equals(",0"))            
+            if (formattedTextNumber.Contains(".0") || formattedTextNumber.Contains(",0"))
             {
                 return new MoneyFormat(number, number.ToString("#,##0"), string.Empty);
             }
@@ -140,6 +146,7 @@ public static class MoneyExtension
         _scales.TryGetValue(key, out var textScale);
 
         formattedTextNumber = textNumber.Substring(0, scaleModulo + 1);
+        Debug.Log("Second start index: " + (scaleModulo + 1));
         var fractionText = "." + textNumber.Substring(scaleModulo + 1, 1);
         if (int.Parse(textNumber.Substring(scaleModulo + 2, 1)) >= 5)
         {

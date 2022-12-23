@@ -1,23 +1,18 @@
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
+using VContainer;
 using VContainer.Unity;
 
 namespace ShopTown.ControllerComponent
 {
 public class GameplayController : IInitializable
 {
-    private readonly IGameBoardController _gameBoardController;
-    private readonly IImprovementController<ManagerPresenter> _managerController;
-    private readonly IImprovementController<UpgradePresenter> _upgradeController;
+    [Inject] private readonly IGameBoardController _gameBoardController;
+    [Inject] private readonly IImprovementController<ManagerPresenter> _managerController;
+    [Inject] private readonly IImprovementController<UpgradePresenter> _upgradeController;
 
-    public GameplayController(IGameBoardController gameBoardController,
-        IImprovementController<ManagerPresenter> managerController,
-        IImprovementController<UpgradePresenter> upgradeController)
-    {
-        _gameBoardController = gameBoardController;
-        _managerController = managerController;
-        _upgradeController = upgradeController;
-    }
+    [Inject] private readonly IShowable<IGameData> _welcomeScreen;
+    [Inject] private readonly IShowable<GameCellModel> _newBusinessProfile;
 
     public void Initialize()
     {
@@ -30,6 +25,9 @@ public class GameplayController : IInitializable
 
         _managerController.ActivateEvent += _gameBoardController.InitializeManager;
         _upgradeController.ActivateEvent += _gameBoardController.InitializeUpgrade;
+
+        _gameBoardController.SetOfflineProfitEvent += _welcomeScreen.Show;
+        _gameBoardController.ActivateEvent += _newBusinessProfile.Show;
     }
 
     private void UnlockImprovements(int level, bool isActivate)

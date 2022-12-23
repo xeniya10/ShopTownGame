@@ -1,4 +1,5 @@
 using ShopTown.Data;
+using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.SpriteContainer;
 using ShopTown.ViewComponent;
@@ -37,6 +38,9 @@ public class GameLifetimeScope : LifetimeScope
     [Header("Audio")]
     [SerializeField] private AudioSourceView _audioSource;
 
+    [Header("Ads")]
+    [SerializeField] private AdsView _adsView;
+
     protected override void Configure(IContainerBuilder builder)
     {
         RegisterView(builder);
@@ -58,13 +62,19 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterPresenter(IContainerBuilder builder)
     {
-        builder.Register<AudioSourcePresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
+        builder.Register<AudioPresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
+        builder.Register<ButtonSubscriber>(Lifetime.Scoped).As<IButtonSubscriber>().AsSelf();
+
+        builder.Register<WelcomeScreenPresenter>(Lifetime.Scoped).As<IShowable<IGameData>>().AsSelf();
+        builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>().AsSelf();
+
         builder.Register<GameCellFactory>(Lifetime.Scoped).As<IPresenterFactory<IGameCell>>().AsSelf();
         builder.Register<ManagerFactory>(Lifetime.Scoped).As<IPresenterFactory<IManager>>().AsSelf();
         builder.Register<UpgradeFactory>(Lifetime.Scoped).As<IPresenterFactory<IUpgrade>>().AsSelf();
 
         builder.UseEntryPoints(entryPoints =>
         {
+            entryPoints.Add<AudioPresenter>();
             entryPoints.Add<SplashScreenPresenter>();
             entryPoints.Add<GameScreenPresenter>();
             entryPoints.Add<MenuScreenPresenter>();
@@ -88,15 +98,17 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_splashPrefab).AsImplementedInterfaces().AsSelf();
         builder.RegisterInstance(_packCellPrefab).AsImplementedInterfaces().AsSelf();
 
-        builder.RegisterInstance(_improvementSprites);
+        builder.RegisterInstance(_improvementSprites).AsImplementedInterfaces().AsSelf();
 
-        builder.RegisterInstance(_defaultData);
-        builder.RegisterInstance(_businessData);
-        builder.RegisterInstance(_boardData);
-        builder.RegisterInstance(_improvementData);
-        builder.RegisterInstance(_packsData);
+        builder.RegisterInstance(_defaultData).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_businessData).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_boardData).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_improvementData).AsImplementedInterfaces().AsSelf();
+        builder.RegisterInstance(_packsData).AsImplementedInterfaces().AsSelf();
 
-        builder.RegisterInstance(_audioSource).As<IAudioSource>().AsSelf();
+        builder.RegisterInstance(_audioSource).AsImplementedInterfaces().AsSelf();
+
+        builder.RegisterInstance(_adsView).AsImplementedInterfaces().AsSelf();
     }
 }
 }

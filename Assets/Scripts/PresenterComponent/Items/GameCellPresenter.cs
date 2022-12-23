@@ -5,7 +5,7 @@ using ShopTown.ViewComponent;
 
 namespace ShopTown.PresenterComponent
 {
-public class GameCellPresenter : ButtonSubscription, IGameCell
+public class GameCellPresenter : IGameCell
 {
     private readonly GameCellModel _model;
     private readonly IGameCellView _view;
@@ -22,14 +22,14 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         _view = (IGameCellView)view;
     }
 
-    public void SetState(CellState state, BoardData cellData, Action callBack = null)
+    public void SetState(CellState state, IBoardData cellData, Action callBack = null)
     {
         _model.State = state;
         SetParameters(cellData);
         switch (state)
         {
             case CellState.Lock or CellState.Unlock:
-                _model.SetDefaultData(cellData.DefaultCell);
+                _model.SetDefaultData(cellData.GetDefaultCell());
                 _model.State = state;
                 break;
 
@@ -43,14 +43,14 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         _view.StartAnimation(_model, callBack);
     }
 
-    public void LevelUp(BoardData cellData)
+    public void LevelUp(IBoardData cellData)
     {
         _model.Level += 1;
         SetState(CellState.Active, cellData);
         _view.StartLevelUpAnimation(_model);
     }
 
-    public void InitializeManager(ImprovementModel manager, BoardData cellData)
+    public void InitializeManager(ImprovementModel manager, IBoardData cellData)
     {
         _model.IsManagerActivated = manager.IsActivated;
         if (_model.IsManagerActivated)
@@ -61,7 +61,7 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         _view.InitializeImprovements(_model);
     }
 
-    public void InitializeUpgrade(ImprovementModel upgrade, BoardData cellData)
+    public void InitializeUpgrade(ImprovementModel upgrade, IBoardData cellData)
     {
         _model.ActivatedUpgradeLevel = upgrade.ImprovementLevel - 1;
         if (upgrade.IsActivated)
@@ -74,27 +74,27 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         _view.InitializeImprovements(_model);
     }
 
-    public void SetCost(int activationNumber, BoardData cellData)
+    public void SetCost(int activationNumber, IBoardData cellData)
     {
-        if (activationNumber > cellData.Cost.Count - 1)
+        if (activationNumber > cellData.GetCostCount() - 1)
         {
-            var lastElement = cellData.Cost[cellData.Cost.Count - 1];
-            var costNumber = lastElement.Number * (activationNumber - cellData.Cost.Count + 2);
+            var lastElement = cellData.GetCost(cellData.GetCostCount() - 1);
+            var costNumber = lastElement.Number * (activationNumber - cellData.GetCostCount() + 2);
             _model.Cost = new MoneyModel(costNumber, lastElement.Value);
             return;
         }
 
-        _model.Cost = cellData.Cost[activationNumber];
+        _model.Cost = cellData.GetCost(activationNumber);
     }
 
-    public void SubscribeToBuyButton(Action<GameCellPresenter> callBack)
+    public void SubscribeToBuyButton(IButtonSubscriber subscriber, Action<IGameCell> callBack)
     {
-        SubscribeToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
+        subscriber.AddListenerToButton(_view.GetBuyButton(), () => callBack?.Invoke(this));
     }
 
-    public void SubscribeToCellClick(Action<GameCellPresenter> callBack)
+    public void SubscribeToCellClick(IButtonSubscriber subscriber, Action<IGameCell> callBack)
     {
-        SubscribeToButton(_view.GetCellButton(), () => callBack?.Invoke(this));
+        subscriber.AddListenerToButton(_view.GetCellButton(), () => callBack?.Invoke(this));
     }
 
     public void SetActiveSelector(bool isActive)
@@ -150,13 +150,13 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         }
     }
 
-    private void SetParameters(BoardData cellData)
+    private void SetParameters(IBoardData cellData)
     {
         SetTime(cellData);
         SetProfit(cellData);
     }
 
-    private void SetTime(BoardData cellData)
+    private void SetTime(IBoardData cellData)
     {
         if (_model.Level < 1)
         {
@@ -164,10 +164,10 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
             return;
         }
 
-        _model.TotalTime = cellData.ProcessTime[_model.Level - 1].ToTimeSpan();
+        _model.TotalTime = cellData.GetTime(_model.Level).ToTimeSpan();
     }
 
-    private void SetProfit(BoardData cellData)
+    private void SetProfit(IBoardData cellData)
     {
         if (_model.Level < 1)
         {
@@ -176,11 +176,11 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         }
 
         var profitMultiplier = _model.ActivatedUpgradeLevel + 1;
-        var baseProfit = cellData.BaseProfit[_model.Level - 1];
+        var baseProfit = cellData.GetProfit(_model.Level);
         _model.Profit = new MoneyModel(baseProfit.Number * profitMultiplier, baseProfit.Value);
     }
 
-    public bool IsNeighborOf(GameCellPresenter cell)
+    public bool IsNeighborOf(IGameCell cell)
     {
         var xDiff = Math.Abs(cell.Model.GridIndex[0] - _model.GridIndex[0]);
         var yDiff = Math.Abs(cell.Model.GridIndex[1] - _model.GridIndex[1]);
@@ -193,7 +193,7 @@ public class GameCellPresenter : ButtonSubscription, IGameCell
         return false;
     }
 
-    public bool HasSameLevelAs(GameCellPresenter otherCell)
+    public bool HasSameLevelAs(IGameCell otherCell)
     {
         if (_model.Level == otherCell.Model.Level)
         {

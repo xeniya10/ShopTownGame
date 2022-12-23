@@ -7,8 +7,9 @@ using VContainer.Unity;
 
 namespace ShopTown.PresenterComponent
 {
-public class SplashScreenPresenter : ButtonSubscription, IInitializable
+public class SplashScreenPresenter : IInitializable
 {
+    [Inject] private readonly IButtonSubscriber _subscriber;
     [Inject] private readonly ISplashCellView _cell;
     [Inject] private readonly ISplashScreenView _splashScreen;
 
@@ -20,7 +21,7 @@ public class SplashScreenPresenter : ButtonSubscription, IInitializable
     public void Initialize()
     {
         Show();
-        SubscribeToButton(_splashScreen.GetStartButton(), Hide);
+        _subscriber.AddListenerToButton(_splashScreen.GetStartButton(), Hide);
     }
 
     private void Show()
@@ -36,6 +37,7 @@ public class SplashScreenPresenter : ButtonSubscription, IInitializable
         _disappearSequence = DOTween.Sequence();
         _splashScreen.DisappearAnimation(_disappearSequence);
         _cells.ForEach(cell => cell.DisappearAnimation(_disappearSequence));
+        _splashScreen.DisappearAnimationImage(_disappearSequence);
         _disappearSequence.Play();
     }
 

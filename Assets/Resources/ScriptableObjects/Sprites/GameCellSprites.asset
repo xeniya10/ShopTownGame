@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7bf85d35a517394b85b6287d0250261, type: 3}
   m_Name: GameCellSprites
   m_EditorClassIdentifier: 
-  BusinessSprites:
+  _businessSprites:
   - {fileID: 21300000, guid: b456d3289ed684041b172b423171ed58, type: 3}
   - {fileID: 21300000, guid: 907f9304b8369a243bd53328dc8ba105, type: 3}
   - {fileID: 21300000, guid: f0095333d6f741d4d893296a30e4d694, type: 3}
@@ -40,7 +40,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f8368595d517c284ca3e476a8128d7ef, type: 3}
   - {fileID: 21300000, guid: 13d96f180a31d3743af9ecaf63f1fca5, type: 3}
   - {fileID: 21300000, guid: 0fa80c4fff49c1e449e2cd186ccf4d57, type: 3}
-  BackgroundSprites:
+  _backgroundSprites:
   - {fileID: 21300000, guid: e26e954b0cfb32440b859147ea47ca51, type: 3}
   - {fileID: 21300000, guid: 472d0137783e43449ac2e0e5c2ebf9b1, type: 3}
   - {fileID: 21300000, guid: 0ac63e1e4b811f14db448c27904f685c, type: 3}

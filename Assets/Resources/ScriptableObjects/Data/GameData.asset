@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8be093df75c74e4c97918d1eee96b47, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  DefaultGameData:
+  _defaultGameData:
     DollarBalance:
-      Number: 1000
+      Number: 2
       Value: 0
     GoldBalance:
       Number: 0

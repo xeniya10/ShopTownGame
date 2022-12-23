@@ -15,21 +15,21 @@ public class GameBoardController : IGameBoardController
     [Inject] private readonly IBoard _board;
     [Inject] private readonly IPresenterFactory<IGameCell> _presenterFactory;
     [Inject] private readonly IGameCellView _view;
-    [Inject] private readonly BoardData _defaultData;
+    [Inject] private readonly IButtonSubscriber _subscriber;
+    [Inject] private readonly IBoardData _defaultData;
 
     private string _key = "GameBoard";
 
     private List<GameCellModel> _models = new List<GameCellModel>();
     private List<IGameCell> _presenters = new List<IGameCell>();
-    private List<GameCellPresenter> _selectedCells = new List<GameCellPresenter>();
+    private List<IGameCell> _selectedCells = new List<IGameCell>();
 
     public event Action<GameCellModel> ActivateEvent;
     public event Action<int, bool> UnlockEvent;
-    public event Action SetOfflineProfitEvent;
+    public event Action<IGameData> SetOfflineProfitEvent;
 
     public void Initialize()
     {
-        _storage.DeleteKey(_key);
         _storage.Load(ref _models, _key);
         CreateBoard();
     }
@@ -38,18 +38,18 @@ public class GameBoardController : IGameBoardController
     {
         _models = new List<GameCellModel>();
 
-        for (var i = 0; i < _defaultData.DefaultBoard.Rows; i++)
+        for (var i = 0; i < _defaultData.GetDefaultBoard().Rows; i++)
         {
-            for (var j = 0; j < _defaultData.DefaultBoard.Columns; j++)
+            for (var j = 0; j < _defaultData.GetDefaultBoard().Columns; j++)
             {
                 var cell = new GameCellModel();
-                cell.SetDefaultData(_defaultData.DefaultCell);
+                cell.SetDefaultData(_defaultData.GetDefaultCell());
                 cell.GridIndex = new[] {j, i};
-                cell.Size = _defaultData.DefaultBoard.CalculateCellSize();
-                cell.Position = _defaultData.DefaultBoard.CalculateCellPosition(j, i);
+                cell.Size = _defaultData.GetDefaultBoard().CalculateCellSize();
+                cell.Position = _defaultData.GetDefaultBoard().CalculateCellPosition(j, i);
                 _models.Add(cell);
 
-                if (i == _defaultData.DefaultBoard.Rows - 2 && j == _defaultData.DefaultBoard.Columns - 2)
+                if (i == _defaultData.GetDefaultBoard().Rows - 2 && j == _defaultData.GetDefaultBoard().Columns - 2)
                 {
                     cell.Level = _data.GameData.MinLevel;
                     cell.State = CellState.Unlock;
@@ -74,8 +74,8 @@ public class GameBoardController : IGameBoardController
             presenter.ChangeEvent += () => _storage.Save(_key, _models);
             presenter.InProgressEndEvent += (profit) => _data.GameData.AddToBalance(profit);
             presenter.GetOfflineProfitEvent += (profit) => _data.GameData.AddToOfflineBalance(profit);
-            presenter.SubscribeToBuyButton(TryBuy);
-            presenter.SubscribeToCellClick(Select);
+            presenter.SubscribeToBuyButton(_subscriber, TryBuy);
+            presenter.SubscribeToCellClick(_subscriber, Select);
             presenter.SetState(model.State, _defaultData);
 
             if (model.Cost == null && model.State == CellState.Unlock)
@@ -86,10 +86,10 @@ public class GameBoardController : IGameBoardController
             _presenters.Add(presenter);
         }
 
-        SetOfflineProfitEvent?.Invoke();
+        SetOfflineProfitEvent?.Invoke(_data);
     }
 
-    private void TryBuy(GameCellPresenter cell)
+    private void TryBuy(IGameCell cell)
     {
         if (_data.GameData.CanBuy(cell.Model.Cost))
         {
@@ -101,7 +101,7 @@ public class GameBoardController : IGameBoardController
         }
     }
 
-    private void Select(GameCellPresenter selectedCell)
+    private void Select(IGameCell selectedCell)
     {
         selectedCell.SetActiveSelector(true);
         _selectedCells.Add(selectedCell);
@@ -129,7 +129,7 @@ public class GameBoardController : IGameBoardController
         _selectedCells.Clear();
     }
 
-    private void Merge(GameCellPresenter oneCell, GameCellPresenter anotherCell)
+    private void Merge(IGameCell oneCell, IGameCell anotherCell)
     {
         if (oneCell.Model.Level < _data.GameData.MaxLevel)
         {
@@ -143,7 +143,7 @@ public class GameBoardController : IGameBoardController
         }
     }
 
-    private void UnlockNeighbors(GameCellPresenter activatedCell)
+    private void UnlockNeighbors(IGameCell activatedCell)
     {
         var neighbors =
             _presenters.FindAll(cell => cell.IsNeighborOf(activatedCell) && cell.Model.State == CellState.Lock);

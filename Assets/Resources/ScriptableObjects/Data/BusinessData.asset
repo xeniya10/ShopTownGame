@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9fbd804a62a8040a0a03fcaac5bfaf, type: 3}
   m_Name: BusinessData
   m_EditorClassIdentifier: 
-  Names:
+  _names:
   - Flower shop
   - Fruit shop
   - Coffee
@@ -28,7 +28,7 @@ MonoBehaviour:
   - Beg shop
   - Shoe shop
   - Clothing shop
-  - Gift shop
+  - 'Gift shop '
   - Book shop
   - Music shop
   - Pet shop

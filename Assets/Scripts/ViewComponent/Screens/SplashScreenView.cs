@@ -29,6 +29,10 @@ public class SplashScreenView : MonoBehaviour, ISplashScreenView
     {
         FadeAnimation(_startButtonText, sequence);
         FadeAnimation(_gameNameText, sequence);
+    }
+
+    public void DisappearAnimationImage(Sequence sequence)
+    {
         FadeAnimation(_splashScreenImage, sequence, () => gameObject.SetActive(false));
     }
 

@@ -5,45 +5,44 @@ using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
-using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameCellPresenterTester
 {
     private GameCellModel _model;
     private IGameCellView _view;
-    private BoardData _boardData;
+    private IBoardData _boardData;
     private IGameCell _presenter;
-
-    private void PrepareCaseTest(bool isMangerActivated, int timeMultiplier = 1)
-    {
-        _boardData.BaseProfit.Add(new MoneyModel(Random.Range(1, 100000)));
-        _boardData.ProcessTime.Add(new TimeModel(Random.Range(0, 3), Random.Range(0, 60), Random.Range(0, 60),
-            Random.Range(0, 60)));
-
-        _boardData.Cost.Add(new MoneyModel(Random.Range(1, 100000)));
-
-        _presenter.Model.Level = 1;
-        _presenter.Model.IsManagerActivated = isMangerActivated;
-        var processTimeInSeconds = _boardData.ProcessTime[_presenter.Model.Level - 1].ToTimeSpan().TotalSeconds *
-            timeMultiplier;
-
-        var processTime = TimeSpan.FromSeconds(processTimeInSeconds);
-        _presenter.Model.StartTime = DateTime.Now.Subtract(processTime);
-    }
 
     [SetUp] public void CreateTestObjects()
     {
         _model = Substitute.For<GameCellModel>();
         _view = Substitute.For<IGameCellView>();
-        _boardData = ScriptableObject.CreateInstance<BoardData>();
+        _boardData = Substitute.For<IBoardData>();
         _presenter = new GameCellPresenter(_model, _view);
+    }
+
+    private void PrepareCaseTest(bool isMangerActivated, int timeMultiplier = 1)
+    {
+        _boardData.GetProfit(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
+        _boardData.GetTime(Arg.Any<int>())
+            .Returns(new TimeModel(Random.Range(0, 3), Random.Range(0, 60), Random.Range(0, 60), Random.Range(0, 60)));
+
+        _boardData.GetCost(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
+        _boardData.GetCostCount().Returns(1);
+
+        _presenter.Model.Level = 1;
+        _presenter.Model.IsManagerActivated = isMangerActivated;
+        var processTimeInSeconds = _boardData.GetTime(1).ToTimeSpan().TotalSeconds * timeMultiplier;
+
+        var processTime = TimeSpan.FromSeconds(processTimeInSeconds);
+        _presenter.Model.StartTime = DateTime.Now.Subtract(processTime);
     }
 
     [Test] public void SetState_OnUnlock_CallsChangeEvent()
     {
         var wasCalled = false;
+        _boardData.GetDefaultCell().Returns(new GameCellModel());
         _presenter.ChangeEvent += () => wasCalled = true;
         _presenter.SetState(CellState.Unlock, _boardData);
         Assert.True(wasCalled);
@@ -51,6 +50,7 @@ public class GameCellPresenterTester
 
     [Test] public void SetState_OnUnlock_SetsUnlock()
     {
+        _boardData.GetDefaultCell().Returns(new GameCellModel());
         _presenter.Model.State = CellState.Active;
         _presenter.SetState(CellState.Unlock, _boardData);
         Assert.AreEqual(CellState.Unlock, _presenter.Model.State);
@@ -145,7 +145,7 @@ public class GameCellPresenterTester
         var activationNumber = 0;
         PrepareCaseTest(false);
         _presenter.SetCost(activationNumber, _boardData);
-        Assert.AreEqual(_boardData.Cost[^1].Number, _presenter.Model.Cost.Number);
+        Assert.AreEqual(_boardData.GetCost(1).Number, _presenter.Model.Cost.Number);
     }
 
     [Test] public void SetCost_OutOfRange_SetsTheSameCostValue()
@@ -153,7 +153,7 @@ public class GameCellPresenterTester
         var activationNumber = 1;
         PrepareCaseTest(false);
         _presenter.SetCost(activationNumber, _boardData);
-        Assert.AreEqual(_boardData.Cost[^1].Number * (activationNumber - _boardData.Cost.Count + 2),
+        Assert.AreEqual(_boardData.GetCost(1).Number * (activationNumber - _boardData.GetCostCount() + 2),
             _presenter.Model.Cost.Number);
     }
 
@@ -161,7 +161,7 @@ public class GameCellPresenterTester
     {
         PrepareCaseTest(false);
         _presenter.SetState(CellState.Active, _boardData);
-        Assert.AreEqual(_boardData.BaseProfit[^1].Number, _presenter.Model.Profit.Number);
+        Assert.AreEqual(_boardData.GetProfit(1).Number, _presenter.Model.Profit.Number);
     }
 
     [Test] public void SetProfit_OutOfRange_SetsTheSameProfitValue()
@@ -176,7 +176,7 @@ public class GameCellPresenterTester
     {
         PrepareCaseTest(false);
         _presenter.SetState(CellState.Active, _boardData);
-        Assert.AreEqual(_boardData.ProcessTime[^1].TotalSeconds, _presenter.Model.TotalTime.TotalSeconds);
+        Assert.AreEqual(_boardData.GetTime(1).TotalSeconds, _presenter.Model.TotalTime.TotalSeconds);
     }
 
     [Test] public void SetTime_OutOfRange_SetsTheSameProcessTimeValue()
@@ -239,7 +239,7 @@ public class GameCellPresenterTester
         upgrade.ImprovementLevel = 2;
         PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.Profit.Number / _boardData.BaseProfit[^1].Number);
+        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.Profit.Number / _boardData.GetProfit(1).Number);
     }
 
     [Test] public void InitializeUpgrade_ActivatedUpgrade_SetsUpgradeState()
@@ -269,28 +269,7 @@ public class GameCellPresenterTester
         upgrade.IsActivated = true;
         PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(upgrade.ImprovementLevel + 1,
-            _presenter.Model.Profit.Number / _boardData.BaseProfit[^1].Number);
-    }
-
-    [Test] public void SubscriptionToBuyButton_ByClick_InvokesCallBack()
-    {
-        var wasCalled = false;
-        var button = Substitute.For<Button>();
-        _view.GetBuyButton().Returns(button);
-        _presenter.SubscribeToBuyButton((cell) => wasCalled = true);
-        _view.GetBuyButton().onClick?.Invoke();
-        Assert.True(wasCalled);
-    }
-
-    [Test] public void SubscriptionToCellButton_ByClick_InvokesCallBack()
-    {
-        var wasCalled = false;
-        var button = Substitute.For<Button>();
-        _view.GetCellButton().Returns(button);
-        _presenter.SubscribeToCellClick((cell) => wasCalled = true);
-        _view.GetCellButton().onClick?.Invoke();
-        Assert.True(wasCalled);
+        Assert.AreEqual(upgrade.ImprovementLevel + 1, _presenter.Model.Profit.Number / _boardData.GetProfit(1).Number);
     }
 
     [Test] public void IsNeighborOf_CheckingOfTwoNeighbors_ReturnsTrue()

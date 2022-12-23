@@ -13,29 +13,29 @@ public class ManagerPresenter : ImprovementPresenter, IManager
     public override void Activate()
     {
         _view.ActivateAnimation();
-        Model.IsActivated = true;
+        _model.IsActivated = true;
         SetState(ImprovementState.Lock);
     }
 
-    protected override void SetSprite(ImprovementContainer improvementSprites)
+    protected override void SetSprite(IImprovementSprites improvementSprites)
     {
-        _view.SetImprovementSprite(improvementSprites.ManagerSprites[Model.Level - 1]);
+        _view.SetImprovementSprite(improvementSprites.GetManagerSprites(_model.Level));
     }
 
-    protected override void SetName(ImprovementData improvementData)
+    protected override void SetName(IImprovementData improvementData)
     {
-        Model.Name = improvementData.ManagerNames[Model.Level - 1];
+        _model.Name = improvementData.GetManagerName(_model.Level);
     }
 
-    protected override void SetDescription(ImprovementData improvementData)
+    protected override void SetDescription(IImprovementData improvementData)
     {
-        var businessName = improvementData.BusinessNames.Names[Model.Level - 1];
-        Model.Description = $"Hire manager to run your {businessName}";
+        var businessName = improvementData.GetBusinessName(_model.Level);
+        _model.Description = $"Hire manager to run your {businessName}";
     }
 
-    protected override void SetCost(ImprovementData improvementData)
+    protected override void SetCost(IImprovementData improvementData)
     {
-        Model.Cost = improvementData.ManagerBaseCost[Model.Level - 1];
+        _model.Cost = improvementData.GetManagerCost(_model.Level);
     }
 }
 }

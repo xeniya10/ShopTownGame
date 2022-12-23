@@ -14,35 +14,35 @@ public abstract class ImprovementController<T> : IImprovementController<T>
     [Inject] protected readonly IGameData _data;
     [Inject] protected readonly IStorageManager _storage;
     [Inject] protected readonly IImprovementView _view;
+    [Inject] protected readonly IButtonSubscriber _subscriber;
     [Inject] protected readonly IBoard _board;
-    [Inject] protected readonly ImprovementData _improvementData;
-    [Inject] protected readonly ImprovementContainer _improvementSprites;
+    [Inject] protected readonly IImprovementData _improvementData;
+    [Inject] protected readonly IImprovementSprites _improvementSprites;
 
     protected abstract string _key { get; set; }
 
     protected List<ImprovementModel> _models;
-    protected List<ImprovementPresenter> _presenters;
+    protected List<IImprovement> _presenters;
 
     public event Action<ImprovementModel> ActivateEvent;
 
     public void Initialize()
     {
-        _storage.DeleteKey(_key);
         _storage.Load(ref _models, _key);
         CreateBoard();
     }
 
     protected abstract void CreateBoard();
 
-    protected void InitializeImprovement(ImprovementPresenter improvement)
+    protected void InitializeImprovement(IImprovement improvement)
     {
         improvement.Initialize(_improvementData, _improvementSprites);
         improvement.ChangeEvent += () => _storage.Save(_key, _models);
-        improvement.SubscribeToBuyButton(TryBuy);
+        improvement.AddListenerToBuyButton(_subscriber, TryBuy);
         _presenters.Add(improvement);
     }
 
-    private void TryBuy(ImprovementPresenter improvement)
+    private void TryBuy(IImprovement improvement)
     {
         if (_data.GameData.CanBuy(improvement.Model.Cost))
         {
@@ -58,7 +58,7 @@ public abstract class ImprovementController<T> : IImprovementController<T>
         for (var i = 0; i < _data.GameData.MaxLevel; i++)
         {
             var improvement = new ImprovementModel();
-            improvement.SetDefaultData(_improvementData.DefaultModel);
+            improvement.SetDefaultData(_improvementData.GetDefaultModel());
             improvement.Level = i + 1;
             if (i == 0)
             {
@@ -71,7 +71,7 @@ public abstract class ImprovementController<T> : IImprovementController<T>
         _storage.Save(_key, _models);
     }
 
-    public ImprovementPresenter FindImprovement(int level)
+    public IImprovement FindImprovement(int level)
     {
         return _presenters.Find(manager => manager.Model.Level == level);
     }

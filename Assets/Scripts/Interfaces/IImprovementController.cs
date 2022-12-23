@@ -10,5 +10,5 @@ public interface IImprovementController<T> : IDisposable
 
     void Unlock(int level, bool isCellActivated);
 
-    ImprovementPresenter FindImprovement(int level);
+    IImprovement FindImprovement(int level);
 }
