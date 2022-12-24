@@ -3,7 +3,7 @@ using ShopTown.PresenterComponent;
 
 namespace ShopTown.ModelComponent
 {
-public enum CellState { Lock, Unlock, Active, InProgress }
+public enum CellState { Lock, Unlock, Active, InProgress, TEST }
 
 [Serializable]
 public class GameCellModel : IModel

@@ -52,6 +52,9 @@ public class GameCellView : MonoBehaviour, IGameCellView
 
     public void Initialize(GameCellModel model)
     {
+        if (model == null)
+            throw new ArgumentException("Get model null");
+        
         SetSize(model.Size);
         SetBusinessSprite(model.Level);
         SetImprovementSprites(model.Level);
@@ -93,6 +96,9 @@ public class GameCellView : MonoBehaviour, IGameCellView
             case CellState.InProgress:
                 InProgressAnimation(model, onCompleteAnimation);
                 break;
+            
+            default:
+                throw new ArgumentException($"Unknown type of state {GetType().Name}.{nameof(StartAnimation)} {model.State}");
         }
     }
 

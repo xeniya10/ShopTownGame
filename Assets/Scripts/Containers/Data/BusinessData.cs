@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ShopTown.Data
 {
+    // CreateAssetMenu
 public class BusinessData : ScriptableObject, IBusinessData
 {
     [SerializeField] private List<string> _names = new List<string>();

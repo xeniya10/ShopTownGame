@@ -42,7 +42,7 @@ public class PackCellView : MonoBehaviour, ICellView<PackModel>
     private void SetProfit(MoneyModel profit)
     {
         _profitText.text = profit.ToFormattedString();
-        SetPackCurrency(_currency.GetIcon(profit.Value));
+        SetPackCurrency(_currency.GetIcon(profit.Currency));
     }
 
     private void SetPrice(double price)

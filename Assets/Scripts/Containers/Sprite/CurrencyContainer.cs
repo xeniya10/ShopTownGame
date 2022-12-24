@@ -9,9 +9,9 @@ public class CurrencyContainer : ScriptableObject, ICurrencyIcon
     [SerializeField] private Sprite _dollarIcon;
     [SerializeField] private Sprite _goldIcon;
 
-    public Sprite GetIcon(Currency currency)
+    public Sprite GetIcon(CurrencyType currencyType)
     {
-        if (currency == Currency.Dollar)
+        if (currencyType == CurrencyType.Dollar)
         {
             return _dollarIcon;
         }

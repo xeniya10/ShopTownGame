@@ -18,7 +18,7 @@ public class UpgradePresenter : ImprovementPresenter, IUpgrade
 
     private void LevelUp()
     {
-        if (_model.ImprovementLevel == 3)
+        if (_model.ImprovementLevel == 3) // 3 ??
         {
             SetState(ImprovementState.Lock);
             _model.IsActivated = true;
@@ -49,7 +49,7 @@ public class UpgradePresenter : ImprovementPresenter, IUpgrade
     protected override void SetCost(IImprovementData improvementData)
     {
         var baseCost = improvementData.GetUpgradeCost(_model.Level);
-        _model.Cost = new MoneyModel(baseCost.Number * _model.ImprovementLevel, baseCost.Value);
+        _model.Cost = new MoneyModel(baseCost.Value * _model.ImprovementLevel, baseCost.Currency);
     }
 }
 }

@@ -27,10 +27,10 @@ public class GameplayController : IInitializable
         _upgradeController.ActivateEvent += _gameBoardController.InitializeUpgrade;
 
         _gameBoardController.SetOfflineProfitEvent += _welcomeScreen.Show;
-        _gameBoardController.ActivateEvent += _newBusinessProfile.Show;
+        _gameBoardController.ActivateEvent += _newBusinessProfile.Show; 
     }
 
-    private void UnlockImprovements(int level, bool isActivate)
+    private void UnlockImprovements(int level, bool isActivate) // naming
     {
         _managerController.Unlock(level, isActivate);
         _upgradeController.Unlock(level, isActivate);

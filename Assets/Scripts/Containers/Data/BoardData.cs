@@ -50,7 +50,7 @@ public class BoardData : ScriptableObject, IBoardData
         return _cost[number];
     }
 
-    public TimeModel GetTime(int level)
+    public TimeModel GetTime(int level) // naming
     {
         if (_time.Count == 0 || level > _time.Count)
         {

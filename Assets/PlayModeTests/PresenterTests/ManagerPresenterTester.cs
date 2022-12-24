@@ -56,7 +56,7 @@ public class ManagerPresenterTester
     public void Initialize__SetsCost()
     {
         _presenter.Initialize(_improvementData, _improvementSprites);
-        Assert.AreEqual(_presenter.Model.Cost.Number, _improvementData.GetManagerCost(_presenter.Model.Level).Number);
+        Assert.AreEqual(_presenter.Model.Cost.Value, _improvementData.GetManagerCost(_presenter.Model.Level).Value);
     }
 
     [Test]

@@ -8,6 +8,6 @@ public interface IStorageManager
 
     public void DeleteKey(string key);
 
-    public void Load<T>(ref T variable, string key);
+    public void Load<T>(ref T variable, string key); // return value instead of ref
 }
 }

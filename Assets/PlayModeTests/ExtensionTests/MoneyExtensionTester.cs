@@ -6,15 +6,15 @@ public class MoneyModelFormatTester
 {
     private List<MoneyModel> _results = new List<MoneyModel>()
     {
-        new MoneyModel(5, Currency.Dollar),
-        new MoneyModel(9.5, Currency.Dollar),
-        new MoneyModel(500, Currency.Dollar),
-        new MoneyModel(900.5, Currency.Dollar),
-        new MoneyModel(5000, Currency.Dollar),
-        new MoneyModel(9510, Currency.Dollar),
-        new MoneyModel(9590, Currency.Dollar),
-        new MoneyModel(5000000, Currency.Dollar),
-        new MoneyModel(9510000, Currency.Dollar)
+        new MoneyModel(5, CurrencyType.Dollar),
+        new MoneyModel(9.5, CurrencyType.Dollar),
+        new MoneyModel(500, CurrencyType.Dollar),
+        new MoneyModel(900.5, CurrencyType.Dollar),
+        new MoneyModel(5000, CurrencyType.Dollar),
+        new MoneyModel(9510, CurrencyType.Dollar),
+        new MoneyModel(9590, CurrencyType.Dollar),
+        new MoneyModel(5000000, CurrencyType.Dollar),
+        new MoneyModel(9510000, CurrencyType.Dollar)
     };
     private List<string> _expectedResults = new List<string>()
     {

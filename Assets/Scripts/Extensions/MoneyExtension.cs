@@ -6,7 +6,7 @@ public static class MoneyExtension
 {
     public static string ToFormattedString(this MoneyModel money)
     {
-        var number = GetNumberDetails(money.Number);
+        var number = GetNumberDetails(money.Value);
         return number.FormattedNumber + number.Scale;
     }
 

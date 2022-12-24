@@ -1,5 +1,8 @@
 using System;
 
+/// <summary>
+/// We need this class for serializing due to C# DateTime can't be serialized via Unity serializer
+/// </summary>
 [Serializable]
 public class TimeModel
 {

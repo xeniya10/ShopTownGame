@@ -76,7 +76,7 @@ public class ImprovementView : MonoBehaviour, IImprovementView
     private void SetCost(MoneyModel cost)
     {
         _priceText.text = cost.ToFormattedString();
-        _currencyImage.sprite = _currency.GetIcon(cost.Value);
+        _currencyImage.sprite = _currency.GetIcon(cost.Currency);
     }
 
     private void SetName(string managerName)

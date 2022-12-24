@@ -5,6 +5,6 @@ namespace ShopTown.Data
 {
 public interface ICurrencyIcon
 {
-    Sprite GetIcon(Currency currency);
+    Sprite GetIcon(CurrencyType currencyType);
 }
 }

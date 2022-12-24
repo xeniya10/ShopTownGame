@@ -2,18 +2,18 @@ using System;
 
 namespace ShopTown.ModelComponent
 {
-public enum Currency { Dollar, Gold }
+public enum CurrencyType { Dollar, Gold }
 
 [Serializable]
 public class MoneyModel
 {
-    public double Number;
-    public Currency Value;
+    public double Value;
+    public CurrencyType Currency;
 
-    public MoneyModel(double number, Currency value = Currency.Dollar)
+    public MoneyModel(double value, CurrencyType currency = CurrencyType.Dollar)
     {
-        Number = number;
         Value = value;
+        Currency = currency;
     }
 }
 }

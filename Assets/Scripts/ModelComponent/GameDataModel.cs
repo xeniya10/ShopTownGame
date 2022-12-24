@@ -23,8 +23,8 @@ public class GameDataModel
 
     public void SetDefaultData(GameDataModel defaultData)
     {
-        DollarBalance = new MoneyModel(defaultData.DollarBalance.Number, defaultData.DollarBalance.Value);
-        GoldBalance = new MoneyModel(defaultData.GoldBalance.Number, defaultData.GoldBalance.Value);
+        DollarBalance = new MoneyModel(defaultData.DollarBalance.Value, defaultData.DollarBalance.Currency);
+        GoldBalance = new MoneyModel(defaultData.GoldBalance.Value, defaultData.GoldBalance.Currency);
         MinLevel = defaultData.MinLevel;
         MaxLevel = defaultData.MaxLevel;
         MaxOpenedLevel = defaultData.MaxOpenedLevel;
@@ -39,40 +39,40 @@ public class GameDataModel
     {
         if (OfflineDollarBalance == null)
         {
-            OfflineDollarBalance = new MoneyModel(profit.Number, profit.Value);
+            OfflineDollarBalance = new MoneyModel(profit.Value, profit.Currency);
             return;
         }
 
-        OfflineDollarBalance.Number += profit.Number;
+        OfflineDollarBalance.Value += profit.Value;
     }
 
     public void AddToBalance(MoneyModel number)
     {
-        if (number.Value == Currency.Dollar)
+        if (number.Currency == CurrencyType.Dollar)
         {
-            DollarBalance.Number += number.Number;
+            DollarBalance.Value += number.Value;
             ChangeEvent?.Invoke();
             return;
         }
 
-        GoldBalance.Number += number.Number;
+        GoldBalance.Value += number.Value;
         ChangeEvent?.Invoke();
     }
 
     private void SubtractFromBalance(MoneyModel number)
     {
-        if (number.Value == Currency.Dollar)
+        if (number.Currency == CurrencyType.Dollar)
         {
-            DollarBalance.Number -= number.Number;
+            DollarBalance.Value -= number.Value;
             return;
         }
 
-        GoldBalance.Number -= number.Number;
+        GoldBalance.Value -= number.Value;
     }
 
     public bool CanBuy(MoneyModel number)
     {
-        if (number.Number > DollarBalance.Number)
+        if (number.Value > DollarBalance.Value)
         {
             return false;
         }

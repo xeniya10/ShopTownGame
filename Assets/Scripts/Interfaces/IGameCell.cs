@@ -11,7 +11,7 @@ public interface IGameCell
     public event Action<MoneyModel> InProgressEndEvent;
     public event Action<MoneyModel> GetOfflineProfitEvent;
 
-    void SetState(CellState state, IBoardData cellData, Action callBack = null);
+    void SetState(CellState state, IBoardData cellData, Action onAnimationEndedCallback = null);
 
     void LevelUp(IBoardData cellData);
 

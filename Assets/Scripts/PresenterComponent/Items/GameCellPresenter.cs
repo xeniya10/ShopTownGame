@@ -22,25 +22,26 @@ public class GameCellPresenter : IGameCell
         _view = (IGameCellView)view;
     }
 
-    public void SetState(CellState state, IBoardData cellData, Action callBack = null)
+    public void SetState(CellState state, IBoardData cellData, Action onAnimationEndedCallback = null)
     {
         _model.State = state;
         SetParameters(cellData);
         switch (state)
         {
-            case CellState.Lock or CellState.Unlock:
+            case CellState.Unlock:
+            case CellState.Lock:
                 _model.SetDefaultData(cellData.GetDefaultCell());
                 _model.State = state;
                 break;
 
             case CellState.InProgress:
                 CalculateStartTime();
-                callBack = GetInProgressCallBack;
+                onAnimationEndedCallback = GetInProgressCallBack;
                 break;
         }
 
         ChangeEvent?.Invoke();
-        _view.StartAnimation(_model, callBack);
+        _view.StartAnimation(_model, onAnimationEndedCallback);
     }
 
     public void LevelUp(IBoardData cellData)
@@ -74,13 +75,13 @@ public class GameCellPresenter : IGameCell
         _view.InitializeImprovements(_model);
     }
 
-    public void SetCost(int activationNumber, IBoardData cellData)
+    public void SetCost(int activationNumber, IBoardData cellData) // naming activationNumber
     {
         if (activationNumber > cellData.GetCostCount() - 1)
         {
             var lastElement = cellData.GetCost(cellData.GetCostCount() - 1);
-            var costNumber = lastElement.Number * (activationNumber - cellData.GetCostCount() + 2);
-            _model.Cost = new MoneyModel(costNumber, lastElement.Value);
+            var costNumber = lastElement.Value * (activationNumber - cellData.GetCostCount() + 2);
+            _model.Cost = new MoneyModel(costNumber, lastElement.Currency);
             return;
         }
 
@@ -128,7 +129,7 @@ public class GameCellPresenter : IGameCell
                     _model.State = CellState.Active;
                 }
 
-                var profit = new MoneyModel(multiplier * _model.Profit.Number, _model.Profit.Value);
+                var profit = new MoneyModel(multiplier * _model.Profit.Value, _model.Profit.Currency);
                 InProgressEndEvent?.Invoke(profit);
                 GetOfflineProfitEvent?.Invoke(profit);
             }
@@ -177,7 +178,7 @@ public class GameCellPresenter : IGameCell
 
         var profitMultiplier = _model.ActivatedUpgradeLevel + 1;
         var baseProfit = cellData.GetProfit(_model.Level);
-        _model.Profit = new MoneyModel(baseProfit.Number * profitMultiplier, baseProfit.Value);
+        _model.Profit = new MoneyModel(baseProfit.Value * profitMultiplier, baseProfit.Currency);
     }
 
     public bool IsNeighborOf(IGameCell cell)
@@ -195,12 +196,7 @@ public class GameCellPresenter : IGameCell
 
     public bool HasSameLevelAs(IGameCell otherCell)
     {
-        if (_model.Level == otherCell.Model.Level)
-        {
-            return true;
-        }
-
-        return false;
+        return _model.Level == otherCell.Model.Level;
     }
 }
 }
