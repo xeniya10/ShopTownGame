@@ -1,7 +1,7 @@
 using System;
 
 /// <summary>
-/// We need this class for serializing due to C# DateTime can't be serialized via Unity serializer
+///     This class is necessary for serialization of DateTime value in Unity Inspector.
 /// </summary>
 [Serializable]
 public class TimeModel

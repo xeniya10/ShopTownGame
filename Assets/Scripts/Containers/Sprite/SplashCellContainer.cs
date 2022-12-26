@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,10 @@ public class SplashCellContainer : ScriptableObject, ISplashCellSprites
 
     public Sprite GetSprite(int number)
     {
-        if (_sprites.Count == 0 || number > _sprites.Count - 1)
+        if (_sprites == null || _sprites.Count == 0 || number > _sprites.Count - 1)
         {
-            Debug.Log("List of Sprites is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetSprite)}: List is null/empty or input number: {number} greater, then count of list");
         }
 
         return _sprites[number];

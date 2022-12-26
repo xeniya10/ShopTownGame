@@ -120,8 +120,8 @@ public class NewBusinessScreenView : MonoBehaviour, IScreenView<GameCellModel>
 
     private void SetBusinessParams(int level)
     {
-        _time.text = _boardData.GetTime(level).ToTimeSpan().ToSymbolFormatString();
-        _profit.text = _boardData.GetProfit(level).ToFormattedString();
+        _time.text = _boardData.GetCellTime(level).ToTimeSpan().ToSymbolFormatString();
+        _profit.text = _boardData.GetCellProfit(level).ToFormattedString();
     }
 
     private void SetManagerName(int level)

@@ -1,3 +1,4 @@
+using System;
 using ShopTown.ModelComponent;
 using UnityEngine;
 
@@ -10,6 +11,11 @@ public class GameData : ScriptableObject, IDefaultModel<GameDataModel>
 
     public GameDataModel GetDefaultModel()
     {
+        if (_defaultGameData == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetDefaultModel)}: Object is null");
+        }
+
         return _defaultGameData;
     }
 }

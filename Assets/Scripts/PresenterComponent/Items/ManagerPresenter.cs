@@ -1,3 +1,4 @@
+using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
@@ -10,7 +11,7 @@ public class ManagerPresenter : ImprovementPresenter, IManager
     public ManagerPresenter(IModel model, IView view) : base(model, view)
     {}
 
-    public override void Activate()
+    public override void Activate(IGameData _data)
     {
         _view.ActivateAnimation();
         _model.IsActivated = true;

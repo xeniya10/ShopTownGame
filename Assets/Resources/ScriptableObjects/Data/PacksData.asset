@@ -14,33 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dollarPacks:
   - Profit:
-      Number: 10000
-      Value: 0
+      Value: 10000
+      Currency: 0
     Price: 2.99
     Size: 1
   - Profit:
-      Number: 100000
-      Value: 0
+      Value: 100000
+      Currency: 0
     Price: 14.99
     Size: 2
   - Profit:
-      Number: 500000
-      Value: 0
+      Value: 500000
+      Currency: 0
     Price: 49.99
     Size: 3
   _goldPacks:
   - Profit:
-      Number: 5
-      Value: 1
+      Value: 5
+      Currency: 1
     Price: 4.99
     Size: 1
   - Profit:
-      Number: 50
-      Value: 1
+      Value: 50
+      Currency: 1
     Price: 29.99
     Size: 2
   - Profit:
-      Number: 100
-      Value: 1
+      Value: 100
+      Currency: 1
     Price: 49.99
     Size: 3

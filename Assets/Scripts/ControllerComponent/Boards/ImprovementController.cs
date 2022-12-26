@@ -24,11 +24,11 @@ public abstract class ImprovementController<T> : IImprovementController<T>
     protected List<ImprovementModel> _models;
     protected List<IImprovement> _presenters;
 
-    public event Action<ImprovementModel> ActivateEvent;
+    public event Action<ImprovementModel> ImprovementActivationEvent;
 
     public void Initialize()
     {
-        _storage.Load(ref _models, _key);
+        _models = _storage.Load<List<ImprovementModel>>(_key);
         CreateBoard();
     }
 
@@ -46,8 +46,8 @@ public abstract class ImprovementController<T> : IImprovementController<T>
     {
         if (_data.GameData.CanBuy(improvement.Model.Cost))
         {
-            improvement.Activate();
-            ActivateEvent?.Invoke(improvement.Model);
+            improvement.Activate(_data);
+            ImprovementActivationEvent?.Invoke(improvement.Model);
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class ImprovementController<T> : IImprovementController<T>
         return _presenters.Find(manager => manager.Model.Level == level);
     }
 
-    public void Unlock(int level, bool isCellActivated)
+    public void UnlockImprovement(int level, bool isCellActivated)
     {
         if (!isCellActivated)
         {

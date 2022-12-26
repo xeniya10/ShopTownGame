@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using ShopTown.ModelComponent;
 using TMPro;
@@ -58,9 +59,9 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
         Hide();
     }
 
-    public void SetButtonText(Setting parameter, bool state)
+    public void SetButtonText(Setting setting, bool state)
     {
-        switch (parameter)
+        switch (setting)
         {
             case Setting.Music:
                 SetButtonText(_musicButtonText, Music, state);
@@ -75,8 +76,11 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
                 break;
 
             case Setting.Ads:
-                // ChangeAdsState();
                 break;
+
+            default:
+                throw new ArgumentException(
+                    $"Unknown type of setting {GetType().Name}.{nameof(SetButtonText)} {setting}");
         }
     }
 
@@ -99,7 +103,6 @@ public class MenuScreenView : MonoBehaviour, IMenuScreenView
     private void Show()
     {
         _startPosition = transform.localPosition;
-        // Initialize(settings);
         gameObject.SetActive(true);
         transform.MoveFromScreenBorder(0f, 1.5f, _moveTime);
     }

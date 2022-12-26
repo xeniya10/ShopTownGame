@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
@@ -15,20 +16,30 @@ public class BoardData : ScriptableObject, IBoardData
 
     public GameBoardModel GetDefaultBoard()
     {
+        if (_defaultBoard == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetDefaultBoard)}: Object is null");
+        }
+
         return _defaultBoard;
     }
 
     public GameCellModel GetDefaultCell()
     {
+        if (_defaultCell == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetDefaultCell)}: Object is null");
+        }
+
         return _defaultCell;
     }
 
-    public MoneyModel GetProfit(int level)
+    public MoneyModel GetCellProfit(int level)
     {
-        if (_profit.Count == 0 || level > _profit.Count)
+        if (_profit == null || _profit.Count == 0 || level > _profit.Count)
         {
-            Debug.Log("List of Profit is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetCellProfit)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _profit[level - 1];
@@ -36,26 +47,31 @@ public class BoardData : ScriptableObject, IBoardData
 
     public int GetCostCount()
     {
+        if (_cost == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetCostCount)}: List is null");
+        }
+
         return _cost.Count;
     }
 
-    public MoneyModel GetCost(int number)
+    public MoneyModel GetCellCost(int number)
     {
-        if (_cost.Count == 0 || number > _cost.Count - 1)
+        if (_cost == null || _cost.Count == 0 || number > _cost.Count - 1)
         {
-            Debug.Log("List of Cost is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetCellCost)}: List is null/empty or input number: {number} greater, then count of list");
         }
 
         return _cost[number];
     }
 
-    public TimeModel GetTime(int level) // naming
+    public TimeModel GetCellTime(int level)
     {
-        if (_time.Count == 0 || level > _time.Count)
+        if (_time == null || _time.Count == 0 || level > _time.Count)
         {
-            Debug.Log("List of Time is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetCellTime)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _time[level - 1];

@@ -62,15 +62,15 @@ public class GameLifetimeScope : LifetimeScope
 
     private void RegisterPresenter(IContainerBuilder builder)
     {
-        builder.Register<AudioPresenter>(Lifetime.Scoped).As<IPlayable>().AsSelf();
-        builder.Register<ButtonSubscriber>(Lifetime.Scoped).As<IButtonSubscriber>().AsSelf();
+        builder.Register<AudioPresenter>(Lifetime.Scoped).As<IPlayable>();
+        builder.Register<ButtonSubscriber>(Lifetime.Scoped).As<IButtonSubscriber>();
 
-        builder.Register<WelcomeScreenPresenter>(Lifetime.Scoped).As<IShowable<IGameData>>().AsSelf();
-        builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>().AsSelf();
+        builder.Register<WelcomeScreenPresenter>(Lifetime.Scoped).As<IShowable<IGameData>>();
+        builder.Register<NewBusinessScreenPresenter>(Lifetime.Scoped).As<IShowable<GameCellModel>>();
 
-        builder.Register<GameCellFactory>(Lifetime.Scoped).As<IPresenterFactory<IGameCell>>().AsSelf();
-        builder.Register<ManagerFactory>(Lifetime.Scoped).As<IPresenterFactory<IManager>>().AsSelf();
-        builder.Register<UpgradeFactory>(Lifetime.Scoped).As<IPresenterFactory<IUpgrade>>().AsSelf();
+        builder.Register<GameCellFactory>(Lifetime.Scoped).As<IPresenterFactory<IGameCell>>();
+        builder.Register<ManagerFactory>(Lifetime.Scoped).As<IPresenterFactory<IManager>>();
+        builder.Register<UpgradeFactory>(Lifetime.Scoped).As<IPresenterFactory<IUpgrade>>();
 
         builder.UseEntryPoints(entryPoints =>
         {

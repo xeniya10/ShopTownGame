@@ -24,16 +24,16 @@ public class GameCellPresenterTester
 
     private void PrepareCaseTest(bool isMangerActivated, int timeMultiplier = 1)
     {
-        _boardData.GetProfit(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
-        _boardData.GetTime(Arg.Any<int>())
+        _boardData.GetCellProfit(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
+        _boardData.GetCellTime(Arg.Any<int>())
             .Returns(new TimeModel(Random.Range(0, 3), Random.Range(0, 60), Random.Range(0, 60), Random.Range(0, 60)));
 
-        _boardData.GetCost(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
+        _boardData.GetCellCost(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
         _boardData.GetCostCount().Returns(1);
 
         _presenter.Model.Level = 1;
         _presenter.Model.IsManagerActivated = isMangerActivated;
-        var processTimeInSeconds = _boardData.GetTime(1).ToTimeSpan().TotalSeconds * timeMultiplier;
+        var processTimeInSeconds = _boardData.GetCellTime(1).ToTimeSpan().TotalSeconds * timeMultiplier;
 
         var processTime = TimeSpan.FromSeconds(processTimeInSeconds);
         _presenter.Model.StartTime = DateTime.Now.Subtract(processTime);
@@ -145,7 +145,7 @@ public class GameCellPresenterTester
         var activationNumber = 0;
         PrepareCaseTest(false);
         _presenter.SetCost(activationNumber, _boardData);
-        Assert.AreEqual(_boardData.GetCost(1).Value, _presenter.Model.Cost.Value);
+        Assert.AreEqual(_boardData.GetCellCost(1).Value, _presenter.Model.Cost.Value);
     }
 
     [Test] public void SetCost_OutOfRange_SetsTheSameCostValue()
@@ -153,7 +153,7 @@ public class GameCellPresenterTester
         var activationNumber = 1;
         PrepareCaseTest(false);
         _presenter.SetCost(activationNumber, _boardData);
-        Assert.AreEqual(_boardData.GetCost(1).Value * (activationNumber - _boardData.GetCostCount() + 2),
+        Assert.AreEqual(_boardData.GetCellCost(1).Value * (activationNumber - _boardData.GetCostCount() + 2),
             _presenter.Model.Cost.Value);
     }
 
@@ -161,7 +161,7 @@ public class GameCellPresenterTester
     {
         PrepareCaseTest(false);
         _presenter.SetState(CellState.Active, _boardData);
-        Assert.AreEqual(_boardData.GetProfit(1).Value, _presenter.Model.Profit.Value);
+        Assert.AreEqual(_boardData.GetCellProfit(1).Value, _presenter.Model.Profit.Value);
     }
 
     [Test] public void SetProfit_OutOfRange_SetsTheSameProfitValue()
@@ -176,7 +176,7 @@ public class GameCellPresenterTester
     {
         PrepareCaseTest(false);
         _presenter.SetState(CellState.Active, _boardData);
-        Assert.AreEqual(_boardData.GetTime(1).TotalSeconds, _presenter.Model.TotalTime.TotalSeconds);
+        Assert.AreEqual(_boardData.GetCellTime(1).TotalSeconds, _presenter.Model.TotalTime.TotalSeconds);
     }
 
     [Test] public void SetTime_OutOfRange_SetsTheSameProcessTimeValue()
@@ -239,7 +239,7 @@ public class GameCellPresenterTester
         upgrade.ImprovementLevel = 2;
         PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.Profit.Value / _boardData.GetProfit(1).Value);
+        Assert.AreEqual(upgrade.ImprovementLevel, _presenter.Model.Profit.Value / _boardData.GetCellProfit(1).Value);
     }
 
     [Test] public void InitializeUpgrade_ActivatedUpgrade_SetsUpgradeState()
@@ -269,7 +269,8 @@ public class GameCellPresenterTester
         upgrade.IsActivated = true;
         PrepareCaseTest(false);
         _presenter.InitializeUpgrade(upgrade, _boardData);
-        Assert.AreEqual(upgrade.ImprovementLevel + 1, _presenter.Model.Profit.Value / _boardData.GetProfit(1).Value);
+        Assert.AreEqual(upgrade.ImprovementLevel + 1,
+            _presenter.Model.Profit.Value / _boardData.GetCellProfit(1).Value);
     }
 
     [Test] public void IsNeighborOf_CheckingOfTwoNeighbors_ReturnsTrue()

@@ -1,9 +1,8 @@
 using System;
-using ShopTown.PresenterComponent;
 
 namespace ShopTown.ModelComponent
 {
-public enum CellState { Lock, Unlock, Active, InProgress, TEST }
+public enum CellState { Lock, Unlock, Active, InProgress }
 
 [Serializable]
 public class GameCellModel : IModel

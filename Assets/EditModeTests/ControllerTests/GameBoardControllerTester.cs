@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 using ShopTown.ControllerComponent;
 using ShopTown.Data;
+using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
 using ShopTown.ViewComponent;
 using VContainer;
@@ -26,6 +28,7 @@ public class GameBoardControllerTester
         _view = Substitute.For<IGameCellView>();
         _subscriber = Substitute.For<IButtonSubscriber>();
         _defaultData = Substitute.For<IBoardData>();
+        _defaultData.GetDefaultBoard().Returns(new GameBoardModel());
 
         var builder = new ContainerBuilder();
         builder.RegisterInstance(_data).As<IGameData>();
@@ -44,7 +47,7 @@ public class GameBoardControllerTester
     [Test] public void Initialize_AnyArg_SetsData()
     {
         _controller.Initialize();
-        _storage.Received(1).Load(ref Arg.Any<object>(), Arg.Any<string>());
+        _storage.Received(1).Load<List<GameCellModel>>(Arg.Any<string>());
     }
 
     [Test] public void Initialize_ByCallingOfCreateBoard_InvokesSetOfflineProfitEvent()

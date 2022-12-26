@@ -8,12 +8,12 @@ public interface IBoardData
 
     GameCellModel GetDefaultCell();
 
-    MoneyModel GetProfit(int level);
+    MoneyModel GetCellProfit(int level);
 
     int GetCostCount();
 
-    MoneyModel GetCost(int number);
+    MoneyModel GetCellCost(int number);
 
-    TimeModel GetTime(int level);
+    TimeModel GetCellTime(int level);
 }
 }

@@ -20,20 +20,20 @@ public class GameplayController : IInitializable
         _managerController.Initialize();
         _upgradeController.Initialize();
 
-        _gameBoardController.ActivateEvent += InitializeImprovements;
-        _gameBoardController.UnlockEvent += UnlockImprovements;
+        _gameBoardController.CellActivationEvent += InitializeImprovements;
+        _gameBoardController.CellUnlockEvent += UnlockImprovements;
 
-        _managerController.ActivateEvent += _gameBoardController.InitializeManager;
-        _upgradeController.ActivateEvent += _gameBoardController.InitializeUpgrade;
+        _managerController.ImprovementActivationEvent += _gameBoardController.InitializeManager;
+        _upgradeController.ImprovementActivationEvent += _gameBoardController.InitializeUpgrade;
 
         _gameBoardController.SetOfflineProfitEvent += _welcomeScreen.Show;
-        _gameBoardController.ActivateEvent += _newBusinessProfile.Show; 
+        _gameBoardController.CellActivationEvent += _newBusinessProfile.Show;
     }
 
-    private void UnlockImprovements(int level, bool isActivate) // naming
+    private void UnlockImprovements(int level, bool isCellActivated)
     {
-        _managerController.Unlock(level, isActivate);
-        _upgradeController.Unlock(level, isActivate);
+        _managerController.UnlockImprovement(level, isCellActivated);
+        _upgradeController.UnlockImprovement(level, isCellActivated);
     }
 
     private void InitializeImprovements(GameCellModel cell)

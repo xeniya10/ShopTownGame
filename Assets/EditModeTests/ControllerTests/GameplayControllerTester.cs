@@ -59,7 +59,7 @@ public class GameplayControllerTester
         _managerController.FindImprovement(Arg.Any<int>()).Returns(new ManagerPresenter(null, null));
         _upgradeController.FindImprovement(Arg.Any<int>()).Returns(new UpgradePresenter(null, null));
 
-        _gameBoardController.ActivateEvent += Raise.Event<Action<GameCellModel>>(new GameCellModel());
+        _gameBoardController.CellActivationEvent += Raise.Event<Action<GameCellModel>>(new GameCellModel());
 
         _managerController.Received(1).FindImprovement(Arg.Any<int>());
         _upgradeController.Received(1).FindImprovement(Arg.Any<int>());
@@ -68,28 +68,28 @@ public class GameplayControllerTester
     [Test] public void Initialize_ByUnlockEvent_InvokesManagerUnlock()
     {
         _gameplayController.Initialize();
-        _gameBoardController.UnlockEvent += Raise.Event<Action<int, bool>>(0, false);
-        _managerController.Received(1).Unlock(0, false);
+        _gameBoardController.CellUnlockEvent += Raise.Event<Action<int, bool>>(0, false);
+        _managerController.Received(1).UnlockImprovement(0, false);
     }
 
     [Test] public void Initialize_ByUnlockEvent_InvokesUpgradeUnlock()
     {
         _gameplayController.Initialize();
-        _gameBoardController.UnlockEvent += Raise.Event<Action<int, bool>>(0, false);
-        _upgradeController.Received(1).Unlock(0, false);
+        _gameBoardController.CellUnlockEvent += Raise.Event<Action<int, bool>>(0, false);
+        _upgradeController.Received(1).UnlockImprovement(0, false);
     }
 
     [Test] public void Initialize_ByActivateEvent_InvokesInitializeManager()
     {
         _gameplayController.Initialize();
-        _managerController.ActivateEvent += Raise.Event<Action<ImprovementModel>>(new ImprovementModel());
+        _managerController.ImprovementActivationEvent += Raise.Event<Action<ImprovementModel>>(new ImprovementModel());
         _gameBoardController.Received(1).InitializeManager(Arg.Any<ImprovementModel>());
     }
 
     [Test] public void Initialize_ByActivateEvent_InvokesInitializeUpgrade()
     {
         _gameplayController.Initialize();
-        _upgradeController.ActivateEvent += Raise.Event<Action<ImprovementModel>>(new ImprovementModel());
+        _upgradeController.ImprovementActivationEvent += Raise.Event<Action<ImprovementModel>>(new ImprovementModel());
         _gameBoardController.Received(1).InitializeUpgrade(Arg.Any<ImprovementModel>());
     }
 }

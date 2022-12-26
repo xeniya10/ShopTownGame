@@ -1,5 +1,6 @@
 using NSubstitute;
 using NUnit.Framework;
+using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.PresenterComponent;
@@ -7,21 +8,23 @@ using ShopTown.SpriteContainer;
 using ShopTown.ViewComponent;
 using UnityEngine;
 
-public class ManagerPresenterTester
+public class UpgradePresenterTester
 {
     private ImprovementModel _model;
     private IImprovementView _view;
+    private IGameData _data;
     private IImprovementData _improvementData;
     private IImprovementSprites _improvementSprites;
-    private ManagerPresenter _presenter;
+    private UpgradePresenter _presenter;
 
     [SetUp] public void CreateTestObjects()
     {
         _model = Substitute.For<ImprovementModel>();
         _view = Substitute.For<IImprovementView>();
+        _data = Substitute.For<IGameData>();
         _improvementData = Substitute.For<IImprovementData>();
         _improvementSprites = Substitute.For<IImprovementSprites>();
-        _presenter = new ManagerPresenter(_model, _view);
+        _presenter = new UpgradePresenter(_model, _view);
 
         TuneObjects();
     }
@@ -29,20 +32,26 @@ public class ManagerPresenterTester
     private void TuneObjects()
     {
         _improvementData.GetBusinessName(Arg.Any<int>()).Returns(string.Empty);
-        _improvementData.GetManagerCost(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
-        _improvementData.GetManagerName(Arg.Any<int>()).Returns(string.Empty);
+        _improvementData.GetUpgradeCost(Arg.Any<int>()).Returns(new MoneyModel(Random.Range(1, 100000)));
+        _improvementData.GetUpgradeNames(Arg.Any<int>(), Arg.Any<int>()).Returns(string.Empty);
 
-        _improvementSprites.GetManagerSprites(Arg.Any<int>())
+        _improvementSprites.GetUpgradeSprites(Arg.Any<int>(), Arg.Any<int>())
             .Returns(Sprite.Create(Texture2D.blackTexture, Rect.zero, Vector2.one));
 
+        var gameData = Substitute.For<GameDataModel>();
+        gameData.MaxUpgradeLevel = 3;
+        _data.GameData.Returns(gameData);
+
         _presenter.Model.Level = 1;
+        _presenter.Model.ImprovementLevel = 1;
     }
 
     [Test]
     public void Initialize__SetsName()
     {
         _presenter.Initialize(_improvementData, _improvementSprites);
-        Assert.AreEqual(_presenter.Model.Name, _improvementData.GetManagerName(_presenter.Model.Level));
+        Assert.AreEqual(_presenter.Model.Name,
+            _improvementData.GetUpgradeNames(_presenter.Model.Level, _presenter.Model.ImprovementLevel));
     }
 
     [Test]
@@ -56,11 +65,11 @@ public class ManagerPresenterTester
     public void Initialize__SetsCost()
     {
         _presenter.Initialize(_improvementData, _improvementSprites);
-        Assert.AreEqual(_presenter.Model.Cost.Value, _improvementData.GetManagerCost(_presenter.Model.Level).Value);
+        Assert.AreEqual(_presenter.Model.Cost.Value, _improvementData.GetUpgradeCost(_presenter.Model.Level).Value);
     }
 
     [Test]
-    public void SetState_ActivatedManager_SetsLock()
+    public void SetState_ActivatedUpgrade_SetsLock()
     {
         _presenter.Model.IsActivated = true;
         _presenter.SetState(ImprovementState.Unlock);
@@ -68,7 +77,7 @@ public class ManagerPresenterTester
     }
 
     [Test]
-    public void SetState_NotActivatedManager_SetsUnlock()
+    public void SetState_NotActivatedUpgrade_SetsUnlock()
     {
         _presenter.Model.IsActivated = false;
         _presenter.SetState(ImprovementState.Unlock);
@@ -76,7 +85,7 @@ public class ManagerPresenterTester
     }
 
     [Test]
-    public void SetState_NotActivatedManager_InvokesChangeEvent()
+    public void SetState_NotActivatedUpgrade_InvokesChangeEvent()
     {
         var wasCalled = false;
         _presenter.ChangeEvent += () => wasCalled = true;
@@ -85,34 +94,43 @@ public class ManagerPresenterTester
     }
 
     [Test]
-    public void SetState_NotActivatedManager_StartsAnimation()
+    public void SetState_NotActivatedUpgrade_StartsAnimation()
     {
         _presenter.SetState(ImprovementState.Unlock);
         _view.Received(1).StartAnimation(Arg.Any<ImprovementState>());
     }
 
     [Test]
-    public void Activate_NotActivatedManager_ActivatesAnimation()
+    public void Activate_NotActivatedUpgrade_ActivatesAnimation()
     {
         _presenter.Model.IsActivated = false;
-        _presenter.Activate();
+        _presenter.Activate(_data);
         _view.Received(1).ActivateAnimation();
     }
 
     [Test]
-    public void Activate_NotActivatedManager_SetsTrue()
+    public void Activate_NotActivatedUpgrade_IncreasesImprovementLevel()
     {
         _presenter.Model.IsActivated = false;
-        _presenter.Activate();
+        _presenter.Activate(_data);
+        Assert.AreEqual(2, _presenter.Model.ImprovementLevel);
+    }
+
+    [Test]
+    public void Activate_NotActivatedUpgrade_SetsTrue()
+    {
+        _presenter.Model.IsActivated = false;
+        _presenter.Model.ImprovementLevel = 3;
+        _presenter.Activate(_data);
         Assert.True(_presenter.Model.IsActivated);
     }
 
     [Test]
-    public void Activate_NotActivatedManager_SetsLock()
+    public void Activate_NotActivatedUpgrade_SetsLock()
     {
         _presenter.Model.IsActivated = false;
-        _presenter.Model.State = ImprovementState.Unlock;
-        _presenter.Activate();
-        Assert.AreEqual(_presenter.Model.State, ImprovementState.Lock);
+        _presenter.Model.ImprovementLevel = 3;
+        _presenter.Activate(_data);
+        Assert.AreEqual(ImprovementState.Lock, _presenter.Model.State);
     }
 }

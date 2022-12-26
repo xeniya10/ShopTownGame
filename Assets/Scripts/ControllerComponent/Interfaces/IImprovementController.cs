@@ -4,11 +4,11 @@ using ShopTown.PresenterComponent;
 
 public interface IImprovementController<T> : IDisposable
 {
-    event Action<ImprovementModel> ActivateEvent;
+    event Action<ImprovementModel> ImprovementActivationEvent;
 
     void Initialize();
 
-    void Unlock(int level, bool isCellActivated);
+    void UnlockImprovement(int level, bool isCellActivated);
 
     IImprovement FindImprovement(int level);
 }

@@ -26,245 +26,245 @@ MonoBehaviour:
     ActivatedUpgradeLevel: 0
     AreAllUpgradeLevelsActivated: 0
     Cost:
-      Number: 0
       Value: 0
+      Currency: 0
     Profit:
-      Number: 0
       Value: 0
+      Currency: 0
   _profit:
-  - Number: 1
-    Value: 0
-  - Number: 5
-    Value: 0
-  - Number: 15
-    Value: 0
-  - Number: 30
-    Value: 0
-  - Number: 80
-    Value: 0
-  - Number: 150
-    Value: 0
-  - Number: 300
-    Value: 0
-  - Number: 700
-    Value: 0
-  - Number: 2000
-    Value: 0
-  - Number: 4000
-    Value: 0
-  - Number: 10000
-    Value: 0
-  - Number: 20000
-    Value: 0
-  - Number: 50000
-    Value: 0
-  - Number: 150000
-    Value: 0
-  - Number: 500000
-    Value: 0
-  - Number: 1000000
-    Value: 0
-  - Number: 2000000
-    Value: 0
-  - Number: 5000000
-    Value: 0
-  - Number: 10000000
-    Value: 0
-  - Number: 20000000
-    Value: 0
-  - Number: 40000000
-    Value: 0
-  - Number: 90000000
-    Value: 0
-  - Number: 150000000
-    Value: 0
-  - Number: 300000000
-    Value: 0
-  - Number: 500000000
-    Value: 0
-  - Number: 1000000000
-    Value: 0
-  - Number: 1500000000
-    Value: 0
+  - Value: 1
+    Currency: 0
+  - Value: 5
+    Currency: 0
+  - Value: 15
+    Currency: 0
+  - Value: 30
+    Currency: 0
+  - Value: 80
+    Currency: 0
+  - Value: 150
+    Currency: 0
+  - Value: 300
+    Currency: 0
+  - Value: 700
+    Currency: 0
+  - Value: 2000
+    Currency: 0
+  - Value: 4000
+    Currency: 0
+  - Value: 10000
+    Currency: 0
+  - Value: 20000
+    Currency: 0
+  - Value: 50000
+    Currency: 0
+  - Value: 150000
+    Currency: 0
+  - Value: 500000
+    Currency: 0
+  - Value: 1000000
+    Currency: 0
+  - Value: 2000000
+    Currency: 0
+  - Value: 5000000
+    Currency: 0
+  - Value: 10000000
+    Currency: 0
+  - Value: 20000000
+    Currency: 0
+  - Value: 40000000
+    Currency: 0
+  - Value: 90000000
+    Currency: 0
+  - Value: 150000000
+    Currency: 0
+  - Value: 300000000
+    Currency: 0
+  - Value: 500000000
+    Currency: 0
+  - Value: 1000000000
+    Currency: 0
+  - Value: 1500000000
+    Currency: 0
   _cost:
-  - Number: 2
-    Value: 0
-  - Number: 5
-    Value: 0
-  - Number: 10
-    Value: 0
-  - Number: 15
-    Value: 0
-  - Number: 20
-    Value: 0
-  - Number: 30
-    Value: 0
-  - Number: 40
-    Value: 0
-  - Number: 50
-    Value: 0
-  - Number: 70
-    Value: 0
-  - Number: 90
-    Value: 0
-  - Number: 120
-    Value: 0
-  - Number: 150
-    Value: 0
-  - Number: 200
-    Value: 0
-  - Number: 250
-    Value: 0
-  - Number: 300
-    Value: 0
-  - Number: 400
-    Value: 0
-  - Number: 500
-    Value: 0
-  - Number: 650
-    Value: 0
-  - Number: 800
-    Value: 0
-  - Number: 950
-    Value: 0
-  - Number: 1100
-    Value: 0
-  - Number: 1300
-    Value: 0
-  - Number: 1500
-    Value: 0
-  - Number: 1800
-    Value: 0
-  - Number: 2100
-    Value: 0
-  - Number: 2400
-    Value: 0
-  - Number: 2800
-    Value: 0
-  - Number: 3200
-    Value: 0
-  - Number: 3600
-    Value: 0
-  - Number: 4100
-    Value: 0
-  - Number: 4500
-    Value: 0
-  - Number: 5000
-    Value: 0
-  - Number: 5500
-    Value: 0
-  - Number: 6000
-    Value: 0
-  - Number: 7000
-    Value: 0
-  - Number: 8000
-    Value: 0
-  - Number: 10000
-    Value: 0
-  - Number: 12000
-    Value: 0
-  - Number: 14000
-    Value: 0
-  - Number: 17000
-    Value: 0
-  - Number: 20000
-    Value: 0
-  - Number: 25000
-    Value: 0
-  - Number: 30000
-    Value: 0
-  - Number: 40000
-    Value: 0
-  - Number: 50000
-    Value: 0
-  - Number: 60000
-    Value: 0
-  - Number: 80000
-    Value: 0
-  - Number: 100000
-    Value: 0
-  - Number: 150000
-    Value: 0
-  - Number: 300000
-    Value: 0
-  - Number: 400000
-    Value: 0
-  - Number: 600000
-    Value: 0
-  - Number: 800000
-    Value: 0
-  - Number: 1000000
-    Value: 0
-  - Number: 2000000
-    Value: 0
-  - Number: 3000000
-    Value: 0
-  - Number: 4000000
-    Value: 0
-  - Number: 5000000
-    Value: 0
-  - Number: 6000000
-    Value: 0
-  - Number: 7000000
-    Value: 0
-  - Number: 8000000
-    Value: 0
-  - Number: 9000000
-    Value: 0
-  - Number: 10000000
-    Value: 0
-  - Number: 15000000
-    Value: 0
-  - Number: 20000000
-    Value: 0
-  - Number: 25000000
-    Value: 0
-  - Number: 30000000
-    Value: 0
-  - Number: 35000000
-    Value: 0
-  - Number: 40000000
-    Value: 0
-  - Number: 45000000
-    Value: 0
-  - Number: 50000000
-    Value: 0
-  - Number: 60000000
-    Value: 0
-  - Number: 70000000
-    Value: 0
-  - Number: 80000000
-    Value: 0
-  - Number: 90000000
-    Value: 0
-  - Number: 100000000
-    Value: 0
-  - Number: 150000000
-    Value: 0
-  - Number: 200000000
-    Value: 0
-  - Number: 250000000
-    Value: 0
-  - Number: 300000000
-    Value: 0
-  - Number: 350000000
-    Value: 0
-  - Number: 400000000
-    Value: 0
-  - Number: 450000000
-    Value: 0
-  - Number: 500000000
-    Value: 0
-  - Number: 600000000
-    Value: 0
-  - Number: 700000000
-    Value: 0
-  - Number: 800000000
-    Value: 0
-  - Number: 900000000
-    Value: 0
-  - Number: 1000000000
-    Value: 0
+  - Value: 2
+    Currency: 0
+  - Value: 5
+    Currency: 0
+  - Value: 10
+    Currency: 0
+  - Value: 15
+    Currency: 0
+  - Value: 20
+    Currency: 0
+  - Value: 30
+    Currency: 0
+  - Value: 40
+    Currency: 0
+  - Value: 50
+    Currency: 0
+  - Value: 70
+    Currency: 0
+  - Value: 90
+    Currency: 0
+  - Value: 120
+    Currency: 0
+  - Value: 150
+    Currency: 0
+  - Value: 200
+    Currency: 0
+  - Value: 250
+    Currency: 0
+  - Value: 300
+    Currency: 0
+  - Value: 400
+    Currency: 0
+  - Value: 500
+    Currency: 0
+  - Value: 650
+    Currency: 0
+  - Value: 800
+    Currency: 0
+  - Value: 950
+    Currency: 0
+  - Value: 1100
+    Currency: 0
+  - Value: 1300
+    Currency: 0
+  - Value: 1500
+    Currency: 0
+  - Value: 1800
+    Currency: 0
+  - Value: 2100
+    Currency: 0
+  - Value: 2400
+    Currency: 0
+  - Value: 2800
+    Currency: 0
+  - Value: 3200
+    Currency: 0
+  - Value: 3600
+    Currency: 0
+  - Value: 4100
+    Currency: 0
+  - Value: 4500
+    Currency: 0
+  - Value: 5000
+    Currency: 0
+  - Value: 5500
+    Currency: 0
+  - Value: 6000
+    Currency: 0
+  - Value: 7000
+    Currency: 0
+  - Value: 8000
+    Currency: 0
+  - Value: 10000
+    Currency: 0
+  - Value: 12000
+    Currency: 0
+  - Value: 14000
+    Currency: 0
+  - Value: 17000
+    Currency: 0
+  - Value: 20000
+    Currency: 0
+  - Value: 25000
+    Currency: 0
+  - Value: 30000
+    Currency: 0
+  - Value: 40000
+    Currency: 0
+  - Value: 50000
+    Currency: 0
+  - Value: 60000
+    Currency: 0
+  - Value: 80000
+    Currency: 0
+  - Value: 100000
+    Currency: 0
+  - Value: 150000
+    Currency: 0
+  - Value: 300000
+    Currency: 0
+  - Value: 400000
+    Currency: 0
+  - Value: 600000
+    Currency: 0
+  - Value: 800000
+    Currency: 0
+  - Value: 1000000
+    Currency: 0
+  - Value: 2000000
+    Currency: 0
+  - Value: 3000000
+    Currency: 0
+  - Value: 4000000
+    Currency: 0
+  - Value: 5000000
+    Currency: 0
+  - Value: 6000000
+    Currency: 0
+  - Value: 7000000
+    Currency: 0
+  - Value: 8000000
+    Currency: 0
+  - Value: 9000000
+    Currency: 0
+  - Value: 10000000
+    Currency: 0
+  - Value: 15000000
+    Currency: 0
+  - Value: 20000000
+    Currency: 0
+  - Value: 25000000
+    Currency: 0
+  - Value: 30000000
+    Currency: 0
+  - Value: 35000000
+    Currency: 0
+  - Value: 40000000
+    Currency: 0
+  - Value: 45000000
+    Currency: 0
+  - Value: 50000000
+    Currency: 0
+  - Value: 60000000
+    Currency: 0
+  - Value: 70000000
+    Currency: 0
+  - Value: 80000000
+    Currency: 0
+  - Value: 90000000
+    Currency: 0
+  - Value: 100000000
+    Currency: 0
+  - Value: 150000000
+    Currency: 0
+  - Value: 200000000
+    Currency: 0
+  - Value: 250000000
+    Currency: 0
+  - Value: 300000000
+    Currency: 0
+  - Value: 350000000
+    Currency: 0
+  - Value: 400000000
+    Currency: 0
+  - Value: 450000000
+    Currency: 0
+  - Value: 500000000
+    Currency: 0
+  - Value: 600000000
+    Currency: 0
+  - Value: 700000000
+    Currency: 0
+  - Value: 800000000
+    Currency: 0
+  - Value: 900000000
+    Currency: 0
+  - Value: 1000000000
+    Currency: 0
   _time:
   - Days: 0
     Hours: 0

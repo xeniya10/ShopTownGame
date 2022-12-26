@@ -5,7 +5,7 @@ namespace ShopTown.ViewComponent
 {
 public interface IMenuScreenView : IScreenView<SettingModel>, IChangeActivation, ISettingButton, ISocialNetButton
 {
-    void SetButtonText(Setting parameter, bool state);
+    void SetButtonText(Setting setting, bool state);
 }
 
 public interface ISettingButton

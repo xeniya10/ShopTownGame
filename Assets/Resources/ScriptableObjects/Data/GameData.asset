@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultGameData:
     DollarBalance:
-      Number: 2
-      Value: 0
+      Value: 2
+      Currency: 0
     GoldBalance:
-      Number: 0
-      Value: 1
-    OfflineDollarBalance:
-      Number: 0
       Value: 0
+      Currency: 1
+    OfflineDollarBalance:
+      Value: 0
+      Currency: 0
     MinLevel: 1
     MaxLevel: 27
     MaxOpenedLevel: 0
     MaxUpgradeLevel: 3
-    ActivationNumber: 0
+    ActivatedCellsNumber: 0
     Settings:
       MusicOn: 1
       SoundOn: 1

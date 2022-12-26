@@ -19,8 +19,8 @@ MonoBehaviour:
     Description: 
     Name: 
     Cost:
-      Number: 0
       Value: 0
+      Currency: 0
     IsActivated: 0
     State: 0
   _managerNames:
@@ -52,60 +52,60 @@ MonoBehaviour:
   - Diana
   - ' Irene'
   _managerCost:
-  - Number: 1000
-    Value: 0
-  - Number: 5000
-    Value: 0
-  - Number: 10000
-    Value: 0
-  - Number: 30000
-    Value: 0
-  - Number: 80000
-    Value: 0
-  - Number: 150000
-    Value: 0
-  - Number: 300000
-    Value: 0
-  - Number: 600000
-    Value: 0
-  - Number: 900000
-    Value: 0
-  - Number: 1500000
-    Value: 0
-  - Number: 5000000
-    Value: 0
-  - Number: 10000000
-    Value: 0
-  - Number: 15000000
-    Value: 0
-  - Number: 20000000
-    Value: 0
-  - Number: 3
-    Value: 1
-  - Number: 5
-    Value: 1
-  - Number: 10
-    Value: 1
-  - Number: 20
-    Value: 1
-  - Number: 40
-    Value: 1
-  - Number: 80
-    Value: 1
-  - Number: 120
-    Value: 1
-  - Number: 200
-    Value: 1
-  - Number: 250
-    Value: 1
-  - Number: 300
-    Value: 1
-  - Number: 400
-    Value: 1
-  - Number: 600
-    Value: 1
-  - Number: 1000
-    Value: 1
+  - Value: 1000
+    Currency: 0
+  - Value: 5000
+    Currency: 0
+  - Value: 10000
+    Currency: 0
+  - Value: 30000
+    Currency: 0
+  - Value: 80000
+    Currency: 0
+  - Value: 150000
+    Currency: 0
+  - Value: 300000
+    Currency: 0
+  - Value: 600000
+    Currency: 0
+  - Value: 900000
+    Currency: 0
+  - Value: 1500000
+    Currency: 0
+  - Value: 5000000
+    Currency: 0
+  - Value: 10000000
+    Currency: 0
+  - Value: 15000000
+    Currency: 0
+  - Value: 20000000
+    Currency: 0
+  - Value: 3
+    Currency: 1
+  - Value: 5
+    Currency: 1
+  - Value: 10
+    Currency: 1
+  - Value: 20
+    Currency: 1
+  - Value: 40
+    Currency: 1
+  - Value: 80
+    Currency: 1
+  - Value: 120
+    Currency: 1
+  - Value: 200
+    Currency: 1
+  - Value: 250
+    Currency: 1
+  - Value: 300
+    Currency: 1
+  - Value: 400
+    Currency: 1
+  - Value: 600
+    Currency: 1
+  - Value: 1000
+    Currency: 1
   _firstLevelUpgradeNames:
   - Bouquets
   - Delivery
@@ -191,57 +191,57 @@ MonoBehaviour:
   - YouTube Channel
   - Repair Service
   _upgradeCost:
-  - Number: 250000
-    Value: 0
-  - Number: 400000
-    Value: 0
-  - Number: 700000
-    Value: 0
-  - Number: 1200000
-    Value: 0
-  - Number: 1500000
-    Value: 0
-  - Number: 2000000
-    Value: 0
-  - Number: 5000000
-    Value: 0
-  - Number: 10000000
-    Value: 0
-  - Number: 15000000
-    Value: 0
-  - Number: 20000000
-    Value: 0
-  - Number: 30000000
-    Value: 0
-  - Number: 40000000
-    Value: 0
-  - Number: 100000000
-    Value: 0
-  - Number: 500000000
-    Value: 0
-  - Number: 3
-    Value: 1
-  - Number: 5
-    Value: 1
-  - Number: 10
-    Value: 1
-  - Number: 20
-    Value: 1
-  - Number: 40
-    Value: 1
-  - Number: 80
-    Value: 1
-  - Number: 120
-    Value: 1
-  - Number: 200
-    Value: 1
-  - Number: 250
-    Value: 1
-  - Number: 300
-    Value: 1
-  - Number: 400
-    Value: 1
-  - Number: 600
-    Value: 1
-  - Number: 1000
-    Value: 1
+  - Value: 250000
+    Currency: 0
+  - Value: 400000
+    Currency: 0
+  - Value: 700000
+    Currency: 0
+  - Value: 1200000
+    Currency: 0
+  - Value: 1500000
+    Currency: 0
+  - Value: 2000000
+    Currency: 0
+  - Value: 5000000
+    Currency: 0
+  - Value: 10000000
+    Currency: 0
+  - Value: 15000000
+    Currency: 0
+  - Value: 20000000
+    Currency: 0
+  - Value: 30000000
+    Currency: 0
+  - Value: 40000000
+    Currency: 0
+  - Value: 100000000
+    Currency: 0
+  - Value: 500000000
+    Currency: 0
+  - Value: 3
+    Currency: 1
+  - Value: 5
+    Currency: 1
+  - Value: 10
+    Currency: 1
+  - Value: 20
+    Currency: 1
+  - Value: 40
+    Currency: 1
+  - Value: 80
+    Currency: 1
+  - Value: 120
+    Currency: 1
+  - Value: 200
+    Currency: 1
+  - Value: 250
+    Currency: 1
+  - Value: 300
+    Currency: 1
+  - Value: 400
+    Currency: 1
+  - Value: 600
+    Currency: 1
+  - Value: 1000
+    Currency: 1

@@ -15,7 +15,7 @@ public class GameDataModel
     public int MaxLevel;
     public int MaxOpenedLevel;
     public int MaxUpgradeLevel;
-    public int ActivationNumber;
+    public int ActivatedCellsNumber;
 
     public SettingModel Settings;
 
@@ -29,7 +29,7 @@ public class GameDataModel
         MaxLevel = defaultData.MaxLevel;
         MaxOpenedLevel = defaultData.MaxOpenedLevel;
         MaxUpgradeLevel = defaultData.MaxUpgradeLevel;
-        ActivationNumber = defaultData.ActivationNumber;
+        ActivatedCellsNumber = defaultData.ActivatedCellsNumber;
 
         Settings = new SettingModel();
         Settings.SetDefaultData(defaultData.Settings);
@@ -84,7 +84,7 @@ public class GameDataModel
 
     public void SetActivationNumber(int number)
     {
-        ActivationNumber = number;
+        ActivatedCellsNumber = number;
         ChangeEvent?.Invoke();
     }
 

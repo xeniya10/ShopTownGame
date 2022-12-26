@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +17,10 @@ public class ImprovementContainer : ScriptableObject, IImprovementSprites
 
     public Sprite GetManagerSprites(int level)
     {
-        if (_managerSprites.Count == 0 || level > _managerSprites.Count)
+        if (_managerSprites == null || _managerSprites.Count == 0 || level > _managerSprites.Count)
         {
-            Debug.Log("List of Manager Sprites is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetManagerSprites)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _managerSprites[level - 1];
@@ -35,16 +36,19 @@ public class ImprovementContainer : ScriptableObject, IImprovementSprites
 
             case 3: return GetThirdLevelUpgradeSprites(level);
 
-            default: return null;
+            default:
+                throw new ArgumentException(
+                    $"{GetType().Name}.{nameof(GetUpgradeSprites)}: Unknown improvement level: {improvementLevel}");
         }
     }
 
     private Sprite GetFirstLevelUpgradeSprites(int level)
     {
-        if (_firstLevelUpgradeSprites.Count == 0 || level > _firstLevelUpgradeSprites.Count)
+        if (_firstLevelUpgradeSprites == null || _firstLevelUpgradeSprites.Count == 0 ||
+            level > _firstLevelUpgradeSprites.Count)
         {
-            Debug.Log("List of Upgrade Sprites (1 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetFirstLevelUpgradeSprites)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _firstLevelUpgradeSprites[level - 1];
@@ -52,10 +56,11 @@ public class ImprovementContainer : ScriptableObject, IImprovementSprites
 
     private Sprite GetSecondLevelUpgradeSprites(int level)
     {
-        if (_secondLevelUpgradeSprites.Count == 0 || level > _secondLevelUpgradeSprites.Count)
+        if (_secondLevelUpgradeSprites == null || _secondLevelUpgradeSprites.Count == 0 ||
+            level > _secondLevelUpgradeSprites.Count)
         {
-            Debug.Log("List of Upgrade Sprites (2 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetSecondLevelUpgradeSprites)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _secondLevelUpgradeSprites[level - 1];
@@ -63,10 +68,11 @@ public class ImprovementContainer : ScriptableObject, IImprovementSprites
 
     private Sprite GetThirdLevelUpgradeSprites(int level)
     {
-        if (_thirdLevelUpgradeSprites.Count == 0 || level > _thirdLevelUpgradeSprites.Count)
+        if (_thirdLevelUpgradeSprites == null || _thirdLevelUpgradeSprites.Count == 0 ||
+            level > _thirdLevelUpgradeSprites.Count)
         {
-            Debug.Log("List of Upgrade Sprites (3 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetThirdLevelUpgradeSprites)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _thirdLevelUpgradeSprites[level - 1];

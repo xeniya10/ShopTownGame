@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 using ShopTown.ControllerComponent;
@@ -10,17 +11,17 @@ using ShopTown.ViewComponent;
 using UnityEngine;
 using VContainer;
 
-public class ManagerControllerTester
+public class UpgradeControllerTester
 {
     private IGameData _data;
     private IStorageManager _storage;
     private IImprovementView _view;
     private IButtonSubscriber _subscriber;
     private IBoard _board;
-    private IPresenterFactory<IManager> _factory;
+    private IPresenterFactory<IUpgrade> _factory;
     private IImprovementData _improvementData;
     private IImprovementSprites _improvementSprites;
-    private IImprovementController<ManagerPresenter> _controller;
+    private IImprovementController<UpgradePresenter> _controller;
 
     [SetUp] public void CreateTestObjects()
     {
@@ -36,7 +37,7 @@ public class ManagerControllerTester
         _view = Substitute.For<IImprovementView>();
         _subscriber = Substitute.For<IButtonSubscriber>();
         _board = Substitute.For<IBoard>();
-        _factory = Substitute.For<IPresenterFactory<IManager>>();
+        _factory = Substitute.For<IPresenterFactory<IUpgrade>>();
         _improvementData = Substitute.For<IImprovementData>();
         _improvementSprites = Substitute.For<IImprovementSprites>();
     }
@@ -46,7 +47,7 @@ public class ManagerControllerTester
         var data = Substitute.For<GameDataModel>();
         data.MaxLevel = 1;
         _data.GameData.Returns(data);
-        var presenter = Substitute.For<IManager>();
+        var presenter = Substitute.For<IUpgrade>();
         presenter.SetState(Arg.Do<ImprovementState>(x => presenter.Model.State = x));
         var model = Substitute.For<ImprovementModel>();
         model.Level = 1;
@@ -69,19 +70,19 @@ public class ManagerControllerTester
         builder.RegisterInstance(_view).As<IImprovementView>();
         builder.RegisterInstance(_subscriber).As<IButtonSubscriber>();
         builder.RegisterInstance(_board).As<IBoard>();
-        builder.RegisterInstance(_factory).As<IPresenterFactory<IManager>>();
+        builder.RegisterInstance(_factory).As<IPresenterFactory<IUpgrade>>();
         builder.RegisterInstance(_improvementData).As<IImprovementData>();
         builder.RegisterInstance(_improvementSprites).As<IImprovementSprites>();
-        builder.Register<ManagerController>(Lifetime.Scoped).As<IImprovementController<ManagerPresenter>>();
+        builder.Register<UpgradeController>(Lifetime.Scoped).As<IImprovementController<UpgradePresenter>>();
 
         var container = builder.Build();
-        _controller = container.Resolve<IImprovementController<ManagerPresenter>>();
+        _controller = container.Resolve<IImprovementController<UpgradePresenter>>();
     }
 
     [Test] public void Initialize_AnyArg_CallsLoad()
     {
         _controller.Initialize();
-        _storage.Received(1).Load(ref Arg.Any<object>(), Arg.Any<string>());
+        _storage.Received(1).Load<List<ImprovementModel>>(Arg.Any<string>());
     }
 
     [Test] public void Initialize_ByInvokingChangeEvent_CallsSave()
@@ -121,7 +122,7 @@ public class ManagerControllerTester
     {
         _controller.Initialize();
         var presenter = _controller.FindImprovement(1);
-        _controller.Unlock(1, true);
+        _controller.UnlockImprovement(1, true);
         Assert.AreEqual(ImprovementState.Unlock, presenter.Model.State);
     }
 
@@ -129,7 +130,7 @@ public class ManagerControllerTester
     {
         _controller.Initialize();
         var presenter = _controller.FindImprovement(1);
-        _controller.Unlock(1, false);
+        _controller.UnlockImprovement(1, false);
         Assert.AreEqual(ImprovementState.Lock, presenter.Model.State);
     }
 

@@ -1,4 +1,5 @@
 using System;
+using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
@@ -61,6 +62,6 @@ public abstract class ImprovementPresenter : IImprovement
 
     protected abstract void SetCost(IImprovementData improvementData);
 
-    public abstract void Activate();
+    public abstract void Activate(IGameData _data);
 }
 }

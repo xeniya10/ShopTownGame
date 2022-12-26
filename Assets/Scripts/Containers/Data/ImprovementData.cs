@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
@@ -22,20 +23,30 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
     public string GetBusinessName(int level)
     {
+        if (_businessNames == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetBusinessName)}: Object is null");
+        }
+
         return _businessNames.GetName(level);
     }
 
     public ImprovementModel GetDefaultModel()
     {
+        if (_defaultModel == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetDefaultModel)}: Object is null");
+        }
+
         return _defaultModel;
     }
 
     public string GetManagerName(int level)
     {
-        if (_managerNames.Count == 0 || level > _managerNames.Count)
+        if (_managerNames == null || _managerNames.Count == 0 || level > _managerNames.Count)
         {
-            Debug.Log("List of Manager Names is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetManagerName)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _managerNames[level - 1];
@@ -43,10 +54,10 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
     public MoneyModel GetManagerCost(int level)
     {
-        if (_managerCost.Count == 0 || level > _managerCost.Count)
+        if (_managerCost == null || _managerCost.Count == 0 || level > _managerCost.Count)
         {
-            Debug.Log("List of Manager Cost is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetManagerCost)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _managerCost[level - 1];
@@ -62,16 +73,19 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
             case 3: return GetThirdLevelUpgradeNames(level);
 
-            default: return null;
+            default:
+                throw new ArgumentException(
+                    $"{GetType().Name}.{nameof(GetUpgradeNames)}: Unknown improvement level: {improvementLevel}");
         }
     }
 
     private string GetFirstLevelUpgradeNames(int level)
     {
-        if (_firstLevelUpgradeNames.Count == 0 || level > _firstLevelUpgradeNames.Count)
+        if (_firstLevelUpgradeNames == null || _firstLevelUpgradeNames.Count == 0 ||
+            level > _firstLevelUpgradeNames.Count)
         {
-            Debug.Log("List of Upgrade Names (1 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetFirstLevelUpgradeNames)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _firstLevelUpgradeNames[level - 1];
@@ -79,10 +93,11 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
     private string GetSecondLevelUpgradeNames(int level)
     {
-        if (_secondLevelUpgradeNames.Count == 0 || level > _secondLevelUpgradeNames.Count)
+        if (_secondLevelUpgradeNames == null || _secondLevelUpgradeNames.Count == 0 ||
+            level > _secondLevelUpgradeNames.Count)
         {
-            Debug.Log("List of Upgrade Names (2 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetSecondLevelUpgradeNames)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _secondLevelUpgradeNames[level - 1];
@@ -90,10 +105,11 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
     private string GetThirdLevelUpgradeNames(int level)
     {
-        if (_thirdLevelUpgradeNames.Count == 0 || level > _thirdLevelUpgradeNames.Count)
+        if (_thirdLevelUpgradeNames == null || _thirdLevelUpgradeNames.Count == 0 ||
+            level > _thirdLevelUpgradeNames.Count)
         {
-            Debug.Log("List of Upgrade Names (3 lvl) is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetThirdLevelUpgradeNames)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _thirdLevelUpgradeNames[level - 1];
@@ -101,10 +117,10 @@ public class ImprovementData : ScriptableObject, IImprovementData
 
     public MoneyModel GetUpgradeCost(int level)
     {
-        if (_upgradeCost.Count == 0 || level > _upgradeCost.Count)
+        if (_upgradeCost == null || _upgradeCost.Count == 0 || level > _upgradeCost.Count)
         {
-            Debug.Log("List of Upgrade Cost is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetUpgradeCost)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _upgradeCost[level - 1];

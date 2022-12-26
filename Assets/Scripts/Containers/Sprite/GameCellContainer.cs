@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,10 +12,10 @@ public class GameCellContainer : ScriptableObject, IGameCellSprites
 
     public Sprite GetBusinessSprites(int level)
     {
-        if (_businessSprites.Count == 0 || level > _businessSprites.Count)
+        if (_businessSprites == null || _businessSprites.Count == 0 || level > _businessSprites.Count)
         {
-            Debug.Log("List of Business Sprites is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetBusinessSprites)}: List is null/empty or input level: {level} greater, then count of list");
         }
 
         return _businessSprites[level - 1];
@@ -22,10 +23,10 @@ public class GameCellContainer : ScriptableObject, IGameCellSprites
 
     public Sprite GetBackgroundSprites(int number)
     {
-        if (_backgroundSprites.Count == 0 || number > _backgroundSprites.Count - 1)
+        if (_backgroundSprites == null || _backgroundSprites.Count == 0 || number > _backgroundSprites.Count - 1)
         {
-            Debug.Log("List of Background Sprites is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetBackgroundSprites)}: List is null/empty or input number: {number} greater, then count of list");
         }
 
         return _backgroundSprites[number];
@@ -33,6 +34,11 @@ public class GameCellContainer : ScriptableObject, IGameCellSprites
 
     public int GetBackgroundSpritesCount()
     {
+        if (_backgroundSprites == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetBackgroundSpritesCount)}: List is null");
+        }
+
         return _backgroundSprites.Count;
     }
 }

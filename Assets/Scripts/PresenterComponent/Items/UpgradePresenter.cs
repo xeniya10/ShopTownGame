@@ -1,3 +1,4 @@
+using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
@@ -10,15 +11,15 @@ public class UpgradePresenter : ImprovementPresenter, IUpgrade
     public UpgradePresenter(IModel model, IView view) : base(model, view)
     {}
 
-    public override void Activate()
+    public override void Activate(IGameData _data)
     {
         _view.ActivateAnimation();
-        LevelUp();
+        LevelUp(_data);
     }
 
-    private void LevelUp()
+    private void LevelUp(IGameData _data)
     {
-        if (_model.ImprovementLevel == 3) // 3 ??
+        if (_model.ImprovementLevel == _data.GameData.MaxUpgradeLevel)
         {
             SetState(ImprovementState.Lock);
             _model.IsActivated = true;

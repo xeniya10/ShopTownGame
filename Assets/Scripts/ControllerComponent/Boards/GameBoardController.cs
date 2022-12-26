@@ -24,13 +24,13 @@ public class GameBoardController : IGameBoardController
     private List<IGameCell> _presenters = new List<IGameCell>();
     private List<IGameCell> _selectedCells = new List<IGameCell>();
 
-    public event Action<GameCellModel> ActivateEvent;
-    public event Action<int, bool> UnlockEvent;
+    public event Action<GameCellModel> CellActivationEvent;
+    public event Action<int, bool> CellUnlockEvent;
     public event Action<IGameData> SetOfflineProfitEvent;
 
     public void Initialize()
     {
-        _storage.Load(ref _models, _key);
+        _models = _storage.Load<List<GameCellModel>>(_key);
         CreateBoard();
     }
 
@@ -80,7 +80,7 @@ public class GameBoardController : IGameBoardController
 
             if (model.Cost == null && model.State == CellState.Unlock)
             {
-                presenter.SetCost(_data.GameData.ActivationNumber, _defaultData);
+                presenter.SetCost(_data.GameData.ActivatedCellsNumber, _defaultData);
             }
 
             _presenters.Add(presenter);
@@ -96,8 +96,8 @@ public class GameBoardController : IGameBoardController
             cell.Model.Level = _data.GameData.MinLevel;
             cell.SetState(CellState.Active, _defaultData);
             UnlockNeighbors(cell);
-            ActivateEvent?.Invoke(cell.Model);
-            UnlockEvent?.Invoke(cell.Model.Level, IsCellWithLevel(cell.Model.Level));
+            CellActivationEvent?.Invoke(cell.Model);
+            CellUnlockEvent?.Invoke(cell.Model.Level, IsCellWithLevel(cell.Model.Level));
         }
     }
 
@@ -133,13 +133,13 @@ public class GameBoardController : IGameBoardController
     {
         if (oneCell.Model.Level < _data.GameData.MaxLevel)
         {
-            _data.GameData.SetActivationNumber(_data.GameData.ActivationNumber + 1);
+            _data.GameData.SetActivationNumber(_data.GameData.ActivatedCellsNumber + 1);
             oneCell.LevelUp(_defaultData);
-            anotherCell.SetCost(_data.GameData.ActivationNumber, _defaultData);
+            anotherCell.SetCost(_data.GameData.ActivatedCellsNumber, _defaultData);
             anotherCell.SetState(CellState.Unlock, _defaultData);
-            ActivateEvent?.Invoke(oneCell.Model);
-            UnlockEvent?.Invoke(oneCell.Model.Level - 1, IsCellWithLevel(oneCell.Model.Level - 1));
-            UnlockEvent?.Invoke(oneCell.Model.Level, IsCellWithLevel(oneCell.Model.Level));
+            CellActivationEvent?.Invoke(oneCell.Model);
+            CellUnlockEvent?.Invoke(oneCell.Model.Level - 1, IsCellWithLevel(oneCell.Model.Level - 1));
+            CellUnlockEvent?.Invoke(oneCell.Model.Level, IsCellWithLevel(oneCell.Model.Level));
         }
     }
 
@@ -150,8 +150,8 @@ public class GameBoardController : IGameBoardController
 
         if (neighbors.Count > 0)
         {
-            _data.GameData.SetActivationNumber(_data.GameData.ActivationNumber + 1);
-            neighbors.ForEach(cell => cell.SetCost(_data.GameData.ActivationNumber, _defaultData));
+            _data.GameData.SetActivationNumber(_data.GameData.ActivatedCellsNumber + 1);
+            neighbors.ForEach(cell => cell.SetCost(_data.GameData.ActivatedCellsNumber, _defaultData));
             neighbors.ForEach(cell => cell.SetState(CellState.Unlock, _defaultData));
         }
     }

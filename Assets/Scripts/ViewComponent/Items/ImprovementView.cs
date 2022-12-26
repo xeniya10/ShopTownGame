@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
@@ -55,6 +56,9 @@ public class ImprovementView : MonoBehaviour, IImprovementView
             case ImprovementState.Unlock:
                 UnlockAnimation();
                 break;
+
+            default:
+                throw new ArgumentException($"Unknown type of state {GetType().Name}.{nameof(StartAnimation)} {state}");
         }
     }
 

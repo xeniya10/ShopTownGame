@@ -10,7 +10,7 @@ public class DataManager : StorageManager, IGameData, IDisposable
     public GameDataModel GameData { get { return _gameData; } }
     private GameDataModel _gameData;
 
-    private readonly string _gameDataKey = "GameData";
+    private readonly string _key = "GameData";
 
     private readonly GameData _defaultData;
 
@@ -22,15 +22,15 @@ public class DataManager : StorageManager, IGameData, IDisposable
 
     private void InitializeGameData()
     {
-        Load(ref _gameData, _gameDataKey);
+        _gameData = Load<GameDataModel>(_key);
 
         if (_gameData == null)
         {
             CreateDefaultData();
         }
 
-        _gameData.ChangeEvent += () => Save(_gameDataKey, _gameData);
-        _gameData.Settings.ChangeEvent += () => Save(_gameDataKey, _gameData);
+        _gameData.ChangeEvent += () => Save(_key, _gameData);
+        _gameData.Settings.ChangeEvent += () => Save(_key, _gameData);
     }
 
     private void CreateDefaultData()
@@ -41,7 +41,7 @@ public class DataManager : StorageManager, IGameData, IDisposable
 
     public void Dispose()
     {
-        Save(_gameDataKey, _gameData);
+        Save(_key, _gameData);
     }
 }
 }

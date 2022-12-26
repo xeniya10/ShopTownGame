@@ -19,7 +19,7 @@ public interface IGameCell
 
     void InitializeUpgrade(ImprovementModel upgrade, IBoardData cellData);
 
-    void SetCost(int activationNumber, IBoardData cellData);
+    void SetCost(int activatedCellsNumber, IBoardData cellData);
 
     void SubscribeToBuyButton(IButtonSubscriber subscriber, Action<IGameCell> callBack);
 

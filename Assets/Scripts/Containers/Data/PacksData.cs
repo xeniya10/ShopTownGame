@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ShopTown.ModelComponent;
 using UnityEngine;
@@ -12,15 +13,20 @@ public class PacksData : ScriptableObject, IPackData
 
     public int GetDollarPackCount()
     {
+        if (_dollarPacks == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetDollarPackCount)}: List is null");
+        }
+
         return _dollarPacks.Count;
     }
 
     public PackModel GetDollarPack(int size)
     {
-        if (_dollarPacks.Count == 0 || size > _dollarPacks.Count)
+        if (_dollarPacks == null || _dollarPacks.Count == 0 || size > _dollarPacks.Count)
         {
-            Debug.Log("List of Dollar Packs is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetDollarPack)}: List is null/empty or input size: {size} greater, then count of list");
         }
 
         return _dollarPacks[size - 1];
@@ -28,15 +34,20 @@ public class PacksData : ScriptableObject, IPackData
 
     public int GetGoldPackCount()
     {
+        if (_goldPacks == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetGoldPackCount)}: List is null");
+        }
+
         return _goldPacks.Count;
     }
 
     public PackModel GetGoldPack(int size)
     {
-        if (_goldPacks.Count == 0 || size > _goldPacks.Count)
+        if (_goldPacks == null || _goldPacks.Count == 0 || size > _goldPacks.Count)
         {
-            Debug.Log("List of Gold Packs is empty or input level greater, then count of list");
-            return null;
+            throw new NullReferenceException(
+                $"{GetType().Name}.{nameof(GetGoldPack)}: List is null/empty or input size: {size} greater, then count of list");
         }
 
         return _goldPacks[size - 1];

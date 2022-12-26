@@ -1,4 +1,5 @@
 using System;
+using ShopTown.ControllerComponent;
 using ShopTown.Data;
 using ShopTown.ModelComponent;
 using ShopTown.SpriteContainer;
@@ -16,7 +17,7 @@ public interface IImprovement
 
     void SetState(ImprovementState state);
 
-    void Activate();
+    void Activate(IGameData _data);
 }
 
 public interface IManager : IImprovement

@@ -1,3 +1,4 @@
+using System;
 using ShopTown.ModelComponent;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public class CurrencyContainer : ScriptableObject, ICurrencyIcon
 
     public Sprite GetIcon(CurrencyType currencyType)
     {
+        if (_dollarIcon == null || _goldIcon == null)
+        {
+            throw new NullReferenceException($"{GetType().Name}.{nameof(GetIcon)}: Currency Icon is null");
+        }
+
         if (currencyType == CurrencyType.Dollar)
         {
             return _dollarIcon;

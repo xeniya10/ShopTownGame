@@ -28,16 +28,21 @@ public class GameCellPresenter : IGameCell
         SetParameters(cellData);
         switch (state)
         {
-            case CellState.Unlock:
             case CellState.Lock:
+            case CellState.Unlock:
                 _model.SetDefaultData(cellData.GetDefaultCell());
                 _model.State = state;
                 break;
+
+            case CellState.Active: break;
 
             case CellState.InProgress:
                 CalculateStartTime();
                 onAnimationEndedCallback = GetInProgressCallBack;
                 break;
+
+            default:
+                throw new ArgumentException($"Unknown type of state {GetType().Name}.{nameof(SetState)} {state}");
         }
 
         ChangeEvent?.Invoke();
@@ -75,17 +80,17 @@ public class GameCellPresenter : IGameCell
         _view.InitializeImprovements(_model);
     }
 
-    public void SetCost(int activationNumber, IBoardData cellData) // naming activationNumber
+    public void SetCost(int activatedCellsNumber, IBoardData cellData)
     {
-        if (activationNumber > cellData.GetCostCount() - 1)
+        if (activatedCellsNumber > cellData.GetCostCount() - 1)
         {
-            var lastElement = cellData.GetCost(cellData.GetCostCount() - 1);
-            var costNumber = lastElement.Value * (activationNumber - cellData.GetCostCount() + 2);
+            var lastElement = cellData.GetCellCost(cellData.GetCostCount() - 1);
+            var costNumber = lastElement.Value * (activatedCellsNumber - cellData.GetCostCount() + 2);
             _model.Cost = new MoneyModel(costNumber, lastElement.Currency);
             return;
         }
 
-        _model.Cost = cellData.GetCost(activationNumber);
+        _model.Cost = cellData.GetCellCost(activatedCellsNumber);
     }
 
     public void SubscribeToBuyButton(IButtonSubscriber subscriber, Action<IGameCell> callBack)
@@ -165,7 +170,7 @@ public class GameCellPresenter : IGameCell
             return;
         }
 
-        _model.TotalTime = cellData.GetTime(_model.Level).ToTimeSpan();
+        _model.TotalTime = cellData.GetCellTime(_model.Level).ToTimeSpan();
     }
 
     private void SetProfit(IBoardData cellData)
@@ -177,7 +182,7 @@ public class GameCellPresenter : IGameCell
         }
 
         var profitMultiplier = _model.ActivatedUpgradeLevel + 1;
-        var baseProfit = cellData.GetProfit(_model.Level);
+        var baseProfit = cellData.GetCellProfit(_model.Level);
         _model.Profit = new MoneyModel(baseProfit.Value * profitMultiplier, baseProfit.Currency);
     }
 

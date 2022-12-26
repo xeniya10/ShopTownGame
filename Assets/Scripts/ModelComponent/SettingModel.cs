@@ -47,6 +47,10 @@ public class SettingModel
                 ChangeState(ref AdsOn);
                 parameter = AdsOn;
                 break;
+
+            default:
+                throw new ArgumentException(
+                    $"Unknown type of setting {GetType().Name}.{nameof(ChangeState)} {setting}");
         }
 
         ChangeEvent?.Invoke();
