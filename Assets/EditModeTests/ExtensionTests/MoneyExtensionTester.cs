@@ -6,6 +6,7 @@ public class MoneyModelFormatTester
 {
     private List<MoneyModel> _results = new List<MoneyModel>()
     {
+        new MoneyModel(0, CurrencyType.Dollar),
         new MoneyModel(5, CurrencyType.Dollar),
         new MoneyModel(9.5, CurrencyType.Dollar),
         new MoneyModel(500, CurrencyType.Dollar),
@@ -18,6 +19,7 @@ public class MoneyModelFormatTester
     };
     private List<string> _expectedResults = new List<string>()
     {
+        "0",
         "5",
         "9.5",
         "500",

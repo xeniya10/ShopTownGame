@@ -27,13 +27,15 @@ public class SplashScreenView : MonoBehaviour, ISplashScreenView
 
     public void DisappearAnimation(Sequence sequence)
     {
+        // sequence.OnComplete(() => gameObject.SetActive(false));
+        FadeAnimation(_splashScreenImage, sequence, 0.3f);
         FadeAnimation(_startButtonText, sequence);
         FadeAnimation(_gameNameText, sequence);
     }
 
     public void DisappearAnimationImage(Sequence sequence)
     {
-        FadeAnimation(_splashScreenImage, sequence, () => gameObject.SetActive(false));
+        FadeAnimation(_splashScreenImage, sequence, 0f, () => gameObject.SetActive(false));
     }
 
     public Transform GetSplashField()
@@ -51,9 +53,9 @@ public class SplashScreenView : MonoBehaviour, ISplashScreenView
         uiElement.MoveFromScreenBorder(-1.5f, 0f, _moveTime, sequence);
     }
 
-    private void FadeAnimation(Graphic uiElement, Sequence sequence, Action callBack = null)
+    private void FadeAnimation(Graphic uiElement, Sequence sequence, float alpha = 0f, Action callBack = null)
     {
-        uiElement.Fade(0, _fadeTime, sequence, () => callBack?.Invoke());
+        uiElement.Fade(alpha, _fadeTime, sequence, () => callBack?.Invoke());
     }
 }
 }

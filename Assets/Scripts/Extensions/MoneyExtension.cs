@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using ShopTown.ModelComponent;
 
 public static class MoneyExtension
@@ -119,20 +120,18 @@ public static class MoneyExtension
 
     private static MoneyFormat GetNumberDetails(double number)
     {
-        var textNumber = number.ToString();
+        var textNumber = number.ToString("###0.#", CultureInfo.InvariantCulture);
         var scale = DigitCount(textNumber) - 1;
         string formattedTextNumber;
 
         if (scale < _lowestScale)
         {
-            formattedTextNumber = number.ToString("###.0");
-            // if (formattedTextNumber.Contains(".0") || formattedTextNumber.Contains(",0"))
-            if (formattedTextNumber.Contains(".0"))
+            if (textNumber.Contains(".0"))
             {
                 return new MoneyFormat(number, number.ToString("###0"), string.Empty);
             }
 
-            return new MoneyFormat(number, formattedTextNumber, string.Empty);
+            return new MoneyFormat(number, textNumber, string.Empty);
         }
 
         var scaleModulo = scale % _lowestScale;

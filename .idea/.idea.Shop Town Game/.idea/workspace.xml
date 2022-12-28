@@ -49,6 +49,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/75/b2a49bf0/IEnumerable`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7b935204f5ff4bcab44b3b0ebca330bf46a800/eb/2b76d3fd/List`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/07/71f84419/IDisposable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/626dec0c2dc14c3e8d31d9b324025294568788/ab/342a0f38/CultureInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bc3985d37b0241b48fc21474b2de25bda7e00/ca/df729e5a/JToken.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bc3985d37b0241b48fc21474b2de25bda7e00/e0/dfa8d27c/JsonWriter.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7b935204f5ff4bcab44b3b0ebca330bf46a800/51/e17ccc32/Environment.cs" root0="SKIP_HIGHLIGHTING" />
@@ -150,7 +151,8 @@
       <workItem from="1671795371982" duration="1386000" />
       <workItem from="1671801905764" duration="5218000" />
       <workItem from="1671809831823" duration="4403000" />
-      <workItem from="1671957923464" duration="14307000" />
+      <workItem from="1671957923464" duration="20777000" />
+      <workItem from="1672123135508" duration="20159000" />
     </task>
     <servers />
   </component>
