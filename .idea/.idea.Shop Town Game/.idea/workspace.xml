@@ -27,7 +27,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ff0af78f8aa482982751bf18b1ec5d2a7600/7a/597555b3/SubstituteExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ff0af78f8aa482982751bf18b1ec5d2a7600/5b/e7852222/Arg.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ff0af78f8aa482982751bf18b1ec5d2a7600/7f/3963d769/Raise.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ControllerComponent/GameplayController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/74/606159ec/020009B7pdb.il" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a1d3814d410c4b899178eceec4eca763de00/4a/b29d6f4e/WelcomeScreenView.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a2b3d49a171526cd6ae392933ea33bf3275d0d022cce01ee252b7845a4cf0/JsonConvert.cs" root0="SKIP_HIGHLIGHTING" />
@@ -40,6 +39,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ab7de6937a4448b0a6ccd59e9820599a157200/5e/92fca97d/UnityEvent`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ff0af78f8aa482982751bf18b1ec5d2a7600/84/905e363f/Substitute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7ff0af78f8aa482982751bf18b1ec5d2a7600/d2/b3f6de13/CompositionInvocation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ControllerComponent/GameplayController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ab7de6937a4448b0a6ccd59e9820599a157200/3b/772400c6/SerializeField.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ab7de6937a4448b0a6ccd59e9820599a157200/8c/0d8d3f96/UnityEventBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
@@ -153,6 +153,7 @@
       <workItem from="1671809831823" duration="4403000" />
       <workItem from="1671957923464" duration="20777000" />
       <workItem from="1672123135508" duration="20159000" />
+      <workItem from="1672313390995" duration="243000" />
     </task>
     <servers />
   </component>

@@ -19,7 +19,6 @@ public class StorageManager : IStorageManager
 
     public T Load<T>(string key)
     {
-        // DeleteKey(key);
         return JsonConvert.DeserializeObject<T>(PlayerPrefs.GetString(key));
     }
 }
